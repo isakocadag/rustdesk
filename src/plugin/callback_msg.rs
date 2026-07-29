@@ -47,7 +47,7 @@ lazy_static::lazy_static! {
 }
 
 #[derive(Deserialize)]
-pub struct MsgToRustDesk {
+pub struct MsgToOssis Remote Control {
     pub r#type: String,
     pub data: Vec<u8>,
 }
@@ -250,7 +250,7 @@ fn handle_msg_to_rustdesk(id: String, content: *const c_void, len: usize) -> Plu
         "parse msg string"
     );
     let msg_to_rustdesk = early_return_value!(
-        serde_json::from_str::<MsgToRustDesk>(s),
+        serde_json::from_str::<MsgToOssis Remote Control>(s),
         ERR_CALLBACK_INVALID_MSG,
         "parse msg '{}'",
         s
@@ -267,7 +267,7 @@ fn handle_msg_to_rustdesk(id: String, content: *const c_void, len: usize) -> Plu
     }
 }
 
-fn request_plugin_sign(id: String, msg_to_rustdesk: MsgToRustDesk) -> PluginReturn {
+fn request_plugin_sign(id: String, msg_to_rustdesk: MsgToOssis Remote Control) -> PluginReturn {
     let signature_data = early_return_value!(
         std::str::from_utf8(&msg_to_rustdesk.data),
         ERR_CALLBACK_INVALID_MSG,

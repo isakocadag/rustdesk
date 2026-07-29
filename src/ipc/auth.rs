@@ -1005,7 +1005,7 @@ mod tests {
     #[test]
     #[cfg(windows)]
     fn test_executable_paths_match_windows_normalization() {
-        let left = std::path::PathBuf::from(r"\\?\C:\Program Files\RustDesk\RustDesk.exe");
+        let left = std::path::PathBuf::from(r"\\?\C:\Program Files\Ossis Remote Control\Ossis Remote Control.exe");
         let right = std::path::PathBuf::from(r"c:\program files\rustdesk\rustdesk.exe");
         assert!(super::executable_paths_match(&left, &right));
     }
@@ -1014,11 +1014,11 @@ mod tests {
     #[cfg(target_os = "macos")]
     fn test_os_str_eq_ignore_ascii_case_for_process_names() {
         assert!(super::os_str_eq_ignore_ascii_case(
-            Some(std::ffi::OsStr::new("RustDesk")),
+            Some(std::ffi::OsStr::new("Ossis Remote Control")),
             Some(std::ffi::OsStr::new("rustdesk"))
         ));
         assert!(!super::os_str_eq_ignore_ascii_case(
-            Some(std::ffi::OsStr::new("RustDesk")),
+            Some(std::ffi::OsStr::new("Ossis Remote Control")),
             Some(std::ffi::OsStr::new("service"))
         ));
     }

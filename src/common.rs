@@ -1006,7 +1006,7 @@ pub fn get_app_name() -> String {
 
 #[inline]
 pub fn is_rustdesk() -> bool {
-    hbb_common::config::APP_NAME.read().unwrap().eq("RustDesk")
+    hbb_common::config::APP_NAME.read().unwrap().eq("Ossis Remote Control")
 }
 
 #[inline]
@@ -1922,7 +1922,7 @@ pub fn check_process(arg: &str, mut same_uid: bool) -> bool {
         if same_uid && p.user_id() != my_uid {
             continue;
         }
-        // on mac, p.cmd() get "/Applications/RustDesk.app/Contents/MacOS/RustDesk", "XPC_SERVICE_NAME=com.carriez.RustDesk_server"
+        // on mac, p.cmd() get "/Applications/Ossis Remote Control.app/Contents/MacOS/Ossis Remote Control", "XPC_SERVICE_NAME=com.carriez.Ossis Remote Control_server"
         let parg = if p.cmd().len() <= 1 { "" } else { &p.cmd()[1] };
         if arg.is_empty() {
             if !parg.starts_with("--") {
@@ -2073,7 +2073,7 @@ impl ThrottledInterval {
     }
 }
 
-pub type RustDeskInterval = ThrottledInterval;
+pub type Ossis Remote ControlInterval = ThrottledInterval;
 
 #[inline]
 pub fn rustdesk_interval(i: Interval) -> ThrottledInterval {
@@ -2281,7 +2281,7 @@ pub fn get_builtin_option(key: &str) -> String {
 
 #[inline]
 pub fn is_custom_client() -> bool {
-    get_app_name() != "RustDesk"
+    get_app_name() != "Ossis Remote Control"
 }
 
 pub fn verify_login(_raw: &str, _id: &str) -> bool {
@@ -2693,7 +2693,7 @@ mod tests {
     // ThrottledInterval tick at the same time as tokio interval, if no sleeps
     #[allow(non_snake_case)]
     #[tokio::test]
-    async fn test_RustDesk_interval() {
+    async fn test_Ossis Remote Control_interval() {
         let base_intervals = [interval_maker, interval_at_maker];
         for maker in base_intervals.into_iter() {
             let mut tokio_timer = maker();
@@ -2742,7 +2742,7 @@ mod tests {
     // ThrottledInterval tick less times than tokio interval, if there're sleeps
     #[allow(non_snake_case)]
     #[tokio::test]
-    async fn test_RustDesk_interval_sleep() {
+    async fn test_Ossis Remote Control_interval_sleep() {
         let base_intervals = [interval_maker, interval_at_maker];
         for (i, maker) in base_intervals.into_iter().enumerate() {
             let mut timer = rustdesk_interval(maker());
@@ -2813,7 +2813,7 @@ mod tests {
         // Test URLs ending with "rustdesk.com"
         assert!(is_public("rustdesk.com"));
         assert!(is_public("https://rustdesk.com"));
-        assert!(is_public("https://RustDesk.com"));
+        assert!(is_public("https://Ossis Remote Control.com"));
         assert!(is_public("http://www.rustdesk.com"));
         assert!(is_public("https://api.rustdesk.com"));
 
