@@ -322,6 +322,38 @@ jobs:
           name: ${{ matrix.job.arch == 'aarch64' && 'topmostwindow-artifacts-ARM64' || 'topmostwindow-artifacts-x64' }}
           path: "./rustdesk"
 
+      - name: Prepare Ossis installer files
+        shell: pwsh
+        run: |
+          if (-not (Test-Path ".\rustdesk\rustdesk.exe")) {
+            throw "rustdesk.exe bulunamadi."
+          }
+
+          Copy-Item `
+            ".\rustdesk\rustdesk.exe" `
+            ".\rustdesk\OssisRemoteControl.exe" `
+            -Force
+
+      - name: Install Inno Setup
+        shell: pwsh
+        run: choco install innosetup -y --no-progress
+
+      - name: Build Ossis installer
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path ".\installer-output" -Force | Out-Null
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" ".\installer\ossis.iss"
+
+          if (-not (Test-Path ".\installer-output\OssisRemoteControl-Setup.exe")) {
+            throw "Ossis kurulum dosyasi olusturulamadi."
+          }
+
+      - name: Upload Ossis installer
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: ossis-remote-control-installer
+          path: installer-output/OssisRemoteControl-Setup.exe
+
       - name: Upload unsigned
         if: env.UPLOAD_ARTIFACT == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
