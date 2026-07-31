@@ -52,10 +52,10 @@ class MultiWindowCallResult {
 /// Window Manager
 /// mainly use it in `Main Window`
 /// use it in sub window is not recommended
-class Ossis Remote ControlMultiWindowManager {
-  Ossis Remote ControlMultiWindowManager._();
+class RustDeskMultiWindowManager {
+  RustDeskMultiWindowManager._();
 
-  static final instance = Ossis Remote ControlMultiWindowManager._();
+  static final instance = RustDeskMultiWindowManager._();
 
   final Set<int> _inactiveWindows = {};
   final Set<int> _activeWindows = {};
@@ -578,4 +578,4 @@ class Ossis Remote ControlMultiWindowManager {
   }
 }
 
-final rustDeskWinManager = Ossis Remote ControlMultiWindowManager.instance;
+final rustDeskWinManager = RustDeskMultiWindowManager.instance;

@@ -21,7 +21,7 @@ const String kPlatformAdditionsIsWayland = "is_wayland";
 const String kPlatformAdditionsHeadless = "headless";
 const String kPlatformAdditionsIsInstalled = "is_installed";
 const String kPlatformAdditionsIddImpl = "idd_impl";
-const String kPlatformAdditionsOssis Remote ControlVirtualDisplays =
+const String kPlatformAdditionsRustDeskVirtualDisplays =
     "rustdesk_virtual_displays";
 const String kPlatformAdditionsAmyuniVirtualDisplays =
     "amyuni_virtual_displays";
