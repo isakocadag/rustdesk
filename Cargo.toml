@@ -4,7 +4,7 @@ version = "1.4.9"
 authors = ["rustdesk <info@rustdesk.com>"]
 edition = "2021"
 build= "build.rs"
-description = "RustDesk Remote Desktop"
+description = "Ossis Remote Control"
 default-run = "rustdesk"
 rust-version = "1.75"
 
@@ -210,10 +210,10 @@ exclude = ["vdi/host", "examples/custom_plugin"]
 libxdo-sys = { path = "libs/libxdo-sys-stub" }
 
 [package.metadata.winres]
-LegalCopyright = "Copyright © 2026 Purslane Tech Pte. Ltd. All rights reserved."
-ProductName = "RustDesk"
-FileDescription = "RustDesk Remote Desktop"
-OriginalFilename = "rustdesk.exe"
+LegalCopyright = "Copyright © 2026 Ossis Bilişim Teknolojileri."
+ProductName = "Ossis Remote Control"
+FileDescription = "Ossis Remote Control"
+OriginalFilename = "OssisRemoteControl.exe"
 
 [target.'cfg(target_os="windows")'.build-dependencies]
 winres = "0.1"
