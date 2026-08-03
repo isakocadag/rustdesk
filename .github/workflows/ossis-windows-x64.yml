@@ -258,6 +258,33 @@ jobs:
         shell: bash
         run: echo "SODIUM_LIB_DIR=$VCPKG_ROOT/installed/${{ matrix.job.vcpkg-triplet }}/lib" >> "$GITHUB_ENV"
 
+      - name: Prepare Flutter dependencies with retry
+        shell: pwsh
+        run: |
+          git config --global http.version HTTP/1.1
+          git config --global http.postBuffer 524288000
+
+          Set-Location flutter
+
+          $success = $false
+          for ($i = 1; $i -le 5; $i++) {
+            Write-Host "Flutter dependency attempt $i/5"
+            & "${{ steps.flutter.outputs.CACHE-PATH }}\bin\flutter.bat" pub get
+
+            if ($LASTEXITCODE -eq 0) {
+              $success = $true
+              break
+            }
+
+            Start-Sleep -Seconds 20
+          }
+
+          if (-not $success) {
+            throw "Flutter dependencies could not be downloaded after 5 attempts."
+          }
+
+          Set-Location ..
+
       - name: Build rustdesk
         run: |
           # Windows: build RustDesk
