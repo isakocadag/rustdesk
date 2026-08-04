@@ -1,6 +1,6 @@
 [package]
 name = "rustdesk"
-version = "1.4.9"
+version = "1.4.10"
 authors = ["rustdesk <info@rustdesk.com>"]
 edition = "2021"
 build= "build.rs"
@@ -213,7 +213,7 @@ libxdo-sys = { path = "libs/libxdo-sys-stub" }
 LegalCopyright = "Copyright | Ossis Bilişim Teknolojileri."
 ProductName = "Ossis Remote Control"
 FileDescription = "Ossis Remote Control"
-ProductVersion = "1.4.9"
+ProductVersion = "1.4.10"
 OriginalFilename = "OssisRemoteControl.exe"
 
 [target.'cfg(target_os="windows")'.build-dependencies]

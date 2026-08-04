@@ -1,6 +1,6 @@
 [package]
 name = "rustdesk-portable-packer"
-version = "1.4.9"
+version = "1.4.10"
 edition = "2021"
 description = "Ossis Remote Control"
 
@@ -30,7 +30,7 @@ LegalCopyright = "Copyright | Ossis Bilişim Teknolojileri."
 ProductName = "Ossis Remote Control"
 OriginalFilename = "OssisRemoteControl.exe"
 FileDescription = "Ossis Remote Control"
-ProductVersion = "1.4.9"
+ProductVersion = "1.4.10"
 
 [target.'cfg(target_os="windows")'.build-dependencies]
 winres = "0.1"
