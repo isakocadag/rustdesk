@@ -1,4 +1,4 @@
-package com.carriez.flutter_hbb
+package com.ossisbilisim.remotecontrol
 
 /**
  * Handle events from flutter
