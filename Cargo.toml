@@ -210,9 +210,10 @@ exclude = ["vdi/host", "examples/custom_plugin"]
 libxdo-sys = { path = "libs/libxdo-sys-stub" }
 
 [package.metadata.winres]
-LegalCopyright = "Copyright © 2026 Ossis Bilişim Teknolojileri."
+LegalCopyright = "Copyright | Ossis Bilişim Teknolojileri."
 ProductName = "Ossis Remote Control"
 FileDescription = "Ossis Remote Control"
+ProductVersion = "1.4.9"
 OriginalFilename = "OssisRemoteControl.exe"
 
 [target.'cfg(target_os="windows")'.build-dependencies]
