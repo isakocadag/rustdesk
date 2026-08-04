@@ -1,5 +1,5 @@
 #define MyAppName "Ossis Remote Control"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.4.9"
 #define MyAppPublisher "Ossis Bilişim"
 #define MyAppExeName "OssisRemoteControl.exe"
 
@@ -7,6 +7,9 @@
 AppId={{FB619377-9D13-4D31-8D93-OSSISREMOTE01}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
+VersionInfoVersion=1.4.9.0
+VersionInfoProductVersion=1.4.9
+VersionInfoCopyright=Copyright | Ossis Bilişim Teknolojileri.
 AppPublisher={#MyAppPublisher}
 DefaultDirName={autopf}\Ossis Remote Control
 DefaultGroupName={#MyAppName}
