@@ -35,6 +35,7 @@ Name: "{autodesktop}\Ossis Remote Control"; Filename: "{app}\OssisRemoteControl.
 Name: "{group}\Ossis Remote Control"; Filename: "{app}\OssisRemoteControl.exe"
 
 [Run]
+Filename: "{cmd}"; Parameters: "/c ""{app}\postinstall.cmd"" config"; Flags: runasoriginaluser runhidden waituntilterminated
 Filename: "{app}\postinstall.cmd"; Flags: runhidden waituntilterminated
 Filename: "{app}\OssisRemoteControl.exe"; Description: "Ossis Remote Control'ü çalıştır"; Flags: nowait postinstall skipifsilent
 
