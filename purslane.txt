@@ -1,0 +1,6 @@
+./flutter/macos/Runner/Configs/AppInfo.xcconfig:14:PRODUCT_COPYRIGHT = Copyright © 2026 Purslane Tech Pte. Ltd. All rights reserved.
+./libs/portable/Cargo.toml:29:LegalCopyright = "Copyright © 2026 Purslane Tech Pte. Ltd. All rights reserved."
+./res/msi/Package/License.rtf:82:\fs18\lang1033\langfe2052\langnp1033\insrsid8979511\charrsid8979511 \loch\af1\dbch\af31505\hich\f1 \'94\loch\f1 \hich\f1 ) governs the terms and conditions under which Purslane Tech Pte. Ltd. (hereinafter \'93}{\rtlch\fcs1 \ab\af1\afs21 \ltrch\fcs0 
+./res/msi/preprocess.py:88:        default="Purslane Tech Pte. Ltd.",
+./res/msi/preprocess.py:502:    license_content = re.sub(r"Purslane(?: Tech Pte\.)? Ltd", app_name, license_content, flags=re.IGNORECASE)
+./src/ui/index.tis:606:	    <div style='background: #2c8cff; color: white; padding: 1em; margin-top: 1em;'>Copyright &copy; 2026 Purslane Tech Pte. Ltd.\

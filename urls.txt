@@ -1,0 +1,280 @@
+./.github/workflows/flutter-build.yml:2120:      # https://rustdesk.com/docs/en/dev/build/web/
+./.github/workflows/flutter-build.yml:2136:          wget https://github.com/rustdesk/doc.rustdesk.com/releases/download/console/web_deps.tar.gz
+./.github/workflows/ossis-windows-x64.yml:93:          $oldServer = 'pub const RENDEZVOUS_SERVERS: &[&str] = &["rs-ny.rustdesk.com"];'
+./build.py:301:Maintainer: rustdesk <info@rustdesk.com>
+./build.py:302:Homepage: https://rustdesk.com
+./Cargo.toml:4:authors = ["rustdesk <info@rustdesk.com>"]
+./docs/CODE_OF_CONDUCT-DE.md:67:unter [info@rustdesk.com](mailto:info@rustdesk.com) gemeldet werden.
+./docs/CODE_OF_CONDUCT-FR.md:68:[info@rustdesk.com](mailto:info@rustdesk.com).
+./docs/CODE_OF_CONDUCT-JP.md:46:虐待、ハラスメント、その他容認できない行為があった場合は、[info@rustdesk.com](mailto:info@rustdesk.com) の
+./docs/CODE_OF_CONDUCT-KR.md:63: [info@rustdesk.com](mailto:info@rustdesk.com)으로 법 집행을 담당하는 커뮤니티 리더에게 
+./docs/CODE_OF_CONDUCT-NL.md:64:handhaving op [info@rustdesk.com](mailto:info@rustdesk.com).
+./docs/CODE_OF_CONDUCT-NO.md:57:[info@rustdesk.com](mailto:info@rustdesk.com).
+./docs/CODE_OF_CONDUCT-PL.md:64:[info@rustdesk.com](mailto:info@rustdesk.com).
+./docs/CODE_OF_CONDUCT-RO.md:40:Cazurile de comportament abuziv, hărțuitor sau altfel inacceptabil pot fi raportate liderilor comunității responsabili pentru aplicare la [info@rustdesk.com](mailto:info@rustdesk.com).  
+./docs/CODE_OF_CONDUCT-RU.md:64:[info@rustdesk.com ](mailto:info@rustdesk.com).
+./docs/CODE_OF_CONDUCT-TR.md:39:Taciz edici, rahatsız edici veya başka türlü kabul edilemez davranış örnekleri, [info@rustdesk.com](mailto:info@rustdesk.com) adresindeki uygulama sorumlularına bildirilebilir. Tüm şikayetler hızlı ve adil bir şekilde incelenecek ve araştırılacaktır.
+./docs/CODE_OF_CONDUCT-ZH.md:42:辱骂、骚扰或其他不可接受的行为可通过[info@rustdesk.com](mailto:info@rustdesk.com)向负责监督的社区领袖报告。 所有投诉都将得到及时和公平的审查和调查。
+./docs/CODE_OF_CONDUCT.md:64:[info@rustdesk.com](mailto:info@rustdesk.com).
+./docs/CONTRIBUTING-DE.md:37:  per [E-Mail](mailto:info@rustdesk.com) um eine Begutachtung bitten.
+./docs/CONTRIBUTING-FR.md:41:  revue par [e-mail](mailto:info@rustdesk.com).
+./docs/CONTRIBUTING-ID.md:19:- Jika perubahan yang kamu buat tidak mendapat tinjauan atau kamu membutuhkan orang tertentu untuk meninjaunya, kamu bisa @-reply seorang reviewer meminta peninjauan dalam permintaan pull request atau komentar, atau kamu bisa meminta tinjauan melalui [email](mailto:info@rustdesk.com).
+./docs/CONTRIBUTING-IT.md:25:- Se la tua patch non viene esaminata o hai bisogno che una persona specifica la esamini, puoi @-rispondere ad un revisore chiedendo una revisione nella richiesta pull o un commento, oppure puoi chiedere una revisione tramite [email](mailto:info@rustdesk.com).
+./docs/CONTRIBUTING-JP.md:29:  プルリクエストやコメントでレビューを依頼するレビュアーに@返信したり、[email](mailto:info@rustdesk.com) でレビューを依頼することができます。
+./docs/CONTRIBUTING-KR.md:34: [이메일](mailto:info@rustdesk.com)을 통해 검토를 요청할 수 있습니다.
+./docs/CONTRIBUTING-NL.md:38:  commentaar, of je kunt om een review vragen via [email](mailto:info@rustdesk.com).
+./docs/CONTRIBUTING-NO.md:34:  Dette kann gjøres i en pull request, en kommentar eller via epost på [email](mailto:info@rustdesk.com).
+./docs/CONTRIBUTING-PL.md:33:  comment, or you can ask for a review via [email](mailto:info@rustdesk.com).
+./docs/CONTRIBUTING-RO.md:19:- Dacă patch-ul tău nu este revizuit sau ai nevoie ca o anumită persoană să-l revizuiască, poți @-reply unui reviewer cerând o revizuire în pull request sau într-un comentariu, sau poți solicita o revizuire prin [email](mailto:info@rustdesk.com).
+./docs/CONTRIBUTING-RU.md:33:  в обсуждениях вашего `pull request` или Вы можете запросить рецензию через[email](mailto:info@rustdesk.com).
+./docs/CONTRIBUTING-TR.md:19:- Yamalarınız gözden geçirilmiyorsa veya belirli bir kişinin gözden geçirmesine ihtiyacınız varsa, çekme isteği veya yorum içinde bir gözden geçirmeyi istemek için bir inceleyiciyi @etiketleyebilir veya inceleme için [e-posta](mailto:info@rustdesk.com) ile talep edebilirsiniz.
+./docs/CONTRIBUTING-ZH.md:19:- 如果您的 PR 未被及时审核，或需要指定的人员进行审核，您可以通过在 PR 或评论中 @ 提到相关审核者，以及发送[电子邮件](mailto:info@rustdesk.com)的方式请求审核。
+./docs/CONTRIBUTING.md:34:  comment, or you can ask for a review via [email](mailto:info@rustdesk.com).
+./docs/README-AR.md:9:  <b>  لغتك الأم,  <a href="https://github.com/rustdesk/doc.rustdesk.com">Doc</a> و <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a>, README نحن بحاجة إلى مساعدتك لترجمة هذا </b>
+./docs/README-AR.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%D8%A7%D9%84%D9%85%D9%8A%D8%B2%D8%A7%D8%AA%20%D8%A7%D9%84%D9%85%D8%AA%D9%82%D8%AF%D9%85%D8%A9-blue)](https://rustdesk.com/pricing.html)
+./docs/README-AR.md:19:[جهز لنفسك واحدا](https://rustdesk.com/server), أو
+./docs/README-AR.md:53:## [البناء](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-CS.md:9:  <b>Potřebujeme Vaši pomoc s překladem tohoto README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">uživatelského rozhraní aplikace RustDesk</a> a <a href="https://github.com/rustdesk/doc.rustdesk.com">dokumentace k ní</a> do vašeho jazyka</b>
+./docs/README-CS.md:15:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Pokro%C4%8Dil%C3%A9%20Funkce-blue)](https://rustdesk.com/pricing.html)
+./docs/README-CS.md:17:Zase další software pro přístup k ploše na dálku, naprogramovaný v jazyce Rust. Funguje hned tak, jak je – není třeba žádného nastavování. Svá data máte ve svých rukách, bez obav o zabezpečení. Je možné používat námi poskytovaný propojovací/předávací (relay) server, [vytvořit si svůj vlastní](https://rustdesk.com/server), nebo [si dokonce svůj vlastní naprogramovat](https://github.com/rustdesk/rustdesk-server-demo), budete-li chtít.
+./docs/README-CS.md:46:## [Sestavení ze zdrojových kódů](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-DA.md:9:  <b>Vi har brug for din hjælp til at oversætte denne README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> og <a href=" https://github.com/rustdesk/doc.rustdesk.com">Dokument</a> til dit modersmål</b>
+./docs/README-DA.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Avancerede%20Funktioner-blue)](https://rustdesk.com/pricing.html)
+./docs/README-DA.md:16:Endnu en fjernskrivebordssoftware, skrevet i Rust. Fungerer ud af æsken, ingen konfiguration påkrævet. Du har fuld kontrol over dine data uden bekymringer om sikkerhed. Du kan bruge vores rendezvous/relay-server, [opsætte din egen](https://rustdesk.com/server), eller [skrive din egen rendezvous/relay-server](https://github.com/rustdesk/rustdesk- server-demo).
+./docs/README-DA.md:43:## [Byg](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-DE.md:8:  <b>Wir brauchen Ihre Hilfe, um dieses README, die <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk-Benutzeroberfläche</a> und die <a href="https://github.com/rustdesk/doc.rustdesk.com">Dokumentation</a> in Ihre Muttersprache zu übersetzen.</b>
+./docs/README-DE.md:18:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Erweiterte%20Funktionen-blue)](https://rustdesk.com/pricing.html)
+./docs/README-DE.md:20:RustDesk ist eine in Rust geschriebene Remote-Desktop-Software, die out of the box ohne besondere Konfiguration funktioniert. Sie haben die volle Kontrolle über Ihre Daten und müssen sich keine Sorgen um die Sicherheit machen. Sie können unseren Rendezvous/Relay-Server nutzen, [einen eigenen Server aufsetzen](https://rustdesk.com/server) oder [einen eigenen Server programmieren](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-DE.md:60:## [Erstellen](https://rustdesk.com/docs/de/dev/build/)
+./docs/README-EO.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Altnivela%20Funkcioj-blue)](https://rustdesk.com/pricing.html)
+./docs/README-EO.md:16:Denove alia fora labortabla programo, skribita en Rust. Ĝi funkcias elskatole, ne bezonas konfiguraĵon. Vi havas la tutan kontrolon sur viaj datumoj, sen zorgo pri sekureco. Vi povas uzi nian servilon rendezvous/relajsan, [agordi vian propran](https://rustdesk.com/server), aŭ [skribi vian propran servilon rendezvous/relajsan](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-ES.md:18:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Caracter%C3%ADsticas%20Avanzadas-blue)](https://rustdesk.com/pricing.html)
+./docs/README-ES.md:20:Otro software de escritorio remoto, escrito en Rust. Funciona de forma inmediata, sin necesidad de configuración. Tienes el control total de tus datos, sin preocupaciones sobre la seguridad. Puedes utilizar nuestro servidor de rendezvous/relay, [instalar el tuyo](https://rustdesk.com/server), o [escribir tu propio servidor rendezvous/relay](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-FA.md:10:<p dir="rtl" align="center"><b>برای ترجمه این سند (README)، <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang" dir="rtl">رابط کاربری RustDesk</a>، <a href="https://github.com/rustdesk/doc.rustdesk.com" dir="rtl">و مستندات آن</a> به زبان مادری شما به کمکتان نیازمندیم. </b></p>
+./docs/README-FA.md:15:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%D9%88%DB%8C%DA%98%DA%AF%DB%8C%E2%80%8C%D9%87%D8%A7%DB%8C%20%D9%BE%DB%8C%D8%B4%D8%B1%D9%81%D8%AA%D9%87-blue)](https://rustdesk.com/pricing.html)
+./docs/README-FA.md:19:می‌توانید از سرور rendezvous/relay ما استفاده کنید، [سرور خودتان را راه‌اندازی کنید](https://rustdesk.com/server) یا
+./docs/README-FA.md:48:## [ساخت](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-FI.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Edistyneet%20Ominaisuudet-blue)](https://rustdesk.com/pricing.html)
+./docs/README-FI.md:16:Vielä yksi etätyöpöytäohjelmisto, ohjelmoitu Rust-kielellä. Toimii suoraan pakkauksesta, ei tarvitse asetusta. Hallitset täysin tietojasi, ei tarvitse murehtia turvallisuutta. Voit käyttää meidän rendezvous/relay-palvelinta, [aseta omasi](https://rustdesk.com/server), tai [kirjoittaa oma rendezvous/relay-palvelin](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-FR.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Fonctionnalit%C3%A9s%20Avanc%C3%A9es-blue)](https://rustdesk.com/pricing.html)
+./docs/README-FR.md:16:Encore un autre logiciel de bureau à distance, écrit en Rust. Fonctionne directement, aucune configuration n'est nécessaire. Vous avez le contrôle total de vos données, sans aucun souci de sécurité. Vous pouvez utiliser notre serveur de rendez-vous/relais, [configurer le vôtre](https://rustdesk.com/server), ou [écrire votre propre serveur de rendez-vous/relais](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-GR.md:9:  <b>Χρειαζόμαστε τη βοήθειά σας για να μεταφράσουμε αυτό το αρχείο README, το <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> και το <a href="https://github.com/rustdesk/doc.rustdesk.com">Doc</a> στη μητρική σας γλώσσα</b>
+./docs/README-GR.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%CE%A0%CF%81%CE%BF%CE%B7%CE%B3%CE%BC%CE%AD%CE%BD%CE%B5%CF%82%20%CE%94%CF%85%CE%BD%CE%B1%CF%84%CF%8C%CF%84%CE%B7%CF%84%CE%B5%CF%82-blue)](https://rustdesk.com/pricing.html)
+./docs/README-GR.md:16:Ένα λογισμικό απομακρυσμένης επιφάνειας εργασίας, γραμμένο σε γλώσσα Rust. Δεν χρειάζεται κάποια παραμετροποίηση, λειτουργεί αμέσως μετά την εγκατάσταση. Έχετε τον πλήρη έλεγχο των δεδομένων σας, χωρίς να ανησυχείτε για την ασφάλειά τους. Μπορείτε να χρησιμοποιήσετε τους προκαθορισμένους διακομιστές rendezvous/αναμετάδοσης, [να εγκαταστήσετε τον δικό σας διακομιστή](https://rustdesk.com/server), ή [να αναπτύξετε ένα δικό σας διακομιστή rendezvous/αναμετάδοσης](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-GR.md:53:## [Build](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-HU.md:9:  <b>Kell a segítséged, hogy lefordítsuk ezt a README-t, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">a RustDesk UI-t</a> és a <a href="https://github.com/rustdesk/doc.rustdesk.com">Dokumentációt</a> az anyanyelvedre</b>
+./docs/README-HU.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Speci%C3%A1lis%20Funkci%C3%B3k-blue)](https://rustdesk.com/pricing.html)
+./docs/README-HU.md:16:A RustDesk egy távoli elérésű asztali szoftver, Rust-ban írva. Működik mindenféle konfiguráció nélkül, feltelepítéssel, vagy anélkül. Az adataidat teljesen te kezeled, nincs szükség aggódásra a harmadik felek miatt. Használhatod a RustDesk punblikus randevú/relay szervereit, [hostolhatsz sajátot](https://rustdesk.com/server), vagy akár [írhatsz is egyet](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-HU.md:51:## [Építés](https://rustdesk.com/docs/hu/dev/build/)
+./docs/README-ID.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Fitur%20Lanjutan-blue)](https://rustdesk.com/pricing.html)
+./docs/README-ID.md:18:Merupakan perangkat lunak Remote Desktop yang baru, dan dibangun dengan Rust. Bahkan kamu bisa langsung menggunakannya tanpa perlu melakukan konfigurasi tambahan. Serta memiliki kontrol penuh terhadap semua data, tanpa perlu merasa was-was tentang isu keamanan, dan yang lebih menarik adalah memiliki opsi untuk menggunakan server rendezvous/relay milik kami, [konfigurasi server sendiri](https://rustdesk.com/server), atau [tulis rendezvous/relay server anda sendiri](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-ID.md:55:## [Build](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-IT.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Funzionalit%C3%A0%20Avanzate-blue)](https://rustdesk.com/pricing.html)
+./docs/README-IT.md:18:Ancora un altro software per il controllo remoto del desktop, scritto in Rust. Funziona immediatamente, nessuna configurazione richiesta. Hai il pieno controllo dei tuoi dati, senza preoccupazioni per la sicurezza. Puoi usare il nostro server rendezvous/relay, [configurare il tuo server](https://rustdesk.com/server) o [realizzare il tuo server rendezvous/relay](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-IT.md:55:## [Build](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-JP.md:9:  <b>READMEや<a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a>、 <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk Doc</a>の翻訳者を歓迎します！</b>
+./docs/README-JP.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%E9%AB%98%E5%BA%A6%E3%81%AA%E6%A9%9F%E8%83%BD-blue)](https://rustdesk.com/pricing.html)
+./docs/README-JP.md:16:Rustで書かれた、設定不要ですぐに使えるリモートデスクトップソフトウェアです。自分のデータを完全にコントロールでき、セキュリティの心配もありません。私たちのランデブー/リレーサーバを使うことも、[自分でサーバーをセットアップする](https://rustdesk.com/server) ことも、 [自分でランデブー/リレーサーバを作成する](https://github.com/rustdesk/rustdesk-server-demo)こともできます。
+./docs/README-JP.md:55:## [ビルド](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-KR.md:8:  <b>이 README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> 및 <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk 문서</a>를 귀하의 모국어로 번역하는 데 도움이 필요합니다</b>
+./docs/README-KR.md:18:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%EA%B3%A0%EA%B8%89%20%EA%B8%B0%EB%8A%A5-blue)](https://rustdesk.com/pricing.html)
+./docs/README-KR.md:20:또 하나의 원격 데스크톱 솔루션으로, Rust로 작성되었습니다. 별도의 설정 없이 바로 사용할 수 있습니다. 데이터에 대한 완전한 통제권을 가지며 보안에 대한 걱정이 없습니다. 저희 랑데부/릴레이 서버를 사용하거나, [직접 설정](https://rustdesk.com/server)하거나, [자신만의 랑데부/릴레이 서버를 작성](https://github.com/rustdesk/rustdesk-server-demo)할 수 있습니다.
+./docs/README-KR.md:60:## [빌드](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-ML.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%E0%B4%B5%E0%B4%BF%E0%B4%95%E0%B4%B8%E0%B4%BF%E0%B4%A4%20%E0%B4%B8%E0%B4%B5%E0%B4%BF%E0%B4%B6%E0%B5%87%E0%B4%B7%E0%B4%A4%E0%B4%95%E0%B5%BE-blue)](https://rustdesk.com/pricing.html)
+./docs/README-ML.md:16:റസ്റ്റിൽ എഴുതിയ മറ്റൊരു റിമോട്ട് ഡെസ്ക്ടോപ്പ് സോഫ്റ്റ്‌വെയർ. ബോക്‌സിന് പുറത്ത് പ്രവർത്തിക്കുന്നു, കോൺഫിഗറേഷൻ ആവശ്യമില്ല. സുരക്ഷയെക്കുറിച്ച് ആശങ്കകളൊന്നുമില്ലാതെ, നിങ്ങളുടെ ഡാറ്റയുടെ പൂർണ്ണ നിയന്ത്രണം നിങ്ങൾക്കുണ്ട്. നിങ്ങൾക്ക് ഞങ്ങളുടെ rendezvous/relay സെർവർ ഉപയോഗിക്കാം, [സ്വന്തമായി സജ്ജീകരിക്കുക](https://rustdesk.com/server), അല്ലെങ്കിൽ [നിങ്ങളുടെ സ്വന്തം rendezvous/relay സെർവർ എഴുതുക](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-NL.md:9:  <b>Wij hebben uw hulp nodig om dit README bestand te vertalen, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> en <a href="https://github.com/rustdesk/doc.rustdesk.com">Doc</a> naar uw moedertaal</b>
+./docs/README-NL.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Geavanceerde%20Functies-blue)](https://rustdesk.com/pricing.html)
+./docs/README-NL.md:16:Alweer een andere programma voor -bureaublad op afstand-, geschreven in Rust. Werkt -out of the box-, geen configuratie nodig. U heeft volledige controle over uw gegevens, en hoeft zich geen zorgen te maken over de beveiliging. U kunt onze rendez-vous/relay server gebruiken, [je eigen server opzetten](https://rustdesk.com/blog/id-relay-set), of [je eigen rendez-vous/relay-server schrijven](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-NL.md:51:## [Bouwen](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-NO.md:9:  <b>Vi trenger din hjelp til å oversette denne README-en, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> og <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk Doc</a> tid ditt morsmål</b>
+./docs/README-NO.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Avanserte%20Funksjoner-blue)](https://rustdesk.com/pricing.html)
+./docs/README-NO.md:16:Enda en annen fjernstyrt desktop programvare, skrevet i Rust. Virker rett ut av pakken, ingen konfigurasjon nødvendig. Du har full kontroll over din data, uten beskymring for sikkerhet. Du kan bruke vår rendezvous_mediator/relay server, [sett opp din egen](https://rustdesk.com/server), eller [skriv din egen rendezvous_mediator/relay server](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-NO.md:56:## [Bygg](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-PL.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Zaawansowane%20Funkcje-blue)](https://rustdesk.com/pricing.html)
+./docs/README-PL.md:18:RustDesk to wieloplatformowe oprogramowanie do zdalnego pulpitu, napisane w języku Rust, zaprojektowane z myślą o prostocie wdrożenia, bezpieczeństwie i pełnej kontroli użytkownika nad danymi. Aplikacja działa od razu po uruchomieniu i nie wymaga skomplikowanej konfiguracji. Możesz skorzystać z naszego darmowego serwera publicznego, [skonfigurować własny](https://rustdesk.com/server), lub [napisać własny serwer](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-PTBR.md:8:  <b>Precisamos da sua ajuda para traduzir este README, a <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">Interface do RustDesk</a> e a <a href="https://github.com/rustdesk/doc.rustdesk.com">Documentação do RustDesk</a> para o seu idioma nativo</b>
+./docs/README-PTBR.md:18:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Advanced%20Features-blue)](https://rustdesk.com/pricing.html)
+./docs/README-PTBR.md:20:Mais uma solução de desktop remoto, escrita em Rust. Funciona imediatamente, sem necessidade de configuração. Você tem controle total dos seus dados, sem preocupações com segurança. Você pode usar nosso servidor de conexão/retransmissão (rendezvous/relay), [configurar o seu próprio](https://rustdesk.com/server) ou [escrever seu próprio servidor de conexão/retransmissão](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-PTBR.md:60:## [Compilar](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-RO.md:8:  <b>Avem nevoie de ajutorul tău pentru a traduce acest README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> și <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk Doc</a> în limba ta maternă</b>
+./docs/README-RO.md:18:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Advanced%20Features-blue)](https://rustdesk.com/pricing.html)
+./docs/README-RO.md:20:Încă o soluție de desktop la distanță scrisă în Rust. Funcționează imediat, fără configurare necesară. Ai control total asupra datelor tale, fără probleme de securitate. Poți folosi serverul nostru de rendezvous/relay, [să-ți configurezi propriul server](https://rustdesk.com/server) sau [să scrii propriul server de rendezvous/relay](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-RO.md:60:## [Construire](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-RU.md:9:     и <a href="https://github.com/rustdesk/doc.rustdesk.com">документации RustDesk</a> на ваш родной язык.</b>
+./docs/README-RU.md:18:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%D0%A0%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%92%D0%BE%D0%B7%D0%BC%D0%BE%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D0%B8-blue)](https://rustdesk.com/pricing.html)
+./docs/README-RU.md:20:Ещё одно программное обеспечение для удаленного рабочего стола, написанное на Rust. Работает из коробки, настройки не требует. Вы полностью контролируете свои данные, не беспокоясь о безопасности. Вы можете использовать наш сервер ретрансляции, [настроить свой собственный](https://rustdesk.com/server), или [написать свой](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-RU.md:62:## [Сборка](https://rustdesk.com/docs/ru/dev/build/)
+./docs/README-TR.md:10:  <b>README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> ve <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk Dökümantasyonu</a>'nu ana dilinize çevirmemiz için yardımınıza ihtiyacımız var</b>
+./docs/README-TR.md:20:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Geli%C5%9Fmi%C5%9F%20%C3%96zellikler-blue)](https://rustdesk.com/pricing.html)
+./docs/README-TR.md:22:Rust dilinde yazılmış, başka bir uzak masaüstü yazılımı daha. Hiçbir yapılandırma gerekmeksizin, hemen kullanıma hazır. Güvenlik konusunda hiçbir endişe duymadan, verileriniz üzerinde tam kontrole sahip olun. Kendi rendezvous/relay sunucumuzu kullanabilirsiniz, [kendi sunucunuzu kurabilirsiniz](https://rustdesk.com/server) veya [kendi rendezvous/relay sunucunuzu yazabilirsiniz](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-TR.md:59:## [Derleme](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-UA.md:9:  <b>Нам потрібна ваша допомога для перекладу цього README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">інтерфейсу</a> та <a href="https://github.com/rustdesk/doc.rustdesk.com">документації</a> RustDesk вашою рідною мовою</B>
+./docs/README-UA.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%D0%A0%D0%BE%D0%B7%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D1%96%20%D0%A4%D1%83%D0%BD%D0%BA%D1%86%D1%96%D1%97-blue)](https://rustdesk.com/pricing.html)
+./docs/README-UA.md:16:Ще один застосунок для віддаленого керування стільницею, написаний на Rust. Працює з коробки, не потребує налаштування. Ви повністю контролюєте свої дані, не турбуючись про безпеку. Ви можете використовувати наш сервер ретрансляції, [налаштувати свій власний](https://rustdesk.com/server), або [написати свій власний сервер ретрансляції](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-UA.md:53:## [Збирання](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-VN.md:11:  <b>Chúng tôi rất hoan nghênh sự hỗ trợ của bạn trong việc dịch trang README, trang giao diện người dùng của RustDesk - <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> và trang tài liệu của RustDesk - <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk Doc</a> sang Tiếng Việt</b>
+./docs/README-VN.md:16:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-T%C3%ADnh%20N%C4%83ng%20N%C3%A2ng%20Cao-blue)](https://rustdesk.com/pricing.html)
+./docs/README-VN.md:18:RustDesk là một phần mềm điểu khiển máy tính từ xa mã nguồn mở, được viết bằng Rust. Nó hoạt động ngay sau khi cài đặt, không yêu cầu cấu hình phức tạp. Bạn có toàn quyền kiểm soát với dữ liệu của mình mà không cần phải lo lắng về vấn đề bảo mật. Bạn có thể sử dụng máy chủ rendezvous/relay của chúng tôi hoặc [tự cài đặt máy chủ của riêng mình](https://rustdesk.com/server) hay thậm chí [tự tạo máy chủ rendezvous/relay cho riêng bạn](https://github.com/rustdesk/rustdesk-server-demo).
+./docs/README-VN.md:50:## [Build](https://rustdesk.com/docs/en/dev/build/)
+./docs/README-ZH.md:17:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD-blue)](https://rustdesk.com/pricing.html)
+./docs/README-ZH.md:20:或者[自己设置](https://rustdesk.com/server)，
+./docs/README-ZH.md:58:## [构建](https://rustdesk.com/docs/en/dev/build/)
+./docs/SECURITY-DE.md:6:Wenn Sie eine Sicherheitslücke im RustDesk-Projekt finden, melden Sie diese bitte verantwortungsbewusst per E-Mail an info@rustdesk.com.
+./docs/SECURITY-FR.md:11:la signaler de manière responsable en envoyant un e-mail à info@rustdesk.com.
+./docs/SECURITY-IT.md:7:Se trovi una vulnerabilità nel progetto RustDesk, segnalala responsabilmente inviando un'email a info@rustdesk.com.
+./docs/SECURITY-JP.md:6:RustDesk プロジェクトにセキュリティの脆弱性を発見した場合は、info@rustdesk.com までメールで責任を持って報告してください。
+./docs/SECURITY-KR.md:5:저희는 프로젝트의 보안을 매우 중요하게 생각합니다. 모든 사용자가 발견한 취약점을 저희에게 보고할 것을 권장합니다. RustDesk 프로젝트에서 보안 취약점이 발견되면 info@rustdesk.com으로 이메일을 보내 책임감 있게 보고해 주시기 바랍니다.
+./docs/SECURITY-NL.md:7:een e-mail te sturen naar info@rustdesk.com.
+./docs/SECURITY-NO.md:6:Om du finner en sikkerhets sårbarhet i RustDesk prosjektet, venligst raportere det ansvarsfult ved å sende oss en email til info@rustdesk.com.
+./docs/SECURITY-PL.md:6:Jeżeli znajdziesz lukę w projekcie RustDesk, proszę zgłosić ją jak najszybciej wysyłając e-mail na adres info@rustdesk.com.
+./docs/SECURITY-RO.md:6:Dacă găsești o vulnerabilitate de securitate în proiectul RustDesk, te rugăm să o raportezi responsabil trimițând un e-mail la info@rustdesk.com.
+./docs/SECURITY-TR.md:6:Eğer RustDesk projesinde bir güvenlik açığı bulursanız, lütfen info@rustdesk.com adresine sorumlu bir şekilde bildirin.
+./docs/SECURITY.md:6:If you find a security vulnerability in the RustDesk project, please report it responsibly by sending an email to info@rustdesk.com.
+./fastlane/metadata/android/en-US/full_description.txt:3:Doc: https://rustdesk.com/docs/en/manual/mobile/
+./fastlane/metadata/android/en-US/full_description.txt:11:Please download and install desktop version from: https://rustdesk.com, then you can access and control your desktop from your mobile, or control your mobile from desktop.
+./fastlane/metadata/android/fr-FR/full_description.txt:3:Doc : https://rustdesk.com/docs/en/manual/mobile/
+./fastlane/metadata/android/fr-FR/full_description.txt:11:Veuillez télécharger et installer la version de bureau à partir de : https://rustdesk.com, vous pourrez alors accéder et contrôler votre bureau à partir de votre mobile, ou contrôler votre mobile à partir du bureau.
+./fastlane/metadata/android/nl-NL/full_description.txt:3:Doc: https://rustdesk.com/docs/en/manual/mobile/
+./fastlane/metadata/android/nl-NL/full_description.txt:11:Download en installeer de desktop versie vanaf: https://rustdesk.com, dan kunt u uw desktop benaderen en bedienen vanaf uw mobiel, of uw mobiel bedienen vanaf uw desktop.
+./fastlane/metadata/android/zh-CN/full_description.txt:3:文档：https://rustdesk.com/docs/en/manual/mobile/
+./fastlane/metadata/android/zh-CN/full_description.txt:12:请从：https://rustdesk.com 下载并安装桌面版，然后您可以通过手机访问和控制您的桌面，或从桌面控制您的手机。
+./flatpak/com.rustdesk.RustDesk.metainfo.xml:41:  <url type="homepage">https://rustdesk.com</url>
+./flatpak/com.rustdesk.RustDesk.metainfo.xml:44:  <url type="help">https://rustdesk.com/docs</url>
+./flatpak/com.rustdesk.RustDesk.metainfo.xml:49:  <url type="contact">https://rustdesk.com/docs/en/technical-support</url>
+./flutter/lib/common.dart:3756:        launchUrl(Uri.parse('https://rustdesk.com'));
+./flutter/lib/common.dart:4011:  // https://rustdesk.com/docs/en/self-host/client-configuration/advanced-settings/#whitelist
+./flutter/lib/desktop/pages/connection_page.dart:44:    const url = "https://rustdesk.com/pricing";
+./flutter/lib/desktop/pages/desktop_home_page.dart:440:        final Uri url = Uri.parse('https://rustdesk.com/download');
+./flutter/lib/desktop/pages/desktop_home_page.dart:533:                'https://rustdesk.com/docs/en/client/linux/#permissions-issue',
+./flutter/lib/desktop/pages/desktop_home_page.dart:544:            link: 'https://rustdesk.com/docs/en/client/linux/#x11-required'));
+./flutter/lib/desktop/pages/desktop_home_page.dart:550:            link: 'https://rustdesk.com/docs/en/client/linux/#login-screen'));
+./flutter/lib/desktop/pages/install_page.dart:190:                                'https://rustdesk.com/privacy.html'),
+./flutter/lib/desktop/pages/install_page.dart:192:                              message: 'https://rustdesk.com/privacy.html',
+./flutter/lib/mobile/pages/connection_page.dart:127:              final url = 'https://rustdesk.com/download';
+./flutter/lib/mobile/pages/settings_page.dart:39:const url = 'https://rustdesk.com/';
+./flutter/lib/mobile/pages/settings_page.dart:995:                  child: Text('rustdesk.com',
+./flutter/lib/mobile/pages/settings_page.dart:1028:                  launchUrlString('https://rustdesk.com/privacy.html'),
+./flutter/lib/mobile/pages/settings_page.dart:1141:              const url = 'https://rustdesk.com/';
+./flutter/lib/mobile/pages/settings_page.dart:1146:              child: Text('rustdesk.com',
+./flutter/windows/flutter/ephemeral/.plugin_symlinks/flutter_gpu_texture_renderer/windows/flutter_gpu_texture_renderer_plugin.h:36:  // https://github.com/rustdesk/rustdesk/commit/89150317e14500170f30570c873b7efa8cb826ad#commitcomment-138449157
+./libs/hbb_common/src/config.rs:100:pub const LINK_DOCS_HOME: &str = "https://rustdesk.com/docs/en/";
+./libs/hbb_common/src/config.rs:101:pub const LINK_DOCS_X11_REQUIRED: &str = "https://rustdesk.com/docs/en/manual/linux/#x11-required";
+./libs/hbb_common/src/config.rs:120:pub const RENDEZVOUS_SERVERS: &[&str] = &["rs-ny.rustdesk.com"];
+./libs/hbb_common/src/lib.rs:496:    const URL: &str = "https://api.rustdesk.com/version/latest";
+./libs/hbb_common/src/socket_client.rs:294:            ipv4_to_ipv6("rustdesk.com".to_owned(), false),
+./libs/hbb_common/src/socket_client.rs:295:            "rustdesk.com"
+./libs/hbb_common/src/socket_client.rs:297:        if ("rustdesk.com:80")
+./libs/hbb_common/src/websocket.rs:420:        assert_eq!(check_ws("rustdesk.com:21115"), "ws://rustdesk.com/ws/id");
+./libs/hbb_common/src/websocket.rs:421:        assert_eq!(check_ws("rustdesk.com:21116"), "ws://rustdesk.com/ws/id");
+./libs/hbb_common/src/websocket.rs:422:        assert_eq!(check_ws("rustdesk.com:21117"), "ws://rustdesk.com/ws/relay");
+./libs/hbb_common/src/websocket.rs:427:            "https://api.rustdesk.com".to_string(),
+./libs/hbb_common/src/websocket.rs:441:        assert_eq!(check_ws("rustdesk.com:21115"), "wss://rustdesk.com/ws/id");
+./libs/hbb_common/src/websocket.rs:442:        assert_eq!(check_ws("rustdesk.com:21116"), "wss://rustdesk.com/ws/id");
+./libs/hbb_common/src/websocket.rs:444:            check_ws("rustdesk.com:21117"),
+./libs/hbb_common/src/websocket.rs:445:            "wss://rustdesk.com/ws/relay"
+./libs/hbb_common/src/websocket.rs:454:        assert_eq!(check_ws("rustdesk.com:21115"), "wss://rustdesk.com/ws/id");
+./libs/hbb_common/src/websocket.rs:455:        assert_eq!(check_ws("rustdesk.com:21116"), "wss://rustdesk.com/ws/id");
+./libs/hbb_common/src/websocket.rs:457:            check_ws("rustdesk.com:34567"),
+./libs/hbb_common/src/websocket.rs:458:            "wss://rustdesk.com/ws/relay"
+./README.md:8:  <b>We need your help to translate this README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> and <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk Doc</a> to your native language</b>
+./README.md:18:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Advanced%20Features-blue)](https://rustdesk.com/pricing.html)
+./README.md:20:Yet another remote desktop solution, written in Rust. Works out of the box with no configuration required. You have full control of your data, with no concerns about security. You can use our rendezvous/relay server, [set up your own](https://rustdesk.com/server), or [write your own rendezvous/relay server](https://github.com/rustdesk/rustdesk-server-demo).
+./README.md:60:## [Build](https://rustdesk.com/docs/en/dev/build/)
+./res/msi/Package/License.rtf:86:), processes personal data in connection with the activities and services concerning the operation of the website rustdesk.com and other websites or social media profiles run and managed by us (hereinafter the \'93}{\rtlch\fcs1 \ab\af1\afs21 \ltrch\fcs0 
+./res/msi/preprocess.py:500:    license_content = license_content.replace("website rustdesk.com and other ", "")
+./res/rpm-flutter-suse.spec:6:URL:        https://rustdesk.com
+./res/rpm-flutter-suse.spec:7:Vendor:     rustdesk <info@rustdesk.com>
+./res/rpm-flutter.spec:6:URL:        https://rustdesk.com
+./res/rpm-flutter.spec:7:Vendor:     rustdesk <info@rustdesk.com>
+./res/rpm.spec:6:URL:        https://rustdesk.com
+./res/rpm.spec:7:Vendor:     rustdesk <info@rustdesk.com>
+./res/vcpkg/ffmpeg/patch/0012-fix-macos-big-sur-CVBufferCopyAttachments.patch:2:From: RustDesk <support@rustdesk.com>
+./rustdesk.txt:111:./docs/README-AR.md:9:  <b>  لغتك الأم,  <a href="https://github.com/rustdesk/doc.rustdesk.com">Doc</a> و <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a>, README نحن بحاجة إلى مساعدتك لترجمة هذا </b>
+./rustdesk.txt:112:./docs/README-AR.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%D8%A7%D9%84%D9%85%D9%8A%D8%B2%D8%A7%D8%AA%20%D8%A7%D9%84%D9%85%D8%AA%D9%82%D8%AF%D9%85%D8%A9-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:117:./docs/README-CS.md:9:  <b>Potřebujeme Vaši pomoc s překladem tohoto README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">uživatelského rozhraní aplikace RustDesk</a> a <a href="https://github.com/rustdesk/doc.rustdesk.com">dokumentace k ní</a> do vašeho jazyka</b>
+./rustdesk.txt:118:./docs/README-CS.md:15:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Pokro%C4%8Dil%C3%A9%20Funkce-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:123:./docs/README-DA.md:9:  <b>Vi har brug for din hjælp til at oversætte denne README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> og <a href=" https://github.com/rustdesk/doc.rustdesk.com">Dokument</a> til dit modersmål</b>
+./rustdesk.txt:124:./docs/README-DA.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Avancerede%20Funktioner-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:128:./docs/README-DE.md:8:  <b>Wir brauchen Ihre Hilfe, um dieses README, die <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk-Benutzeroberfläche</a> und die <a href="https://github.com/rustdesk/doc.rustdesk.com">Dokumentation</a> in Ihre Muttersprache zu übersetzen.</b>
+./rustdesk.txt:130:./docs/README-DE.md:18:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Erweiterte%20Funktionen-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:131:./docs/README-DE.md:20:RustDesk ist eine in Rust geschriebene Remote-Desktop-Software, die out of the box ohne besondere Konfiguration funktioniert. Sie haben die volle Kontrolle über Ihre Daten und müssen sich keine Sorgen um die Sicherheit machen. Sie können unseren Rendezvous/Relay-Server nutzen, [einen eigenen Server aufsetzen](https://rustdesk.com/server) oder [einen eigenen Server programmieren](https://github.com/rustdesk/rustdesk-server-demo).
+./rustdesk.txt:136:./docs/README-EO.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Altnivela%20Funkcioj-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:141:./docs/README-ES.md:18:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Caracter%C3%ADsticas%20Avanzadas-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:148:./docs/README-FA.md:10:<p dir="rtl" align="center"><b>برای ترجمه این سند (README)، <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang" dir="rtl">رابط کاربری RustDesk</a>، <a href="https://github.com/rustdesk/doc.rustdesk.com" dir="rtl">و مستندات آن</a> به زبان مادری شما به کمکتان نیازمندیم. </b></p>
+./rustdesk.txt:149:./docs/README-FA.md:15:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%D9%88%DB%8C%DA%98%DA%AF%DB%8C%E2%80%8C%D9%87%D8%A7%DB%8C%20%D9%BE%DB%8C%D8%B4%D8%B1%D9%81%D8%AA%D9%87-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:154:./docs/README-FI.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Edistyneet%20Ominaisuudet-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:158:./docs/README-FR.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Fonctionnalit%C3%A9s%20Avanc%C3%A9es-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:163:./docs/README-GR.md:9:  <b>Χρειαζόμαστε τη βοήθειά σας για να μεταφράσουμε αυτό το αρχείο README, το <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> και το <a href="https://github.com/rustdesk/doc.rustdesk.com">Doc</a> στη μητρική σας γλώσσα</b>
+./rustdesk.txt:164:./docs/README-GR.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%CE%A0%CF%81%CE%BF%CE%B7%CE%B3%CE%BC%CE%AD%CE%BD%CE%B5%CF%82%20%CE%94%CF%85%CE%BD%CE%B1%CF%84%CF%8C%CF%84%CE%B7%CF%84%CE%B5%CF%82-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:168:./docs/README-HU.md:9:  <b>Kell a segítséged, hogy lefordítsuk ezt a README-t, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">a RustDesk UI-t</a> és a <a href="https://github.com/rustdesk/doc.rustdesk.com">Dokumentációt</a> az anyanyelvedre</b>
+./rustdesk.txt:169:./docs/README-HU.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Speci%C3%A1lis%20Funkci%C3%B3k-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:170:./docs/README-HU.md:16:A RustDesk egy távoli elérésű asztali szoftver, Rust-ban írva. Működik mindenféle konfiguráció nélkül, feltelepítéssel, vagy anélkül. Az adataidat teljesen te kezeled, nincs szükség aggódásra a harmadik felek miatt. Használhatod a RustDesk punblikus randevú/relay szervereit, [hostolhatsz sajátot](https://rustdesk.com/server), vagy akár [írhatsz is egyet](https://github.com/rustdesk/rustdesk-server-demo).
+./rustdesk.txt:177:./docs/README-ID.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Fitur%20Lanjutan-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:182:./docs/README-IT.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Funzionalit%C3%A0%20Avanzate-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:187:./docs/README-JP.md:9:  <b>READMEや<a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a>、 <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk Doc</a>の翻訳者を歓迎します！</b>
+./rustdesk.txt:188:./docs/README-JP.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%E9%AB%98%E5%BA%A6%E3%81%AA%E6%A9%9F%E8%83%BD-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:194:./docs/README-KR.md:8:  <b>이 README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> 및 <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk 문서</a>를 귀하의 모국어로 번역하는 데 도움이 필요합니다</b>
+./rustdesk.txt:196:./docs/README-KR.md:18:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%EA%B3%A0%EA%B8%89%20%EA%B8%B0%EB%8A%A5-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:201:./docs/README-ML.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%E0%B4%B5%E0%B4%BF%E0%B4%95%E0%B4%B8%E0%B4%BF%E0%B4%A4%20%E0%B4%B8%E0%B4%B5%E0%B4%BF%E0%B4%B6%E0%B5%87%E0%B4%B7%E0%B4%A4%E0%B4%95%E0%B5%BE-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:205:./docs/README-NL.md:9:  <b>Wij hebben uw hulp nodig om dit README bestand te vertalen, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> en <a href="https://github.com/rustdesk/doc.rustdesk.com">Doc</a> naar uw moedertaal</b>
+./rustdesk.txt:206:./docs/README-NL.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Geavanceerde%20Functies-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:210:./docs/README-NO.md:9:  <b>Vi trenger din hjelp til å oversette denne README-en, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> og <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk Doc</a> tid ditt morsmål</b>
+./rustdesk.txt:211:./docs/README-NO.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Avanserte%20Funksjoner-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:216:./docs/README-PL.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Zaawansowane%20Funkcje-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:217:./docs/README-PL.md:18:RustDesk to wieloplatformowe oprogramowanie do zdalnego pulpitu, napisane w języku Rust, zaprojektowane z myślą o prostocie wdrożenia, bezpieczeństwie i pełnej kontroli użytkownika nad danymi. Aplikacja działa od razu po uruchomieniu i nie wymaga skomplikowanej konfiguracji. Możesz skorzystać z naszego darmowego serwera publicznego, [skonfigurować własny](https://rustdesk.com/server), lub [napisać własny serwer](https://github.com/rustdesk/rustdesk-server-demo).
+./rustdesk.txt:221:./docs/README-PTBR.md:8:  <b>Precisamos da sua ajuda para traduzir este README, a <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">Interface do RustDesk</a> e a <a href="https://github.com/rustdesk/doc.rustdesk.com">Documentação do RustDesk</a> para o seu idioma nativo</b>
+./rustdesk.txt:223:./docs/README-PTBR.md:18:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Advanced%20Features-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:228:./docs/README-RO.md:8:  <b>Avem nevoie de ajutorul tău pentru a traduce acest README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> și <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk Doc</a> în limba ta maternă</b>
+./rustdesk.txt:230:./docs/README-RO.md:18:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Advanced%20Features-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:236:./docs/README-RU.md:9:     и <a href="https://github.com/rustdesk/doc.rustdesk.com">документации RustDesk</a> на ваш родной язык.</b>
+./rustdesk.txt:238:./docs/README-RU.md:18:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%D0%A0%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%BD%D1%8B%D0%B5%20%D0%92%D0%BE%D0%B7%D0%BC%D0%BE%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D0%B8-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:245:./docs/README-TR.md:10:  <b>README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> ve <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk Dökümantasyonu</a>'nu ana dilinize çevirmemiz için yardımınıza ihtiyacımız var</b>
+./rustdesk.txt:247:./docs/README-TR.md:20:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Geli%C5%9Fmi%C5%9F%20%C3%96zellikler-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:251:./docs/README-UA.md:9:  <b>Нам потрібна ваша допомога для перекладу цього README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">інтерфейсу</a> та <a href="https://github.com/rustdesk/doc.rustdesk.com">документації</a> RustDesk вашою рідною мовою</B>
+./rustdesk.txt:252:./docs/README-UA.md:14:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%D0%A0%D0%BE%D0%B7%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D1%96%20%D0%A4%D1%83%D0%BD%D0%BA%D1%86%D1%96%D1%97-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:256:./docs/README-VN.md:11:  <b>Chúng tôi rất hoan nghênh sự hỗ trợ của bạn trong việc dịch trang README, trang giao diện người dùng của RustDesk - <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> và trang tài liệu của RustDesk - <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk Doc</a> sang Tiếng Việt</b>
+./rustdesk.txt:257:./docs/README-VN.md:16:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-T%C3%ADnh%20N%C4%83ng%20N%C3%A2ng%20Cao-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:258:./docs/README-VN.md:18:RustDesk là một phần mềm điểu khiển máy tính từ xa mã nguồn mở, được viết bằng Rust. Nó hoạt động ngay sau khi cài đặt, không yêu cầu cấu hình phức tạp. Bạn có toàn quyền kiểm soát với dữ liệu của mình mà không cần phải lo lắng về vấn đề bảo mật. Bạn có thể sử dụng máy chủ rendezvous/relay của chúng tôi hoặc [tự cài đặt máy chủ của riêng mình](https://rustdesk.com/server) hay thậm chí [tự tạo máy chủ rendezvous/relay cho riêng bạn](https://github.com/rustdesk/rustdesk-server-demo).
+./rustdesk.txt:263:./docs/README-ZH.md:17:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:269:./docs/SECURITY-DE.md:6:Wenn Sie eine Sicherheitslücke im RustDesk-Projekt finden, melden Sie diese bitte verantwortungsbewusst per E-Mail an info@rustdesk.com.
+./rustdesk.txt:271:./docs/SECURITY-IT.md:7:Se trovi una vulnerabilità nel progetto RustDesk, segnalala responsabilmente inviando un'email a info@rustdesk.com.
+./rustdesk.txt:272:./docs/SECURITY-JP.md:6:RustDesk プロジェクトにセキュリティの脆弱性を発見した場合は、info@rustdesk.com までメールで責任を持って報告してください。
+./rustdesk.txt:273:./docs/SECURITY-KR.md:5:저희는 프로젝트의 보안을 매우 중요하게 생각합니다. 모든 사용자가 발견한 취약점을 저희에게 보고할 것을 권장합니다. RustDesk 프로젝트에서 보안 취약점이 발견되면 info@rustdesk.com으로 이메일을 보내 책임감 있게 보고해 주시기 바랍니다.
+./rustdesk.txt:275:./docs/SECURITY-NO.md:6:Om du finner en sikkerhets sårbarhet i RustDesk prosjektet, venligst raportere det ansvarsfult ved å sende oss en email til info@rustdesk.com.
+./rustdesk.txt:276:./docs/SECURITY-PL.md:6:Jeżeli znajdziesz lukę w projekcie RustDesk, proszę zgłosić ją jak najszybciej wysyłając e-mail na adres info@rustdesk.com.
+./rustdesk.txt:277:./docs/SECURITY-RO.md:6:Dacă găsești o vulnerabilitate de securitate în proiectul RustDesk, te rugăm să o raportezi responsabil trimițând un e-mail la info@rustdesk.com.
+./rustdesk.txt:278:./docs/SECURITY-TR.md:6:Eğer RustDesk projesinde bir güvenlik açığı bulursanız, lütfen info@rustdesk.com adresine sorumlu bir şekilde bildirin.
+./rustdesk.txt:279:./docs/SECURITY.md:6:If you find a security vulnerability in the RustDesk project, please report it responsibly by sending an email to info@rustdesk.com.
+./rustdesk.txt:412:./README.md:8:  <b>We need your help to translate this README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> and <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk Doc</a> to your native language</b>
+./rustdesk.txt:414:./README.md:18:[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Advanced%20Features-blue)](https://rustdesk.com/pricing.html)
+./rustdesk.txt:459:./res/vcpkg/ffmpeg/patch/0012-fix-macos-big-sur-CVBufferCopyAttachments.patch:2:From: RustDesk <support@rustdesk.com>
+./src/client.rs:132:pub const SCRAP_X11_REF_URL: &str = "https://rustdesk.com/docs/en/manual/linux/#x11-required";
+./src/client.rs:3352:            link: "https://rustdesk.com/docs/en/manual/linux/#login-screen",
+./src/common.rs:952:// Because the url is always `https://api.rustdesk.com/version/latest`.
+./src/common.rs:1083:    "https://admin.rustdesk.com".to_owned()
+./src/common.rs:1089:    url.contains("rustdesk.com/") || url.ends_with("rustdesk.com")
+./src/common.rs:2806:        // Test URLs containing "rustdesk.com/"
+./src/common.rs:2807:        assert!(is_public("https://rustdesk.com/"));
+./src/common.rs:2808:        assert!(is_public("https://www.rustdesk.com/"));
+./src/common.rs:2809:        assert!(is_public("https://api.rustdesk.com/v1"));
+./src/common.rs:2811:        assert!(is_public("https://rustdesk.com/path"));
+./src/common.rs:2813:        // Test URLs ending with "rustdesk.com"
+./src/common.rs:2814:        assert!(is_public("rustdesk.com"));
+./src/common.rs:2815:        assert!(is_public("https://rustdesk.com"));
+./src/common.rs:2817:        assert!(is_public("http://www.rustdesk.com"));
+./src/common.rs:2818:        assert!(is_public("https://api.rustdesk.com"));
+./src/common.rs:2825:        assert!(!is_public("https://rustdesk.computer.com"));
+./src/common.rs:2826:        assert!(!is_public("rustdesk.comhello.com"));
+./src/common.rs:2844:            "https://admin.rustdesk.com/api/login",
+./src/common.rs:2845:            "https://admin.rustdesk.com"
+./src/lang/en.rs:92:        ("doc_mac_permission", "https://rustdesk.com/docs/en/client/mac/#enable-permissions"),
+./src/lang/en.rs:199:        ("doc_fix_wayland", "https://rustdesk.com/docs/en/client/linux/#x11-required"),
+./src/platform/windows.rs:1504:    // https://github.com/rustdesk/rustdesk/commit/f4bdfb6936ae4804fc8ab1cf560db192622ad01a
+./src/server/input_service.rs:717:    // https://www.reddit.com/r/rustdesk/comments/1kn1w5x/typing_lags_when_connecting_to_macos_clients/
+./src/ui/index.tis:96:        handler.open_url("https://rustdesk.com/blog/id-relay-set/");
+./src/ui/index.tis:604:            <div .link .custom-event url='https://rustdesk.com/privacy.html'>" + translate("Privacy Statement") + "</div> \
+./src/ui/index.tis:605:            <div .link .custom-event url='https://rustdesk.com'>" + translate("Website") + "</div> \
+./src/ui/index.tis:837:        handler.open_url("https://rustdesk.com/download");
+./src/ui/index.tis:840:            handler.open_url("https://rustdesk.com");
+./src/ui/index.tis:1346:    handler.open_url("https://rustdesk.com");
+./src/ui/install.tis:53:        view.open_url("http://rustdesk.com/privacy");

@@ -26,8 +26,8 @@ windows = { version = "0.61", features = [
 native-windows-gui = {version = "1.0", default-features = false, features = ["animation-timer", "image-decoder"]}
 
 [package.metadata.winres]
-LegalCopyright = "Copyright © 2026 Purslane Tech Pte. Ltd. All rights reserved."
-ProductName = "RustDesk"
+LegalCopyright = "Copyright © 2026 Ossis Bilişim Teknolojileri. Tüm hakları saklıdır."
+ProductName = "Ossis Remote Control"
 OriginalFilename = "OssisRemoteControl.exe"
 FileDescription = "Ossis Remote Control"
 #ProductVersion = ""
