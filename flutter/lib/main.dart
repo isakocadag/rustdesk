@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hbb/common/widgets/overlay.dart';
 import 'package:flutter_hbb/desktop/pages/desktop_tab_page.dart';
 import 'package:flutter_hbb/desktop/pages/install_page.dart';
+import 'package:flutter_hbb/desktop/pages/ossis_reference_gate.dart';
 import 'package:flutter_hbb/desktop/pages/server_page.dart';
 import 'package:flutter_hbb/desktop/screen/desktop_file_transfer_screen.dart';
 import 'package:flutter_hbb/desktop/screen/desktop_view_camera_screen.dart';
@@ -137,16 +138,27 @@ void runMainApp(bool startService) async {
   // register uni links
   await initEnv(kAppTypeMain);
   checkUpdate();
-  // trigger connection status updater
-  await bind.mainCheckConnectStatus();
-  if (startService) {
-    gFFI.serverModel.startService();
-    bind.pluginSyncUi(syncTo: kAppTypeMain);
-    bind.pluginListReload();
-  }
   await Future.wait([gFFI.abModel.loadCache(), gFFI.groupModel.loadCache()]);
   gFFI.userModel.refreshCurrentUser();
-  runApp(App());
+
+  final requireReference = isWindows;
+  Future<void> activateMainFeatures() async {
+    // No connection service is started until the reference is approved.
+    await bind.mainCheckConnectStatus();
+    if (startService) {
+      await gFFI.serverModel.startService();
+      bind.pluginSyncUi(syncTo: kAppTypeMain);
+      bind.pluginListReload();
+    }
+  }
+
+  if (!requireReference) {
+    await activateMainFeatures();
+  }
+  runApp(App(
+    requireReference: requireReference,
+    onReferenceApproved: activateMainFeatures,
+  ));
 
   bool? alwaysOnTop;
   if (isDesktop) {
@@ -161,9 +173,10 @@ void runMainApp(bool startService) async {
     // Restore the location of the main window before window hide or show.
     await restoreWindowPosition(WindowType.Main);
     // Check the startup argument, if we successfully handle the argument, we keep the main window hidden.
-    final handledByUniLinks = await initUniLinks();
+    final handledByUniLinks = requireReference ? false : await initUniLinks();
     debugPrint("handled by uni links: $handledByUniLinks");
-    if (handledByUniLinks || handleUriLink(cmdArgs: kBootArgs)) {
+    if (!requireReference &&
+        (handledByUniLinks || handleUriLink(cmdArgs: kBootArgs))) {
       windowManager.hide();
     } else {
       windowManager.show();
@@ -424,6 +437,15 @@ WindowOptions getHiddenTitleBarWindowOptions(
 }
 
 class App extends StatefulWidget {
+  const App({
+    super.key,
+    this.requireReference = false,
+    this.onReferenceApproved,
+  });
+
+  final bool requireReference;
+  final Future<void> Function()? onReferenceApproved;
+
   @override
   State<App> createState() => _AppState();
 }
@@ -486,6 +508,18 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     // final analytics = FirebaseAnalytics.instance;
     final botToastBuilder = BotToastInit();
+    Widget home = isDesktop
+        ? const DesktopTabPage()
+        : isWeb
+            ? WebHomePage()
+            : HomePage();
+    if (widget.requireReference) {
+      home = OssisReferenceGate(
+        onApproved: widget.onReferenceApproved!,
+        child: home,
+      );
+    }
+
     return RefreshWrapper(builder: (context) {
       return MultiProvider(
         providers: [
@@ -506,11 +540,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
           theme: MyTheme.lightTheme,
           darkTheme: MyTheme.darkTheme,
           themeMode: MyTheme.currentThemeMode(),
-          home: isDesktop
-              ? const DesktopTabPage()
-              : isWeb
-                  ? WebHomePage()
-                  : HomePage(),
+          home: home,
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,

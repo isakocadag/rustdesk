@@ -42,3 +42,5 @@ Filename: "{app}\OssisRemoteControl.exe"; Description: "Ossis Remote Control'ü 
 [UninstallRun]
 Filename: "{sys}\sc.exe"; Parameters: "stop RustDesk"; Flags: runhidden
 Filename: "{sys}\sc.exe"; Parameters: "delete RustDesk"; Flags: runhidden
+Filename: "{sys}\sc.exe"; Parameters: "stop OssisRemoteControl"; Flags: runhidden
+Filename: "{sys}\sc.exe"; Parameters: "delete OssisRemoteControl"; Flags: runhidden

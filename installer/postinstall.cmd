@@ -12,11 +12,12 @@ taskkill /F /IM OssisRemoteControl.exe >nul 2>&1
 
 sc.exe stop RustDesk >nul 2>&1
 sc.exe delete RustDesk >nul 2>&1
+sc.exe stop OssisRemoteControl >nul 2>&1
+sc.exe delete OssisRemoteControl >nul 2>&1
 
 "%APP%" --config "%CONFIG%"
 
-sc.exe create OssisRemoteControl binPath= "\"%APP%\" --service" start= auto
-sc.exe description OssisRemoteControl "Ossis Remote Control Service"
-sc.exe start OssisRemoteControl
+rem The reference gate starts the connection service only after approval.
+rem Do not install an always-on Windows service that could bypass the gate.
 
 exit /b 0

@@ -106,8 +106,14 @@ void showServerSettingsWithValue(
     }
 
     Widget buildField(
-        String label, TextEditingController controller, String errorMsg,
-        {String? Function(String?)? validator, bool autofocus = false}) {
+      String label,
+      TextEditingController controller,
+      String errorMsg, {
+      String? Function(String?)? validator,
+      bool autofocus = false,
+      bool obscureText = false,
+      bool readOnly = false,
+    }) {
       if (isDesktop || isWeb) {
         return Row(
           children: [
@@ -126,6 +132,8 @@ void showServerSettingsWithValue(
                 showLabelText: false,
                 validator: validator,
                 autofocus: autofocus,
+                obscureText: obscureText,
+                readOnly: readOnly,
               ).workaroundFreezeLinuxMint(),
             ),
           ],
@@ -137,6 +145,8 @@ void showServerSettingsWithValue(
         controller: controller,
         errorMsg: errorMsg,
         validator: validator,
+        obscureText: obscureText,
+        readOnly: readOnly,
       ).workaroundFreezeLinuxMint();
     }
 
@@ -144,7 +154,11 @@ void showServerSettingsWithValue(
       title: Row(
         children: [
           Expanded(child: Text(translate('ID/Relay Server'))),
-          ...ServerConfigImportExportWidgets(controllers, errMsgs),
+          ...ServerConfigImportExportWidgets(
+            controllers,
+            errMsgs,
+            allowExport: !isWindows,
+          ),
         ],
       ),
       content: ConstrainedBox(
@@ -176,7 +190,13 @@ void showServerSettingsWithValue(
                     },
                   ),
                   SizedBox(height: 8),
-                  buildField('Key', keyCtrl, ''),
+                  buildField(
+                    'Key',
+                    keyCtrl,
+                    '',
+                    obscureText: isWindows,
+                    readOnly: isWindows,
+                  ),
                   if (isInProgress)
                     Padding(
                       padding: EdgeInsets.only(top: 8),
@@ -215,9 +235,15 @@ TextFormField serverSettingsTextFormField({
   bool autofocus = false,
   bool showLabelText = true,
   EdgeInsetsGeometry? contentPadding,
+  bool obscureText = false,
+  bool readOnly = false,
 }) {
   return TextFormField(
     controller: controller,
+    obscureText: obscureText,
+    obscuringCharacter: '*',
+    readOnly: readOnly,
+    enableInteractiveSelection: !obscureText,
     decoration: InputDecoration(
       labelText: showLabelText ? label : null,
       errorText: errorMsg.isEmpty ? null : errorMsg,
