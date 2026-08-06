@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -145,9 +147,10 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
                     Text(
                       'Destek Referansı Gerekli',
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
                     ),
                     const SizedBox(height: 12),
                     Text(
@@ -190,6 +193,14 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
                               ),
                             )
                           : const Text('Doğrula ve Uygulamayı Aç'),
+                    ),
+                    const SizedBox(height: 10),
+                    OutlinedButton(
+                      onPressed: _busy ? null : () => exit(0),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                      ),
+                      child: const Text('Bağlantıyı İptal Et'),
                     ),
                     const SizedBox(height: 16),
                     Text(
