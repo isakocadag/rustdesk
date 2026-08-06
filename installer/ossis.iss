@@ -27,8 +27,11 @@ CloseApplications=yes
 RestartApplications=no
 
 [Files]
-Source: "..\rustdesk\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\rustdesk\*"; DestDir: "{app}"; Excludes: "rustdesk.exe"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "postinstall.cmd"; DestDir: "{app}"; Flags: ignoreversion
+
+[InstallDelete]
+Type: files; Name: "{app}\rustdesk.exe"
 
 [Icons]
 Name: "{autodesktop}\Ossis Remote Control"; Filename: "{app}\OssisRemoteControl.exe"
