@@ -11,6 +11,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 const _referenceVerificationUrl =
     'https://servis.ossisbilisim.com:8443/api/v1/reference/validate/';
 
+const _contractedSupportUrl =
+    'https://servis.ossisbilisim.com:8443/api/v1/support/contracted/';
+
 class OssisReferenceGate extends StatefulWidget {
   const OssisReferenceGate({
     super.key,
@@ -27,14 +30,19 @@ class OssisReferenceGate extends StatefulWidget {
 
 class _OssisReferenceGateState extends State<OssisReferenceGate> {
   final _controller = TextEditingController();
+  final _companyCodeController = TextEditingController();
+  final _passwordController = TextEditingController();
   final _focusNode = FocusNode();
   bool _approved = false;
   bool _busy = false;
+  bool _contractedMode = false;
   String? _error;
 
   @override
   void dispose() {
     _controller.dispose();
+    _companyCodeController.dispose();
+    _passwordController.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -133,6 +141,97 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
     }
   }
 
+  Future<void> _startContractedSupport() async {
+    if (_busy) return;
+
+    final companyCode = _companyCodeController.text.trim().toUpperCase();
+    final password = _passwordController.text;
+
+    if (companyCode.isEmpty || password.isEmpty) {
+      setState(() {
+        _error = 'Firma kodu ve şifre zorunludur.';
+      });
+      return;
+    }
+
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+
+    try {
+      final response = await http
+          .post(
+            Uri.parse(_contractedSupportUrl),
+            headers: const {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode({
+              'company_code': companyCode,
+              'password': password,
+              'subject': 'Ossis Remote Control destek talebi',
+              'description':
+                  'Sözleşmeli müşteri Ossis Remote Control üzerinden destek başlattı.',
+            }),
+          )
+          .timeout(const Duration(seconds: 12));
+
+      Map<String, dynamic>? payload;
+      try {
+        final decoded = jsonDecode(utf8.decode(response.bodyBytes));
+        if (decoded is Map<String, dynamic>) {
+          payload = decoded;
+        }
+      } on FormatException {
+        payload = null;
+      }
+
+      if (response.statusCode != 200 || payload?['valid'] != true) {
+        final errorCode = payload?['error']?.toString();
+        final message = switch (errorCode) {
+          'invalid_credentials' => 'Firma kodu veya şifre hatalı.',
+          'company_code_and_password_required' =>
+            'Firma kodu ve şifre zorunludur.',
+          'reference_creation_disabled' =>
+            'Bu müşteri hesabı için destek başlatma yetkisi kapalı.',
+          _ => 'Destek oturumu başlatılamadı. Lütfen tekrar deneyin.',
+        };
+        throw _ReferenceRejected(message);
+      }
+
+      final referenceCode =
+          payload?['reference_code']?.toString().trim().toUpperCase();
+
+      if (referenceCode == null || referenceCode.isEmpty) {
+        throw const _ReferenceRejected(
+          'Sunucudan referans kodu alınamadı.',
+        );
+      }
+
+      _controller.text = referenceCode;
+
+      if (!mounted) return;
+      setState(() {
+        _busy = false;
+      });
+
+      await _verify();
+    } on _ReferenceRejected catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _busy = false;
+        _error = error.message;
+      });
+    } on TimeoutException {
+      _showConnectionError();
+    } on http.ClientException {
+      _showConnectionError();
+    } catch (_) {
+      _showConnectionError();
+    }
+  }
+
   void _showConnectionError() {
     if (!mounted) return;
     setState(() {
@@ -148,6 +247,7 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
     if (_approved) return widget.child;
 
     final colors = Theme.of(context).colorScheme;
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -165,55 +265,157 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
                     Image.asset('assets/icon.png', height: 64, width: 64),
                     const SizedBox(height: 22),
                     Text(
-                      'Destek Referansı Gerekli',
+                      'Ossis Remote Control',
                       textAlign: TextAlign.center,
                       style:
                           Theme.of(context).textTheme.headlineSmall?.copyWith(
                                 fontWeight: FontWeight.w700,
                               ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     Text(
-                      'Ossis Remote Control uygulamasını açmak için size iletilen geçerli referans kodunu girin.',
+                      _contractedMode
+                          ? 'Sözleşmeli Müşteri Girişi'
+                          : 'Destek Referansı Gerekli',
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    const SizedBox(height: 26),
-                    TextField(
-                      controller: _controller,
-                      focusNode: _focusNode,
-                      autofocus: true,
-                      enabled: !_busy,
-                      textCapitalization: TextCapitalization.characters,
-                      textInputAction: TextInputAction.done,
-                      maxLength: 64,
-                      decoration: InputDecoration(
-                        labelText: 'Referans kodu',
-                        hintText: 'Örn. OSSIS-XXXX-XXXX',
-                        errorText: _error,
-                        border: const OutlineInputBorder(),
-                        prefixIcon: const Icon(Icons.vpn_key_outlined),
-                        counterText: '',
+                    const SizedBox(height: 22),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _contractedMode
+                              ? OutlinedButton(
+                                  onPressed: _busy
+                                      ? null
+                                      : () {
+                                          setState(() {
+                                            _contractedMode = false;
+                                            _error = null;
+                                          });
+                                          _focusNode.requestFocus();
+                                        },
+                                  child: const Text('Referans Kodum Var'),
+                                )
+                              : FilledButton(
+                                  onPressed: null,
+                                  child: const Text('Referans Kodum Var'),
+                                ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _contractedMode
+                              ? FilledButton(
+                                  onPressed: null,
+                                  child: const Text('Sözleşmeli Müşteriyim'),
+                                )
+                              : OutlinedButton(
+                                  onPressed: _busy
+                                      ? null
+                                      : () {
+                                          setState(() {
+                                            _contractedMode = true;
+                                            _error = null;
+                                          });
+                                        },
+                                  child: const Text('Sözleşmeli Müşteriyim'),
+                                ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    if (!_contractedMode) ...[
+                      Text(
+                        'Ossis Remote Control uygulamasını açmak için size iletilen geçerli referans kodunu girin.',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
-                      onSubmitted: (_) => _verify(),
-                    ),
-                    const SizedBox(height: 18),
-                    FilledButton(
-                      onPressed: _busy ? null : _verify,
-                      style: FilledButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
+                      const SizedBox(height: 20),
+                      TextField(
+                        controller: _controller,
+                        focusNode: _focusNode,
+                        autofocus: true,
+                        enabled: !_busy,
+                        textCapitalization: TextCapitalization.characters,
+                        textInputAction: TextInputAction.done,
+                        maxLength: 64,
+                        decoration: InputDecoration(
+                          labelText: 'Referans kodu',
+                          hintText: 'Örn. OSSIS-XXXX-XXXX',
+                          errorText: _error,
+                          border: const OutlineInputBorder(),
+                          prefixIcon: const Icon(Icons.vpn_key_outlined),
+                          counterText: '',
+                        ),
+                        onSubmitted: (_) => _verify(),
                       ),
-                      child: _busy
-                          ? SizedBox(
-                              width: 22,
-                              height: 22,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.5,
-                                color: colors.onPrimary,
-                              ),
-                            )
-                          : const Text('Doğrula ve Uygulamayı Aç'),
-                    ),
+                      const SizedBox(height: 18),
+                      FilledButton(
+                        onPressed: _busy ? null : _verify,
+                        style: FilledButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                        ),
+                        child: _busy
+                            ? SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: colors.onPrimary,
+                                ),
+                              )
+                            : const Text('Doğrula ve Uygulamayı Aç'),
+                      ),
+                    ] else ...[
+                      Text(
+                        'Firma kodunuz ve şifreniz ile doğrudan destek başlatabilirsiniz.',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      const SizedBox(height: 20),
+                      TextField(
+                        controller: _companyCodeController,
+                        enabled: !_busy,
+                        textCapitalization: TextCapitalization.characters,
+                        textInputAction: TextInputAction.next,
+                        decoration: const InputDecoration(
+                          labelText: 'Firma kodu',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.business_outlined),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      TextField(
+                        controller: _passwordController,
+                        enabled: !_busy,
+                        obscureText: true,
+                        textInputAction: TextInputAction.done,
+                        decoration: InputDecoration(
+                          labelText: 'Şifre',
+                          errorText: _error,
+                          border: const OutlineInputBorder(),
+                          prefixIcon: const Icon(Icons.lock_outline),
+                        ),
+                        onSubmitted: (_) => _startContractedSupport(),
+                      ),
+                      const SizedBox(height: 18),
+                      FilledButton(
+                        onPressed: _busy ? null : _startContractedSupport,
+                        style: FilledButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                        ),
+                        child: _busy
+                            ? SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: colors.onPrimary,
+                                ),
+                              )
+                            : const Text('Destek Başlat'),
+                      ),
+                    ],
                     const SizedBox(height: 10),
                     OutlinedButton(
                       onPressed: _busy ? null : () => exit(0),
@@ -224,7 +426,9 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Referans kodunuz yoksa Ossis Bilişim destek ekibiyle iletişime geçin.',
+                      _contractedMode
+                          ? 'Sözleşmeli müşteriler firma kodu ve şifre ile ek onay beklemeden destek başlatabilir.'
+                          : 'Referans kodunuz yoksa Ossis Bilişim destek ekibiyle iletişime geçin.',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
