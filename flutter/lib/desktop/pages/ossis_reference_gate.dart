@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -57,6 +58,15 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
 
     try {
       final packageInfo = await PackageInfo.fromPlatform();
+      final windowsInfo = await DeviceInfoPlugin().windowsInfo;
+      final deviceId = windowsInfo.deviceId.trim();
+      final deviceName = windowsInfo.computerName.trim();
+
+      if (deviceId.isEmpty) {
+        throw const _ReferenceRejected(
+          'Bu bilgisayarın cihaz kimliği alınamadı.',
+        );
+      }
       final response = await http
           .post(
             Uri.parse(_referenceVerificationUrl),
@@ -69,6 +79,8 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
               'client': 'ossis-remote-control',
               'platform': 'windows',
               'version': packageInfo.version,
+              'device_id': deviceId,
+              'device_name': deviceName,
             }),
           )
           .timeout(const Duration(seconds: 12));
@@ -91,12 +103,20 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
         return;
       }
 
-      final serverMessage = payload?['message'];
-      throw _ReferenceRejected(
-        serverMessage is String && serverMessage.trim().isNotEmpty
-            ? serverMessage.trim()
-            : 'Referans kodu geçersiz veya kullanım süresi dolmuş.',
-      );
+      final errorCode = payload?['error']?.toString();
+      final errorMessage = switch (errorCode) {
+        'invalid_reference' => 'Referans kodu geçersiz.',
+        'inactive_reference' => 'Referans kodu devre dışı bırakılmış.',
+        'expired_reference' => 'Referans kodunun kullanım süresi dolmuş.',
+        'device_limit_reached' =>
+          'Bu referans kodu başka bir bilgisayarda etkinleştirilmiş.',
+        'device_disabled' =>
+          'Bu bilgisayar için bağlantı yetkisi devre dışı bırakılmış.',
+        'device_id_required' => 'Bilgisayar kimliği sunucuya gönderilemedi.',
+        'reference_code_required' => 'Referans kodu zorunludur.',
+        _ => 'Referans kodu doğrulanamadı.',
+      };
+      throw _ReferenceRejected(errorMessage);
     } on _ReferenceRejected catch (error) {
       if (!mounted) return;
       setState(() {
