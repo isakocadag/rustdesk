@@ -246,47 +246,103 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
   Widget build(BuildContext context) {
     if (_approved) return widget.child;
 
-    final colors = Theme.of(context).colorScheme;
+    const accent = Color(0xFFD32F2F);
+    const background = Color(0xFF121418);
+    const panel = Color(0xFF1B1D22);
+    const panelSoft = Color(0xFF22252B);
+    const border = Color(0xFF3A3E46);
+    const textSoft = Color(0xFFB9BDC6);
 
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 460),
-            child: Card(
-              elevation: 8,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(36, 34, 36, 32),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Image.asset('assets/icon.png', height: 64, width: 64),
-                    const SizedBox(height: 22),
-                    Text(
-                      'Ossis Remote Control',
-                      textAlign: TextAlign.center,
-                      style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.w700,
-                              ),
+      backgroundColor: background,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final compact = constraints.maxWidth < 620;
+          final veryCompact = constraints.maxWidth < 460;
+
+          final maxWidth = compact ? 460.0 : 700.0;
+          final horizontalPadding = compact ? 16.0 : 28.0;
+          final cardPadding = compact ? 20.0 : 34.0;
+          final logoSize = compact ? 74.0 : 96.0;
+          final titleSize = compact ? 28.0 : 38.0;
+          final sectionGap = compact ? 18.0 : 24.0;
+
+          return Center(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: compact ? 18 : 28,
+              ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxWidth),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: panel,
+                    borderRadius: BorderRadius.circular(compact ? 18 : 22),
+                    border: Border.all(color: border),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0x66000000),
+                        blurRadius: 28,
+                        offset: Offset(0, 14),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      cardPadding,
+                      compact ? 24 : 34,
+                      cardPadding,
+                      compact ? 20 : 28,
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _contractedMode
-                          ? 'Sözleşmeli Müşteri Girişi'
-                          : 'Destek Referansı Gerekli',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 22),
-                    Row(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Expanded(
-                          child: _contractedMode
-                              ? OutlinedButton(
-                                  onPressed: _busy
+                        Image.asset(
+                          'assets/icon.png',
+                          height: logoSize,
+                          width: logoSize,
+                        ),
+                        SizedBox(height: compact ? 14 : 18),
+                        Text(
+                          'Ossis Remote Control',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: titleSize,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.4,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          _contractedMode
+                              ? 'Sözleşmeli Müşteri Girişi'
+                              : 'Destek Referansı Gerekli',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: textSoft,
+                            fontSize: compact ? 17 : 21,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: compact ? 24 : 30),
+                        Container(
+                          height: compact ? 58 : 66,
+                          decoration: BoxDecoration(
+                            color: panelSoft,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: border),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: _buildModeButton(
+                                  selected: !_contractedMode,
+                                  icon: Icons.vpn_key_outlined,
+                                  label: 'Referans Kodum Var',
+                                  onTap: _busy
                                       ? null
                                       : () {
                                           setState(() {
@@ -295,22 +351,14 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
                                           });
                                           _focusNode.requestFocus();
                                         },
-                                  child: const Text('Referans Kodum Var'),
-                                )
-                              : FilledButton(
-                                  onPressed: null,
-                                  child: const Text('Referans Kodum Var'),
                                 ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: _contractedMode
-                              ? FilledButton(
-                                  onPressed: null,
-                                  child: const Text('Sözleşmeli Müşteriyim'),
-                                )
-                              : OutlinedButton(
-                                  onPressed: _busy
+                              ),
+                              Expanded(
+                                child: _buildModeButton(
+                                  selected: _contractedMode,
+                                  icon: Icons.people_alt_outlined,
+                                  label: 'Sözleşmeli Müşteriyim',
+                                  onTap: _busy
                                       ? null
                                       : () {
                                           setState(() {
@@ -318,124 +366,347 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
                                             _error = null;
                                           });
                                         },
-                                  child: const Text('Sözleşmeli Müşteriyim'),
                                 ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: sectionGap),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: compact ? 16 : 22,
+                            vertical: compact ? 14 : 18,
+                          ),
+                          decoration: BoxDecoration(
+                            color: panelSoft,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: border),
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: compact ? 38 : 44,
+                                height: compact ? 38 : 44,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: accent,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: const Icon(
+                                  Icons.info_outline,
+                                  color: accent,
+                                ),
+                              ),
+                              SizedBox(width: compact ? 12 : 16),
+                              Expanded(
+                                child: Text(
+                                  _contractedMode
+                                      ? 'Firma kodunuz ve şifreniz ile ek onay beklemeden destek başlatabilirsiniz.'
+                                      : 'Ossis Remote Control uygulamasını açmak için size iletilen geçerli referans kodunu girin.',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: compact ? 15 : 18,
+                                    height: 1.35,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: sectionGap),
+                        if (!_contractedMode) ...[
+                          _buildDarkField(
+                            controller: _controller,
+                            focusNode: _focusNode,
+                            autofocus: true,
+                            enabled: !_busy,
+                            label: 'Referans Kodu',
+                            hint: 'Örn. OSSIS-XXXX-XXXX',
+                            icon: Icons.vpn_key_outlined,
+                            errorText: _error,
+                            textCapitalization: TextCapitalization.characters,
+                            textInputAction: TextInputAction.done,
+                            maxLength: 64,
+                            onSubmitted: (_) => _verify(),
+                          ),
+                          SizedBox(height: compact ? 16 : 18),
+                          _buildPrimaryButton(
+                            busy: _busy,
+                            height: compact ? 56 : 66,
+                            icon: Icons.verified_user_outlined,
+                            label: 'Doğrula ve Uygulamayı Aç',
+                            fontSize: compact ? 17 : 20,
+                            onPressed: _verify,
+                          ),
+                        ] else ...[
+                          _buildDarkField(
+                            controller: _companyCodeController,
+                            enabled: !_busy,
+                            label: 'Firma Kodu',
+                            hint: 'Firma kodunuzu girin',
+                            icon: Icons.business_outlined,
+                            errorText: null,
+                            textCapitalization: TextCapitalization.characters,
+                            textInputAction: TextInputAction.next,
+                          ),
+                          SizedBox(height: compact ? 12 : 14),
+                          _buildDarkField(
+                            controller: _passwordController,
+                            enabled: !_busy,
+                            label: 'Şifre',
+                            hint: 'Şifrenizi girin',
+                            icon: Icons.lock_outline,
+                            errorText: _error,
+                            obscureText: true,
+                            textInputAction: TextInputAction.done,
+                            onSubmitted: (_) => _startContractedSupport(),
+                          ),
+                          SizedBox(height: compact ? 16 : 18),
+                          _buildPrimaryButton(
+                            busy: _busy,
+                            height: compact ? 56 : 66,
+                            icon: Icons.support_agent_outlined,
+                            label: 'Destek Başlat',
+                            fontSize: compact ? 17 : 20,
+                            onPressed: _startContractedSupport,
+                          ),
+                        ],
+                        SizedBox(height: compact ? 12 : 14),
+                        SizedBox(
+                          height: compact ? 50 : 58,
+                          child: OutlinedButton.icon(
+                            onPressed: _busy ? null : () => exit(0),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: panelSoft,
+                              side: const BorderSide(color: border),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
+                            icon: const Icon(Icons.cancel_outlined),
+                            label: Text(
+                              'Bağlantıyı İptal Et',
+                              style: TextStyle(
+                                fontSize: compact ? 16 : 18,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: compact ? 18 : 22),
+                        Container(
+                          padding: EdgeInsets.only(
+                            top: compact ? 16 : 18,
+                          ),
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              top: BorderSide(color: border),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.link_outlined,
+                                color: accent,
+                                size: 24,
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  _contractedMode
+                                      ? 'Sözleşmeli müşteri bilgileriniz yalnızca destek oturumu başlatmak için kullanılır.'
+                                      : 'Referans kodunuz yoksa Ossis Bilişim destek ekibiyle iletişime geçin.',
+                                  style: TextStyle(
+                                    color: textSoft,
+                                    fontSize: veryCompact ? 12.5 : 14,
+                                    height: 1.35,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
-                    if (!_contractedMode) ...[
-                      Text(
-                        'Ossis Remote Control uygulamasını açmak için size iletilen geçerli referans kodunu girin.',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        controller: _controller,
-                        focusNode: _focusNode,
-                        autofocus: true,
-                        enabled: !_busy,
-                        textCapitalization: TextCapitalization.characters,
-                        textInputAction: TextInputAction.done,
-                        maxLength: 64,
-                        decoration: InputDecoration(
-                          labelText: 'Referans kodu',
-                          hintText: 'Örn. OSSIS-XXXX-XXXX',
-                          errorText: _error,
-                          border: const OutlineInputBorder(),
-                          prefixIcon: const Icon(Icons.vpn_key_outlined),
-                          counterText: '',
-                        ),
-                        onSubmitted: (_) => _verify(),
-                      ),
-                      const SizedBox(height: 18),
-                      FilledButton(
-                        onPressed: _busy ? null : _verify,
-                        style: FilledButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                        ),
-                        child: _busy
-                            ? SizedBox(
-                                width: 22,
-                                height: 22,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: colors.onPrimary,
-                                ),
-                              )
-                            : const Text('Doğrula ve Uygulamayı Aç'),
-                      ),
-                    ] else ...[
-                      Text(
-                        'Firma kodunuz ve şifreniz ile doğrudan destek başlatabilirsiniz.',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        controller: _companyCodeController,
-                        enabled: !_busy,
-                        textCapitalization: TextCapitalization.characters,
-                        textInputAction: TextInputAction.next,
-                        decoration: const InputDecoration(
-                          labelText: 'Firma kodu',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.business_outlined),
-                        ),
-                      ),
-                      const SizedBox(height: 14),
-                      TextField(
-                        controller: _passwordController,
-                        enabled: !_busy,
-                        obscureText: true,
-                        textInputAction: TextInputAction.done,
-                        decoration: InputDecoration(
-                          labelText: 'Şifre',
-                          errorText: _error,
-                          border: const OutlineInputBorder(),
-                          prefixIcon: const Icon(Icons.lock_outline),
-                        ),
-                        onSubmitted: (_) => _startContractedSupport(),
-                      ),
-                      const SizedBox(height: 18),
-                      FilledButton(
-                        onPressed: _busy ? null : _startContractedSupport,
-                        style: FilledButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                        ),
-                        child: _busy
-                            ? SizedBox(
-                                width: 22,
-                                height: 22,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: colors.onPrimary,
-                                ),
-                              )
-                            : const Text('Destek Başlat'),
-                      ),
-                    ],
-                    const SizedBox(height: 10),
-                    OutlinedButton(
-                      onPressed: _busy ? null : () => exit(0),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                      ),
-                      child: const Text('Bağlantıyı İptal Et'),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      _contractedMode
-                          ? 'Sözleşmeli müşteriler firma kodu ve şifre ile ek onay beklemeden destek başlatabilir.'
-                          : 'Referans kodunuz yoksa Ossis Bilişim destek ekibiyle iletişime geçin.',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildModeButton({
+    required bool selected,
+    required IconData icon,
+    required String label,
+    required VoidCallback? onTap,
+  }) {
+    const accent = Color(0xFFD32F2F);
+    const textSoft = Color(0xFFB9BDC6);
+
+    return Material(
+      color: selected ? accent : Colors.transparent,
+      borderRadius: BorderRadius.circular(14),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                color: selected ? Colors.white : textSoft,
+                size: 24,
+              ),
+              const SizedBox(width: 9),
+              Flexible(
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: selected ? Colors.white : const Color(0xFFE1E3E8),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDarkField({
+    required TextEditingController controller,
+    required bool enabled,
+    required String label,
+    required String hint,
+    required IconData icon,
+    required TextInputAction textInputAction,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    String? errorText,
+    bool obscureText = false,
+    TextCapitalization textCapitalization = TextCapitalization.none,
+    int? maxLength,
+    ValueChanged<String>? onSubmitted,
+  }) {
+    const accent = Color(0xFFD32F2F);
+    const panel = Color(0xFF191B20);
+
+    return TextField(
+      controller: controller,
+      focusNode: focusNode,
+      autofocus: autofocus,
+      enabled: enabled,
+      obscureText: obscureText,
+      textCapitalization: textCapitalization,
+      textInputAction: textInputAction,
+      maxLength: maxLength,
+      onSubmitted: onSubmitted,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 17,
+      ),
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hint,
+        errorText: errorText,
+        counterText: '',
+        filled: true,
+        fillColor: panel,
+        labelStyle: const TextStyle(
+          color: Color(0xFFE3E5E9),
+          fontWeight: FontWeight.w600,
+        ),
+        hintStyle: const TextStyle(
+          color: Color(0xFF777C86),
+        ),
+        prefixIcon: Icon(icon, color: accent),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(
+            color: accent,
+            width: 1.5,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(
+            color: Color(0xFFE53935),
+            width: 2,
+          ),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(
+            color: Color(0xFF3A3E46),
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(
+            color: Color(0xFFFF6B6B),
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(
+            color: Color(0xFFFF6B6B),
+            width: 2,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPrimaryButton({
+    required bool busy,
+    required double height,
+    required IconData icon,
+    required String label,
+    required double fontSize,
+    required VoidCallback onPressed,
+  }) {
+    return SizedBox(
+      height: height,
+      child: FilledButton.icon(
+        onPressed: busy ? null : onPressed,
+        style: FilledButton.styleFrom(
+          backgroundColor: const Color(0xFFD32F2F),
+          foregroundColor: Colors.white,
+          disabledBackgroundColor: const Color(0xFF7A2A2A),
+          disabledForegroundColor: Colors.white70,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+        icon: busy
+            ? const SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  color: Colors.white,
+                ),
+              )
+            : Icon(icon),
+        label: Text(
+          label,
+          style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: FontWeight.w800,
           ),
         ),
       ),
