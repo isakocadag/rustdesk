@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 
 const _referenceVerificationUrl =
-    'https://servis.ossisbilisim.com/api/reference/verify';
+    'https://servis.ossisbilisim.com:8443/api/v1/reference/validate/';
 
 class OssisReferenceGate extends StatefulWidget {
   const OssisReferenceGate({
