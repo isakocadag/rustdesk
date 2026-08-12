@@ -177,9 +177,9 @@ void runMainApp(bool startService) async {
     await restoreWindowPosition(WindowType.Main);
 
     if (requireReference) {
-      const referenceWindowSize = Size(400, 600);
+      const referenceWindowSize = Size(420, 600);
       await windowManager.setSize(referenceWindowSize);
-      await windowManager.setMinimumSize(const Size(400, 600));
+      await windowManager.setMinimumSize(const Size(420, 600));
       await windowManager.center();
     }
     // Check the startup argument, if we successfully handle the argument, we keep the main window hidden.
