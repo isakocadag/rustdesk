@@ -170,17 +170,17 @@ void runMainApp(bool startService) async {
   WindowOptions windowOptions = getHiddenTitleBarWindowOptions(
     isMainWindow: true,
     alwaysOnTop: alwaysOnTop,
+    size: requireReference ? const Size(400, 600) : null,
+    center: requireReference,
     backgroundColor: requireReference ? const Color(0xFF121418) : null,
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
-    // Restore the location of the main window before window hide or show.
-    await restoreWindowPosition(WindowType.Main);
-
-    if (requireReference) {
-      const referenceWindowSize = Size(400, 600);
-      await windowManager.setSize(referenceWindowSize);
+    // Referans ekrani ilk kareden itibaren 400x600 acilir.
+    // Normal ana pencere ise kaydedilmis konumunu/boyutunu kullanmaya devam eder.
+    if (!requireReference) {
+      await restoreWindowPosition(WindowType.Main);
+    } else {
       await windowManager.setMinimumSize(const Size(400, 600));
-      await windowManager.center();
     }
     // Check the startup argument, if we successfully handle the argument, we keep the main window hidden.
     final handledByUniLinks = requireReference ? false : await initUniLinks();
