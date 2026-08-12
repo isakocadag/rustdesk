@@ -170,7 +170,7 @@ void runMainApp(bool startService) async {
   WindowOptions windowOptions = getHiddenTitleBarWindowOptions(
     isMainWindow: true,
     alwaysOnTop: alwaysOnTop,
-    size: requireReference ? const Size(400, 600) : null,
+    size: requireReference ? const Size(420, 600) : null,
     center: requireReference,
     backgroundColor: requireReference ? const Color(0xFF121418) : null,
   );
@@ -180,7 +180,7 @@ void runMainApp(bool startService) async {
     if (!requireReference) {
       await restoreWindowPosition(WindowType.Main);
     } else {
-      await windowManager.setMinimumSize(const Size(400, 600));
+      await windowManager.setMinimumSize(const Size(420, 600));
     }
     // Check the startup argument, if we successfully handle the argument, we keep the main window hidden.
     final handledByUniLinks = requireReference ? false : await initUniLinks();
