@@ -22,6 +22,7 @@ import 'package:flutter_hbb/utils/multi_window_manager.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'common.dart';
@@ -177,9 +178,26 @@ void runMainApp(bool startService) async {
     await restoreWindowPosition(WindowType.Main);
 
     if (requireReference) {
-      const referenceWindowSize = Size(420, 600);
+      final display = await screenRetriever.getPrimaryDisplay();
+      final visible = display.visibleSize ?? display.size;
+
+      const targetWidth = 420.0;
+      const targetHeight = 600.0;
+
+      final availableWidth = visible.width * 0.90;
+      final availableHeight = visible.height * 0.90;
+
+      final width = availableWidth < targetWidth ? availableWidth : targetWidth;
+      final height =
+          availableHeight < targetHeight ? availableHeight : targetHeight;
+
+      final referenceWindowSize = Size(
+        width < 300.0 ? 300.0 : width,
+        height < 420.0 ? 420.0 : height,
+      );
+
+      await windowManager.setMinimumSize(const Size(300, 420));
       await windowManager.setSize(referenceWindowSize);
-      await windowManager.setMinimumSize(const Size(420, 600));
       await windowManager.center();
     }
     // Check the startup argument, if we successfully handle the argument, we keep the main window hidden.
