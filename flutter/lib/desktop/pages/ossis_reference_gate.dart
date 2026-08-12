@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 const _referenceVerificationUrl =
@@ -242,6 +243,11 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
     _focusNode.requestFocus();
   }
 
+  Future<void> _openSupportTicket() async {
+    final uri = Uri.parse('https://ossisbilisim.com/support/ticket/');
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_approved) return widget.child;
@@ -260,12 +266,12 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
           final compact = constraints.maxWidth < 620;
           final veryCompact = constraints.maxWidth < 460;
 
-          final maxWidth = compact ? 460.0 : 700.0;
-          final horizontalPadding = compact ? 16.0 : 28.0;
-          final cardPadding = compact ? 20.0 : 34.0;
-          final logoSize = compact ? 74.0 : 96.0;
-          final titleSize = compact ? 28.0 : 38.0;
-          final sectionGap = compact ? 18.0 : 24.0;
+          final maxWidth = compact ? 430.0 : 620.0;
+          final horizontalPadding = compact ? 12.0 : 22.0;
+          final cardPadding = compact ? 16.0 : 28.0;
+          final logoSize = compact ? 62.0 : 82.0;
+          final titleSize = compact ? 26.0 : 34.0;
+          final sectionGap = compact ? 14.0 : 20.0;
 
           return Center(
             child: SingleChildScrollView(
@@ -404,7 +410,7 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
                                 child: Text(
                                   _contractedMode
                                       ? 'Firma kodunuz ve şifreniz ile ek onay beklemeden destek başlatabilirsiniz.'
-                                      : 'Ossis Remote Control uygulamasını açmak için size iletilen geçerli referans kodunu girin.',
+                                      : 'LÜTFEN REFERANS NUMARANIZI GİRİN',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: compact ? 15 : 18,
@@ -497,36 +503,52 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
                           ),
                         ),
                         SizedBox(height: compact ? 18 : 22),
-                        Container(
-                          padding: EdgeInsets.only(
-                            top: compact ? 16 : 18,
-                          ),
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              top: BorderSide(color: border),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.link_outlined,
-                                color: accent,
-                                size: 24,
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: _openSupportTicket,
+                            borderRadius: BorderRadius.circular(14),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: compact ? 12 : 16,
+                                vertical: compact ? 11 : 14,
                               ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  _contractedMode
-                                      ? 'Sözleşmeli müşteri bilgileriniz yalnızca destek oturumu başlatmak için kullanılır.'
-                                      : 'Referans kodunuz yoksa Ossis Bilişim destek ekibiyle iletişime geçin.',
-                                  style: TextStyle(
-                                    color: textSoft,
-                                    fontSize: veryCompact ? 12.5 : 14,
-                                    height: 1.35,
-                                  ),
+                              decoration: BoxDecoration(
+                                color: panelSoft,
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(
+                                  color: const Color(0x66D32F2F),
                                 ),
                               ),
-                            ],
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.language,
+                                    color: accent,
+                                    size: 26,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      _contractedMode
+                                          ? 'Destek talebi oluşturmak veya Ossis Bilişim ile iletişime geçmek için tıklayın.'
+                                          : 'Referans kodunuz yoksa Ossis Bilişim destek ekibiyle iletişime geçin.',
+                                      style: TextStyle(
+                                        color: textSoft,
+                                        fontSize: veryCompact ? 12.0 : 13.5,
+                                        height: 1.3,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Icon(
+                                    Icons.chevron_right,
+                                    color: accent,
+                                    size: 26,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ],

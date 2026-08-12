@@ -172,6 +172,13 @@ void runMainApp(bool startService) async {
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     // Restore the location of the main window before window hide or show.
     await restoreWindowPosition(WindowType.Main);
+
+    if (requireReference) {
+      const referenceWindowSize = Size(560, 680);
+      await windowManager.setSize(referenceWindowSize);
+      await windowManager.setMinimumSize(const Size(500, 620));
+      await windowManager.center();
+    }
     // Check the startup argument, if we successfully handle the argument, we keep the main window hidden.
     final handledByUniLinks = requireReference ? false : await initUniLinks();
     debugPrint("handled by uni links: $handledByUniLinks");

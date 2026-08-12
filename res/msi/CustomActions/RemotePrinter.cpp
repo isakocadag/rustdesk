@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 
 #include <Windows.h>
 #include <winspool.h>
@@ -18,7 +18,7 @@ namespace RemotePrinter
 {
 #define HRESULT_ERR_ELEMENT_NOT_FOUND 0x80070490
 
-    LPCWCH RD_DRIVER_INF_PATH = L"drivers\\RustDeskPrinterDriver\\RustDeskPrinterDriver.inf";
+    LPCWCH RD_DRIVER_INF_PATH = L"drivers\\OssisPrinterDriver\\RustDeskPrinterDriver.inf";
     LPCWCH RD_PRINTER_PORT = L"RustDesk Printer";
     LPCWCH RD_PRINTER_NAME = L"RustDesk Printer";
     LPCWCH RD_PRINTER_DRIVER_NAME = L"RustDesk v4 Printer Driver";
@@ -515,3 +515,4 @@ namespace RemotePrinter
         WcaLog(LOGMSG_STANDARD, "Deleted the local port\n");
     }
 }
+
