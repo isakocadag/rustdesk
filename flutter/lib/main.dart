@@ -168,15 +168,18 @@ void runMainApp(bool startService) async {
 
   // Set window option.
   WindowOptions windowOptions = getHiddenTitleBarWindowOptions(
-      isMainWindow: true, alwaysOnTop: alwaysOnTop);
+    isMainWindow: true,
+    alwaysOnTop: alwaysOnTop,
+    backgroundColor: requireReference ? const Color(0xFF121418) : null,
+  );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     // Restore the location of the main window before window hide or show.
     await restoreWindowPosition(WindowType.Main);
 
     if (requireReference) {
-      const referenceWindowSize = Size(560, 680);
+      const referenceWindowSize = Size(400, 600);
       await windowManager.setSize(referenceWindowSize);
-      await windowManager.setMinimumSize(const Size(500, 620));
+      await windowManager.setMinimumSize(const Size(400, 600));
       await windowManager.center();
     }
     // Check the startup argument, if we successfully handle the argument, we keep the main window hidden.
@@ -423,11 +426,13 @@ void runInstallPage() async {
   });
 }
 
-WindowOptions getHiddenTitleBarWindowOptions(
-    {bool isMainWindow = false,
-    Size? size,
-    bool center = false,
-    bool? alwaysOnTop}) {
+WindowOptions getHiddenTitleBarWindowOptions({
+  bool isMainWindow = false,
+  Size? size,
+  bool center = false,
+  bool? alwaysOnTop,
+  Color? backgroundColor,
+}) {
   var defaultTitleBarStyle = TitleBarStyle.hidden;
   // we do not hide titlebar on win7 because of the frame overflow.
   if (kUseCompatibleUiMode) {
@@ -436,7 +441,8 @@ WindowOptions getHiddenTitleBarWindowOptions(
   return WindowOptions(
     size: size,
     center: center,
-    backgroundColor: (isMacOS && isMainWindow) ? null : Colors.transparent,
+    backgroundColor: backgroundColor ??
+        ((isMacOS && isMainWindow) ? null : Colors.transparent),
     skipTaskbar: false,
     titleBarStyle: defaultTitleBarStyle,
     alwaysOnTop: alwaysOnTop,

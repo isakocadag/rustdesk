@@ -266,12 +266,12 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
           final compact = constraints.maxWidth < 620;
           final veryCompact = constraints.maxWidth < 460;
 
-          final maxWidth = compact ? 430.0 : 620.0;
-          final horizontalPadding = compact ? 12.0 : 22.0;
-          final cardPadding = compact ? 16.0 : 28.0;
-          final logoSize = compact ? 62.0 : 82.0;
-          final titleSize = compact ? 26.0 : 34.0;
-          final sectionGap = compact ? 14.0 : 20.0;
+          final maxWidth = compact ? 376.0 : 620.0;
+          final horizontalPadding = compact ? 8.0 : 22.0;
+          final cardPadding = compact ? 12.0 : 28.0;
+          final logoSize = compact ? 52.0 : 82.0;
+          final titleSize = compact ? 22.0 : 34.0;
+          final sectionGap = compact ? 10.0 : 20.0;
 
           return Center(
             child: SingleChildScrollView(
@@ -409,7 +409,7 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
                               Expanded(
                                 child: Text(
                                   _contractedMode
-                                      ? 'Firma kodunuz ve şifreniz ile ek onay beklemeden destek başlatabilirsiniz.'
+                                      ? 'FİRMA KODUNUZU VE ŞİFRENİZİ GİRİNİZ'
                                       : 'LÜTFEN REFERANS NUMARANIZI GİRİN',
                                   style: TextStyle(
                                     color: Colors.white,
@@ -572,37 +572,40 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
     const accent = Color(0xFFD32F2F);
     const textSoft = Color(0xFFB9BDC6);
 
-    return Material(
-      color: selected ? accent : Colors.transparent,
-      borderRadius: BorderRadius.circular(14),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                color: selected ? Colors.white : textSoft,
-                size: 24,
-              ),
-              const SizedBox(width: 9),
-              Flexible(
-                child: Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: selected ? Colors.white : const Color(0xFFE1E3E8),
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15,
+    return SizedBox.expand(
+      child: Material(
+        color: selected ? accent : Colors.transparent,
+        borderRadius: BorderRadius.circular(13),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  color: selected ? Colors.white : textSoft,
+                  size: 20,
+                ),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: selected ? Colors.white : const Color(0xFFE1E3E8),
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                      height: 1.12,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
