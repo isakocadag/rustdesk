@@ -264,9 +264,9 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           final compact = constraints.maxWidth < 620;
-          final veryCompact = constraints.maxWidth < 400;
+          final veryCompact = constraints.maxWidth < 460;
 
-          final maxWidth = compact ? 388.0 : 620.0;
+          final maxWidth = compact ? 376.0 : 620.0;
           final horizontalPadding = compact ? 8.0 : 22.0;
           final cardPadding = compact ? 12.0 : 28.0;
           final logoSize = compact ? 52.0 : 82.0;
