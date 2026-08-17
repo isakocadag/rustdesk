@@ -10,6 +10,7 @@ import 'package:flutter_hbb/common/widgets/overlay.dart';
 import 'package:flutter_hbb/desktop/pages/desktop_tab_page.dart';
 import 'package:flutter_hbb/desktop/pages/install_page.dart';
 import 'package:flutter_hbb/desktop/pages/ossis_reference_gate.dart';
+import 'package:flutter_hbb/desktop/pages/ossis_personnel_gate.dart';
 import 'package:flutter_hbb/desktop/pages/server_page.dart';
 import 'package:flutter_hbb/desktop/screen/desktop_file_transfer_screen.dart';
 import 'package:flutter_hbb/desktop/screen/desktop_view_camera_screen.dart';
@@ -38,6 +39,11 @@ import 'package:flutter_hbb/plugin/handlers.dart'
 int? kWindowId;
 WindowType? kWindowType;
 late List<String> kBootArgs;
+
+const bool kOssisPersonnelBuild = bool.fromEnvironment(
+  'OSSIS_PERSONNEL',
+  defaultValue: false,
+);
 
 Future<void> main(List<String> args) async {
   earlyAssert();
@@ -141,7 +147,8 @@ void runMainApp(bool startService) async {
   await Future.wait([gFFI.abModel.loadCache(), gFFI.groupModel.loadCache()]);
   gFFI.userModel.refreshCurrentUser();
 
-  final requireReference = isWindows;
+  final requirePersonnel = isWindows && kOssisPersonnelBuild;
+  final requireReference = isWindows && !requirePersonnel;
   Future<void> activateMainFeatures() async {
     // No connection service is started until the reference is approved.
     await bind.mainCheckConnectStatus();
@@ -152,11 +159,12 @@ void runMainApp(bool startService) async {
     }
   }
 
-  if (!requireReference) {
+  if (!requireReference && !requirePersonnel) {
     await activateMainFeatures();
   }
   runApp(App(
     requireReference: requireReference,
+    requirePersonnel: requirePersonnel,
     onReferenceApproved: activateMainFeatures,
   ));
 
@@ -170,23 +178,26 @@ void runMainApp(bool startService) async {
   WindowOptions windowOptions = getHiddenTitleBarWindowOptions(
     isMainWindow: true,
     alwaysOnTop: alwaysOnTop,
-    backgroundColor: requireReference ? const Color(0xFF121418) : null,
+    backgroundColor: (requireReference || requirePersonnel)
+        ? const Color(0xFF121418)
+        : null,
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     // Restore the location of the main window before window hide or show.
     await restoreWindowPosition(WindowType.Main);
 
     // Check the startup argument, if we successfully handle the argument, we keep the main window hidden.
-    final handledByUniLinks = requireReference ? false : await initUniLinks();
+    final gateRequired = requireReference || requirePersonnel;
+    final handledByUniLinks = gateRequired ? false : await initUniLinks();
     debugPrint("handled by uni links: $handledByUniLinks");
-    if (!requireReference &&
+    if (!gateRequired &&
         (handledByUniLinks || handleUriLink(cmdArgs: kBootArgs))) {
       windowManager.hide();
     } else {
       await windowManager.show();
       await windowManager.focus();
 
-      if (requireReference) {
+      if (gateRequired) {
         await windowManager.maximize();
       }
 
@@ -452,10 +463,12 @@ class App extends StatefulWidget {
   const App({
     super.key,
     this.requireReference = false,
+    this.requirePersonnel = false,
     this.onReferenceApproved,
   });
 
   final bool requireReference;
+  final bool requirePersonnel;
   final Future<void> Function()? onReferenceApproved;
 
   @override
@@ -525,7 +538,12 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         : isWeb
             ? WebHomePage()
             : HomePage();
-    if (widget.requireReference) {
+    if (widget.requirePersonnel) {
+      home = OssisPersonnelGate(
+        onApproved: widget.onReferenceApproved!,
+        child: home,
+      );
+    } else if (widget.requireReference) {
       home = OssisReferenceGate(
         onApproved: widget.onReferenceApproved!,
         child: home,

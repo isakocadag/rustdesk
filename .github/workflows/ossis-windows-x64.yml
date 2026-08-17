@@ -285,12 +285,45 @@ jobs:
 
           Set-Location ..
 
+      - name: Validate Ossis personnel Dart code
+        shell: pwsh
+        run: |
+          Set-Location flutter
+
+          dart analyze lib/main.dart
+          if ($LASTEXITCODE -ne 0) {
+            throw "main.dart analizi basarisiz."
+          }
+
+          dart analyze lib/desktop/pages/ossis_personnel_gate.dart
+          if ($LASTEXITCODE -ne 0) {
+            throw "ossis_personnel_gate.dart analizi basarisiz."
+          }
+
+          Write-Host "OSSIS PERSONNEL DART PREFLIGHT: OK"
+          Set-Location ..
+
       - name: Build rustdesk
         run: |
           # Windows: build RustDesk
           # --hwcodec is shared by all Windows targets; per-target extras (e.g. --vram) come from the matrix
           python3 .\build.py --portable --flutter --skip-portable-pack --hwcodec ${{ matrix.job.build-args }}
           mv ./flutter/build/windows/${{ matrix.job.flutter-arch }}/runner/Release ./rustdesk
+
+          # Build personnel Flutter variant using the SAME Rust/Cargo output.
+          # Only the Flutter layer is rebuilt with OSSIS_PERSONNEL=true.
+          Set-Location flutter
+          flutter build windows --release --dart-define=OSSIS_PERSONNEL=true
+          Set-Location ..
+
+          if (-not (Test-Path ".\flutter\build\windows\${{ matrix.job.flutter-arch }}\runner\Release\rustdesk.exe")) {
+            throw "Personel Flutter executable olusturulamadi."
+          }
+
+          Move-Item `
+            ".\flutter\build\windows\${{ matrix.job.flutter-arch }}\runner\Release" `
+            ".\rustdesk-personnel" `
+            -Force
 
           # Download usbmmidd_v2.zip and extract it to ./rustdesk
           Invoke-WebRequest -Uri https://github.com/rustdesk-org/rdev/releases/download/usbmmidd_v2/usbmmidd_v2.zip -OutFile usbmmidd_v2.zip
@@ -326,6 +359,29 @@ jobs:
               Write-Host "Ingore the printer driver error."
           }
 
+      - name: Prepare personnel runtime files
+        shell: pwsh
+        run: |
+          if (-not (Test-Path ".\rustdesk-personnel\rustdesk.exe")) {
+            throw "Personel rustdesk.exe bulunamadi."
+          }
+
+          if (Test-Path ".\rustdesk\usbmmidd_v2") {
+            Copy-Item ".\rustdesk\usbmmidd_v2" ".\rustdesk-personnel\usbmmidd_v2" -Recurse -Force
+          }
+
+          if (Test-Path ".\rustdesk\drivers") {
+            Copy-Item ".\rustdesk\drivers" ".\rustdesk-personnel\drivers" -Recurse -Force
+          }
+
+          if (Test-Path ".\rustdesk\printer_driver_adapter.dll") {
+            Copy-Item ".\rustdesk\printer_driver_adapter.dll" ".\rustdesk-personnel\printer_driver_adapter.dll" -Force
+          }
+
+          if (Test-Path ".\rustdesk\dylib_virtual_display.dll") {
+            Copy-Item ".\rustdesk\dylib_virtual_display.dll" ".\rustdesk-personnel\dylib_virtual_display.dll" -Force
+          }
+
       - name: find Runner.res
         # Windows: find Runner.res (compiled from ./flutter/windows/runner/Runner.rc), copy to ./Runner.res
         # Runner.rc does not contain actual version, but Runner.res does
@@ -349,6 +405,15 @@ jobs:
           name: ${{ matrix.job.arch == 'aarch64' && 'topmostwindow-artifacts-ARM64' || 'topmostwindow-artifacts-x64' }}
           path: "./rustdesk"
 
+      - name: Copy TopMostWindow files to personnel package
+        shell: pwsh
+        run: |
+          Get-ChildItem ".\rustdesk" -File | ForEach-Object {
+            if ($_.Name -like "*TopMost*" -or $_.Name -like "*topmost*") {
+              Copy-Item $_.FullName ".\rustdesk-personnel\$($_.Name)" -Force
+            }
+          }
+
       - name: Prepare Ossis installer files
         shell: pwsh
         run: |
@@ -359,6 +424,18 @@ jobs:
           Copy-Item `
             ".\rustdesk\rustdesk.exe" `
             ".\rustdesk\OssisRemoteControl.exe" `
+            -Force
+
+      - name: Prepare Ossis personnel installer files
+        shell: pwsh
+        run: |
+          if (-not (Test-Path ".\rustdesk-personnel\rustdesk.exe")) {
+            throw "Personel rustdesk.exe bulunamadi."
+          }
+
+          Copy-Item `
+            ".\rustdesk-personnel\rustdesk.exe" `
+            ".\rustdesk-personnel\OssisSupportConsole.exe" `
             -Force
 
       - name: Install Inno Setup
@@ -375,11 +452,33 @@ jobs:
             throw "Ossis kurulum dosyasi olusturulamadi."
           }
 
+      - name: Build Ossis personnel installer
+        shell: pwsh
+        run: |
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" ".\installer\ossis-personnel.iss"
+
+          if (-not (Test-Path ".\installer-output\OssisSupportConsole-Setup.exe")) {
+            throw "Ossis personel kurulum dosyasi olusturulamadi."
+          }
+
       - name: Upload Ossis installer
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: ossis-remote-control-installer
           path: installer-output/OssisRemoteControl-Setup.exe
+
+      - name: Upload Ossis personnel installer
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: ossis-support-console-installer
+          path: installer-output/OssisSupportConsole-Setup.exe
+
+      - name: Upload Ossis personnel unsigned
+        if: env.UPLOAD_ARTIFACT == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: ossis-support-console-unsigned-windows-${{ matrix.job.arch }}
+          path: rustdesk-personnel
 
       - name: Upload unsigned
         if: env.UPLOAD_ARTIFACT == 'true'
