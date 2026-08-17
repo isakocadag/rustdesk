@@ -311,10 +311,121 @@ jobs:
           mv ./flutter/build/windows/${{ matrix.job.flutter-arch }}/runner/Release ./rustdesk
 
           # Build personnel Flutter variant using the SAME Rust/Cargo output.
-          # Only the Flutter layer is rebuilt with OSSIS_PERSONNEL=true.
-          Set-Location flutter
-          flutter build windows --release --dart-define=OSSIS_PERSONNEL=true
-          Set-Location ..
+          # Temporarily brand the Windows native layer as Ossis Support Console.
+          # Customer sources are always restored in finally.
+          $repoRoot = (Get-Location).Path
+          $runnerRc = Join-Path $repoRoot "flutter\windows\runner\Runner.rc"
+          $mainCpp = Join-Path $repoRoot "flutter\windows\runner\main.cpp"
+          $runnerRcBackup = "$runnerRc.ossis-customer-build-backup"
+          $mainCppBackup = "$mainCpp.ossis-customer-build-backup"
+
+          Copy-Item $runnerRc $runnerRcBackup -Force
+          Copy-Item $mainCpp $mainCppBackup -Force
+
+          try {
+            # ------------------------------------------------------
+            # PERSONEL EXE VERSION RESOURCE
+            # ------------------------------------------------------
+            $rcText = [System.IO.File]::ReadAllText(
+              $runnerRc,
+              [System.Text.Encoding]::UTF8
+            )
+
+            $rcReplacements = @(
+              @(
+                'VALUE "FileDescription", "Ossis Remote Control" "\0"',
+                'VALUE "FileDescription", "Ossis Support Console" "\0"'
+              ),
+              @(
+                'VALUE "InternalName", "rustdesk" "\0"',
+                'VALUE "InternalName", "OssisSupportConsole" "\0"'
+              ),
+              @(
+                'VALUE "OriginalFilename", "OssisRemoteControl.exe" "\0"',
+                'VALUE "OriginalFilename", "OssisSupportConsole.exe" "\0"'
+              ),
+              @(
+                'VALUE "ProductName", "Ossis Remote Control" "\0"',
+                'VALUE "ProductName", "Ossis Support Console" "\0"'
+              )
+            )
+
+            foreach ($pair in $rcReplacements) {
+              if (-not $rcText.Contains($pair[0])) {
+                throw "Runner.rc beklenen alan bulunamadi: $($pair[0])"
+              }
+              $rcText = $rcText.Replace($pair[0], $pair[1])
+            }
+
+            [System.IO.File]::WriteAllText(
+              $runnerRc,
+              $rcText,
+              [System.Text.UTF8Encoding]::new($false)
+            )
+
+            # ------------------------------------------------------
+            # PERSONEL NATIVE WINDOW NAME
+            # ------------------------------------------------------
+            $cppText = [System.IO.File]::ReadAllText(
+              $mainCpp,
+              [System.Text.Encoding]::UTF8
+            )
+
+            $cppAnchor = [string]::Join([Environment]::NewLine, @(
+              '  if (get_rustdesk_app_name) {',
+              '    wchar_t app_name_buffer[512] = {0};',
+              '    if (get_rustdesk_app_name(app_name_buffer, 512) == 0) {',
+              '      app_name = std::wstring(app_name_buffer);',
+              '    }',
+              '  }'
+            ))
+
+            $cppReplacement = $cppAnchor + [Environment]::NewLine +
+              '  app_name = L"Ossis Support Console";'
+
+            $cppCount = ([regex]::Matches(
+              $cppText,
+              [regex]::Escape($cppAnchor)
+            )).Count
+
+            if ($cppCount -ne 1) {
+              throw "main.cpp get_rustdesk_app_name blogu tam 1 kez bulunmadi. Sayim: $cppCount"
+            }
+
+            $cppText = $cppText.Replace(
+              $cppAnchor,
+              $cppReplacement
+            )
+
+            [System.IO.File]::WriteAllText(
+              $mainCpp,
+              $cppText,
+              [System.Text.UTF8Encoding]::new($false)
+            )
+
+            # ------------------------------------------------------
+            # PERSONEL FLUTTER BUILD
+            # ------------------------------------------------------
+            Set-Location (Join-Path $repoRoot "flutter")
+            flutter build windows --release --dart-define=OSSIS_PERSONNEL=true
+
+            if ($LASTEXITCODE -ne 0) {
+              throw "Personel Flutter build basarisiz."
+            }
+          }
+          finally {
+            Set-Location $repoRoot
+
+            if (Test-Path $runnerRcBackup) {
+              Copy-Item $runnerRcBackup $runnerRc -Force
+              Remove-Item $runnerRcBackup -Force
+            }
+
+            if (Test-Path $mainCppBackup) {
+              Copy-Item $mainCppBackup $mainCpp -Force
+              Remove-Item $mainCppBackup -Force
+            }
+          }
 
           if (-not (Test-Path ".\flutter\build\windows\${{ matrix.job.flutter-arch }}\runner\Release\rustdesk.exe")) {
             throw "Personel Flutter executable olusturulamadi."

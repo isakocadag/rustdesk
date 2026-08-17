@@ -26,6 +26,10 @@ import 'package:window_manager/window_manager.dart';
 import 'package:window_size/window_size.dart' as window_size;
 import '../widgets/button.dart';
 
+const bool kOssisPersonnelHomeBuild = bool.fromEnvironment(
+  'OSSIS_PERSONNEL',
+  defaultValue: false,
+);
 class DesktopHomePage extends StatefulWidget {
   const DesktopHomePage({Key? key}) : super(key: key);
 
@@ -88,9 +92,51 @@ class _DesktopHomePageState extends State<DesktopHomePage>
         ),
       Align(
         alignment: Alignment.center,
-        child: loadLogo(),
+        child: kOssisPersonnelHomeBuild
+            ? Padding(
+                padding: const EdgeInsets.only(
+                  left: 12,
+                  right: 12,
+                  top: 12,
+                ),
+                child: Image.asset(
+                  'assets/icon.png',
+                  width: 110,
+                  height: 94,
+                  fit: BoxFit.contain,
+                ),
+              )
+            : loadLogo(),
       ),
       buildTip(context),
+
+      if (kOssisPersonnelHomeBuild)
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
+          child: SizedBox(
+            height: 48,
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: () {
+                SystemNavigator.pop();
+
+                if (isWindows) {
+                  exit(0);
+                }
+              },
+              icon: const Icon(
+                Icons.cancel_outlined,
+              ),
+              label: const Text(
+                'Bağlantıyı İptal Et',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+          ),
+        ),
       if (!isOutgoingOnly) buildIDBoard(context),
       if (!isOutgoingOnly) buildPasswordBoard(context),
       FutureBuilder<Widget>(
@@ -403,7 +449,9 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    translate("Your Desktop"),
+                    kOssisPersonnelHomeBuild
+                        ? 'Ossis Support Console'
+                        : translate("Your Desktop"),
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),

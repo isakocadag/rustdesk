@@ -22,6 +22,10 @@ import 'package:visibility_detector/visibility_detector.dart';
 import '../../utils/multi_window_manager.dart';
 
 const double _kTabBarHeight = kDesktopRemoteTabBarHeight;
+const bool kOssisPersonnelTabbarBuild = bool.fromEnvironment(
+  'OSSIS_PERSONNEL',
+  defaultValue: false,
+);
 const double _kIconSize = 18;
 const double _kDividerIndent = 10;
 const double _kActionIconSize = 12;
@@ -640,10 +644,12 @@ class _DesktopTabState extends State<DesktopTab>
                         ),
                         Offstage(
                             offstage: !showTitle,
-                            child: const Text(
-                              "Ossis Remote Control",
-                              style: TextStyle(fontSize: 13),
-                            ).marginOnly(left: 2))
+                            child: Text(
+      kOssisPersonnelTabbarBuild
+          ? 'Ossis Support Console'
+          : 'Ossis Remote Control',
+      style: const TextStyle(fontSize: 13),
+    ).marginOnly(left: 2))
                       ]).marginOnly(
                         left: 5,
                         right: 10,
