@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 const _personnelLoginUrl =
@@ -215,25 +217,12 @@ class _OssisPersonnelGateState extends State<OssisPersonnelGate> {
                 crossAxisAlignment:
                     CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    'OSSIS',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFFE62B2F),
-                      fontSize: 30,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
-                  const SizedBox(height: 7),
-                  const Text(
-                    'REMOTE SERVICE',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFF9DA7B0),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 2,
+                  Center(
+                    child: Image.asset(
+                      'assets/icon.png',
+                      width: 150,
+                      height: 105,
+                      fit: BoxFit.contain,
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -349,6 +338,39 @@ class _OssisPersonnelGateState extends State<OssisPersonnelGate> {
                                 letterSpacing: .4,
                               ),
                             ),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  SizedBox(
+                    height: 44,
+                    child: OutlinedButton.icon(
+                      onPressed: _busy
+                          ? null
+                          : () {
+                              SystemNavigator.pop();
+
+                               if (Platform.isWindows) {
+                                 exit(0);
+                               }
+                            },
+                      icon: const Icon(
+                        Icons.cancel_outlined,
+                      ),
+                      label: const Text(
+                        'Bağlantıyı İptal Et',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFFB8C0C8),
+                        side: const BorderSide(
+                          color: Color(0xFF3A424A),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
