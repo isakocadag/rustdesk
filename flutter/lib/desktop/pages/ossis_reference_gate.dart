@@ -51,6 +51,12 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
     if (initialReference != null &&
         RegExp(r'^[A-Z0-9-]{4,64}$').hasMatch(initialReference)) {
       _controller.text = initialReference;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _verify();
+        }
+      });
     }
   }
 
