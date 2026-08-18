@@ -79,6 +79,17 @@ pub fn core_main() -> Option<Vec<String>> {
         }
         i += 1;
     }
+    #[cfg(all(feature = "flutter", target_os = "windows"))]
+    let ossis_reference_link = args
+        .first()
+        .filter(|arg| arg.to_ascii_lowercase().starts_with("ossisremote:"))
+        .cloned();
+
+    #[cfg(all(feature = "flutter", target_os = "windows"))]
+    if let Some(link) = ossis_reference_link.as_ref() {
+        flutter_args.push(link.clone());
+    }
+
     #[cfg(any(target_os = "linux", target_os = "windows"))]
     if args.is_empty() {
         #[cfg(target_os = "linux")]

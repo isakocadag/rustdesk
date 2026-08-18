@@ -188,8 +188,11 @@ void runMainApp(bool startService) async {
       }
     }
   }
-  Future<void> activateMainFeatures() async {
+  Future<void> activateMainFeatures({bool startNativeServer = false}) async {
     // No connection service is started until the reference is approved.
+    if (startNativeServer) {
+      await bind.mainStartServerAfterApproval();
+    }
     await bind.mainCheckConnectStatus();
     if (startService) {
       await gFFI.serverModel.startService();
@@ -205,7 +208,7 @@ void runMainApp(bool startService) async {
     requireReference: requireReference,
     initialOssisReference: initialOssisReference,
     requirePersonnel: requirePersonnel,
-    onReferenceApproved: activateMainFeatures,
+    onReferenceApproved: () => activateMainFeatures(startNativeServer: true),
   ));
 
   bool? alwaysOnTop;

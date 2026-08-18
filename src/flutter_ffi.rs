@@ -1143,6 +1143,11 @@ pub fn main_check_connect_status() {
     start_option_status_sync(); // avoid multi calls
 }
 
+pub fn main_start_server_after_approval() {
+    #[cfg(target_os = "windows")]
+    std::thread::spawn(|| crate::start_server(false, false));
+}
+
 pub fn main_is_using_public_server() -> bool {
     crate::using_public_server()
 }
