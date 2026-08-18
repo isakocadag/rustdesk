@@ -18,9 +18,12 @@ const _contractedSupportUrl =
 class OssisReferenceGate extends StatefulWidget {
   const OssisReferenceGate({
     super.key,
+    this.initialReference,
     required this.child,
     required this.onApproved,
   });
+
+  final String? initialReference;
 
   final Widget child;
   final Future<void> Function() onApproved;
@@ -38,6 +41,18 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
   bool _busy = false;
   bool _contractedMode = false;
   String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final initialReference = widget.initialReference?.trim().toUpperCase();
+
+    if (initialReference != null &&
+        RegExp(r'^[A-Z0-9-]{4,64}$').hasMatch(initialReference)) {
+      _controller.text = initialReference;
+    }
+  }
 
   @override
   void dispose() {

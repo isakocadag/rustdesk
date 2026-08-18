@@ -42,6 +42,13 @@ Filename: "{cmd}"; Parameters: "/c ""{app}\postinstall.cmd"" config"; Flags: run
 Filename: "{app}\postinstall.cmd"; Flags: runhidden waituntilterminated
 Filename: "{app}\OssisRemoteControl.exe"; Description: "Ossis Remote Control'ü çalıştır"; Flags: nowait postinstall skipifsilent
 
+
+[Registry]
+Root: HKCR; Subkey: "ossisremote"; ValueType: string; ValueName: ""; ValueData: "URL:Ossis Remote Control Protocol"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "ossisremote"; ValueType: string; ValueName: "URL Protocol"; ValueData: ""
+Root: HKCR; Subkey: "ossisremote\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"",0"
+Root: HKCR; Subkey: "ossisremote\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
+
 [UninstallRun]
 Filename: "{sys}\sc.exe"; Parameters: "stop RustDesk"; Flags: runhidden
 Filename: "{sys}\sc.exe"; Parameters: "delete RustDesk"; Flags: runhidden

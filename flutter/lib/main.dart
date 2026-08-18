@@ -149,6 +149,45 @@ void runMainApp(bool startService) async {
 
   final requirePersonnel = isWindows && kOssisPersonnelBuild;
   final requireReference = isWindows && !requirePersonnel;
+
+  String? initialOssisReference;
+
+  if (requireReference) {
+    const referenceArgument = '--ossis-reference';
+    final referenceIndex = kBootArgs.indexOf(referenceArgument);
+
+    if (referenceIndex >= 0 && referenceIndex + 1 < kBootArgs.length) {
+      final candidate = kBootArgs[referenceIndex + 1].trim().toUpperCase();
+
+      if (RegExp(r'^[A-Z0-9-]{4,64}$').hasMatch(candidate)) {
+        initialOssisReference = candidate;
+      }
+    }
+
+    if (initialOssisReference == null) {
+      for (final argument in kBootArgs) {
+        final rawArgument = argument.trim();
+
+        if (!rawArgument.toLowerCase().startsWith('ossisremote:')) {
+          continue;
+        }
+
+        var candidate = rawArgument.substring('ossisremote:'.length).trim();
+
+        candidate = candidate
+            .replaceFirst(RegExp(r'^//'), '')
+            .split(RegExp(r'[/?#]'))
+            .first
+            .trim()
+            .toUpperCase();
+
+        if (RegExp(r'^[A-Z0-9-]{4,64}$').hasMatch(candidate)) {
+          initialOssisReference = candidate;
+          break;
+        }
+      }
+    }
+  }
   Future<void> activateMainFeatures() async {
     // No connection service is started until the reference is approved.
     await bind.mainCheckConnectStatus();
@@ -164,6 +203,7 @@ void runMainApp(bool startService) async {
   }
   runApp(App(
     requireReference: requireReference,
+    initialOssisReference: initialOssisReference,
     requirePersonnel: requirePersonnel,
     onReferenceApproved: activateMainFeatures,
   ));
@@ -178,9 +218,8 @@ void runMainApp(bool startService) async {
   WindowOptions windowOptions = getHiddenTitleBarWindowOptions(
     isMainWindow: true,
     alwaysOnTop: alwaysOnTop,
-    backgroundColor: (requireReference || requirePersonnel)
-        ? const Color(0xFF121418)
-        : null,
+    backgroundColor:
+        (requireReference || requirePersonnel) ? const Color(0xFF121418) : null,
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     // Restore the location of the main window before window hide or show.
@@ -463,11 +502,13 @@ class App extends StatefulWidget {
   const App({
     super.key,
     this.requireReference = false,
+    this.initialOssisReference,
     this.requirePersonnel = false,
     this.onReferenceApproved,
   });
 
   final bool requireReference;
+  final String? initialOssisReference;
   final bool requirePersonnel;
   final Future<void> Function()? onReferenceApproved;
 
@@ -545,6 +586,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       );
     } else if (widget.requireReference) {
       home = OssisReferenceGate(
+        initialReference: widget.initialOssisReference,
         onApproved: widget.onReferenceApproved!,
         child: home,
       );
