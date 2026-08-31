@@ -176,6 +176,16 @@ lazy_static::lazy_static! {
 
 const PUBLIC_SERVER: &str = "public";
 
+fn is_ossis_customer_client() -> bool {
+    std::env::current_exe()
+        .ok()
+        .and_then(|path| path.file_stem().map(|stem| stem.to_owned()))
+        .and_then(|stem| stem.to_str().map(str::to_owned))
+        .map_or(false, |name| {
+            name.eq_ignore_ascii_case("OssisRemoteControl")
+        })
+}
+
 #[cfg(not(any(target_os = "android", target_os = "ios")))]
 pub fn get_key_state(key: enigo::Key) -> bool {
     use enigo::KeyboardControllable;
@@ -252,7 +262,7 @@ impl Client {
         (i32, String),
         bool,
     )> {
-        if config::is_incoming_only() {
+        if config::is_incoming_only() || is_ossis_customer_client() {
             bail!("Incoming only mode");
         }
         // to-do: remember the port for each peer, so that we can retry easier
