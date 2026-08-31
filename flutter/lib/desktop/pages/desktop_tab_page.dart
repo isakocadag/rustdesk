@@ -12,6 +12,11 @@ import 'package:window_manager/window_manager.dart';
 
 import '../../common/shared_state.dart';
 
+const bool kOssisPersonnelTabsBuild = bool.fromEnvironment(
+  'OSSIS_PERSONNEL',
+  defaultValue: false,
+);
+
 class DesktopTabPage extends StatefulWidget {
   const DesktopTabPage({Key? key}) : super(key: key);
 
@@ -97,7 +102,9 @@ class _DesktopTabPageState extends State<DesktopTabPage> {
             body: DesktopTab(
               controller: tabController,
               tail: Offstage(
-                offstage: bind.isIncomingOnly() || bind.isDisableSettings(),
+                offstage: !kOssisPersonnelTabsBuild ||
+                    bind.isIncomingOnly() ||
+                    bind.isDisableSettings(),
                 child: ActionIcon(
                   message: 'Settings',
                   icon: IconFont.menu,

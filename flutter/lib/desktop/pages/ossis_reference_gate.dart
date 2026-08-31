@@ -4,10 +4,14 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hbb/common.dart';
+import 'package:flutter_hbb/consts.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
+import 'ossis_customer_session.dart';
 
 const _referenceVerificationUrl =
     'https://servis.ossisbilisim.com:8443/api/v1/reference/validate/';
@@ -124,6 +128,14 @@ class _OssisReferenceGateState extends State<OssisReferenceGate> {
       }
 
       if (response.statusCode == 200 && payload?['valid'] == true) {
+        OssisCustomerSession.instance.updateFromPayload(
+          payload!,
+          reference: code,
+        );
+        await bind.mainSetOption(
+          key: kOptionApproveMode,
+          value: 'click',
+        );
         await widget.onApproved();
         if (!mounted) return;
         setState(() {

@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_hbb/common/widgets/connection_page_title.dart';
 import 'package:flutter_hbb/consts.dart';
 import 'package:flutter_hbb/desktop/widgets/popup_menu.dart';
 import 'package:flutter_hbb/models/state_model.dart';
@@ -20,6 +19,11 @@ import '../../common/widgets/peer_tab_page.dart';
 import '../../common/widgets/autocomplete.dart';
 import '../../models/platform_model.dart';
 import '../../desktop/widgets/material_mod_popup_menu.dart' as mod_menu;
+
+const bool kOssisPersonnelConnectionBuild = bool.fromEnvironment(
+  'OSSIS_PERSONNEL',
+  defaultValue: false,
+);
 
 class OnlineStatusWidget extends StatefulWidget {
   const OnlineStatusWidget({Key? key, this.onSvcStatusChanged})
@@ -304,6 +308,9 @@ class _ConnectionPageState extends State<ConnectionPage>
   @override
   Widget build(BuildContext context) {
     final isOutgoingOnly = bind.isOutgoingOnly();
+    if (kOssisPersonnelConnectionBuild) {
+      return _buildOssisPersonnelPage(context, isOutgoingOnly);
+    }
     return Column(
       children: [
         Expanded(
@@ -322,6 +329,120 @@ class _ConnectionPageState extends State<ConnectionPage>
         if (!isOutgoingOnly) const Divider(height: 1),
         if (!isOutgoingOnly) OnlineStatusWidget()
       ],
+    );
+  }
+
+  Widget _buildOssisPersonnelPage(
+    BuildContext context,
+    bool isOutgoingOnly,
+  ) {
+    const surface = Color(0xFF0F161E);
+    const panel = Color(0xFF17212C);
+    const border = Color(0xFF293644);
+    const accent = Color(0xFFD92D3A);
+
+    return Container(
+      color: surface,
+      padding: const EdgeInsets.all(22),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            height: 210,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: panel,
+                    borderRadius: BorderRadius.circular(17),
+                    border: Border.all(color: border),
+                  ),
+                  child: _buildRemoteIDTextField(context),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF25191E), Color(0xFF17212C)],
+                      ),
+                      borderRadius: BorderRadius.circular(17),
+                      border: Border.all(color: const Color(0xFF503039)),
+                    ),
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.admin_panel_settings_outlined,
+                              color: accent,
+                              size: 27,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              'Güvenli Personel Bağlantısı',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          'Müşterinin ekrandaki OSSIS ID numarasını girin. Bağlantı isteği müşterinin onayına sunulur ve onay sonrasında oturum araçları açılır.',
+                          style: TextStyle(
+                            color: Color(0xFFA8B3BF),
+                            fontSize: 12,
+                            height: 1.45,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          const Row(
+            children: [
+              Icon(Icons.devices_other_outlined, color: accent, size: 19),
+              SizedBox(width: 9),
+              Text(
+                'MÜŞTERİLER VE SON OTURUMLAR',
+                style: TextStyle(
+                  color: Color(0xFF9CA8B5),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: Container(
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                color: panel,
+                borderRadius: BorderRadius.circular(17),
+                border: Border.all(color: border),
+              ),
+              child: PeerTabPage(),
+            ),
+          ),
+          if (!isOutgoingOnly) ...[
+            const SizedBox(height: 10),
+            const OnlineStatusWidget(),
+          ],
+        ],
+      ),
     );
   }
 
@@ -350,7 +471,16 @@ class _ConnectionPageState extends State<ConnectionPage>
       child: Ink(
         child: Column(
           children: [
-            getConnectionPageTitle(context, false).marginOnly(bottom: 15),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Yeni Destek Bağlantısı',
+                style: TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ).marginOnly(bottom: 15),
             Row(
               children: [
                 Expanded(
@@ -430,7 +560,7 @@ class _ConnectionPageState extends State<ConnectionPage>
                               counterText: '',
                               hintText: _idInputFocused.value
                                   ? null
-                                  : translate('Enter Remote ID'),
+                                  : 'Cihaz ID’sini girin',
                               contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 13)),
                           controller: fieldTextEditingController,
@@ -522,7 +652,7 @@ class _ConnectionPageState extends State<ConnectionPage>
                     onPressed: () {
                       onConnect();
                     },
-                    child: Text(translate("Connect")),
+                    child: const Text('Bağlantıyı Başlat'),
                   ),
                 ),
                 const SizedBox(width: 8),

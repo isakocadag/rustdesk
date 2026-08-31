@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
+import 'ossis_personnel_session.dart';
+
 const _personnelLoginUrl =
     'https://servis.ossisbilisim.com:8443/api/v1/personnel/login/';
 
@@ -150,6 +152,11 @@ class _OssisPersonnelGateState extends State<OssisPersonnelGate> {
           'Personel oturumu doğrulanamadı.',
         );
       }
+
+      OssisPersonnelSession.instance.updateFromPayload({
+        ...payload!,
+        ...sessionPayload!,
+      });
 
       // Şifre artık gerekli değil; bellekte tutma.
       _passwordController.clear();
