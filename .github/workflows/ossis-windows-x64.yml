@@ -338,11 +338,11 @@ jobs:
               ),
               @(
                 'VALUE "InternalName", "rustdesk" "\0"',
-                'VALUE "InternalName", "OssisSupportConsole" "\0"'
+                'VALUE "InternalName", "OssisRemoteSRV" "\0"'
               ),
               @(
                 'VALUE "OriginalFilename", "OssisRemoteControl.exe" "\0"',
-                'VALUE "OriginalFilename", "OssisSupportConsole.exe" "\0"'
+                'VALUE "OriginalFilename", "OssisRemoteSRV.exe" "\0"'
               ),
               @(
                 'VALUE "ProductName", "Ossis Remote Control" "\0"',
@@ -546,7 +546,7 @@ jobs:
 
           Copy-Item `
             ".\rustdesk-personnel\rustdesk.exe" `
-            ".\rustdesk-personnel\OssisSupportConsole.exe" `
+            ".\rustdesk-personnel\OssisRemoteSRV.exe" `
             -Force
 
       - name: Install Inno Setup
