@@ -3043,7 +3043,7 @@ const bool kOssisPersonnelCommonBuild = bool.fromEnvironment(
 String getWindowName({WindowType? overrideType}) {
   final name = kOssisPersonnelCommonBuild
       ? 'Ossis Support Console'
-      : bind.mainGetAppNameSync();
+      : 'Ossis Remote Control';
   switch (overrideType ?? kWindowType) {
     case WindowType.Main:
       return name;

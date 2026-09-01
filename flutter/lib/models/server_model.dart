@@ -13,11 +13,13 @@ import 'package:window_manager/window_manager.dart';
 import '../common.dart';
 import '../common/formatter/id_formatter.dart';
 import '../desktop/pages/server_page.dart' as desktop;
+import '../desktop/pages/ossis_customer_session.dart';
 import '../desktop/widgets/tabbar_widget.dart';
 import '../mobile/pages/server_page.dart';
 import 'model.dart';
 
 const kLoginDialogTag = "LOGIN";
+const _kOssisConsentVersion = '2026-09-01-v1';
 
 const bool _kOssisPersonnelServerBuild = bool.fromEnvironment(
   'OSSIS_PERSONNEL',
@@ -621,6 +623,13 @@ class ServerModel with ChangeNotifier {
   }
 
   void showLoginDialog(Client client) {
+    if (_isOssisCustomerMainWindow &&
+        !client.isFileTransfer &&
+        !client.isViewCamera &&
+        !client.isTerminal) {
+      _showOssisConnectionConsentDialog(client);
+      return;
+    }
     showClientDialog(
       client,
       client.isFileTransfer
@@ -634,6 +643,131 @@ class ServerModel with ChangeNotifier {
       'android_new_connection_tip',
       () => sendLoginResponse(client, false),
       () => sendLoginResponse(client, true),
+    );
+  }
+
+  void _showOssisConnectionConsentDialog(Client client) {
+    var accepted = false;
+    parent.target?.dialogManager.show((setDialogState, close, context) {
+      void reject() {
+        sendLoginResponse(client, false);
+        close();
+      }
+
+      void approve() {
+        if (!accepted) return;
+        sendLoginResponse(client, true);
+        close();
+      }
+
+      final personnelName = client.name.trim().isEmpty
+          ? 'Yetkili OSSIS destek personeli'
+          : client.name.trim();
+      final entitlement = OssisCustomerSession.instance;
+
+      return CustomAlertDialog(
+        title: Row(
+          children: [
+            const Icon(Icons.verified_user_outlined, color: Color(0xFFD92D3A)),
+            const SizedBox(width: 10),
+            const Expanded(child: Text('Uzaktan Destek Onayı')),
+            IconButton(onPressed: reject, icon: const Icon(Icons.close)),
+          ],
+        ),
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 560),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '$personnelName bilgisayarınıza bağlanmak istiyor.',
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 12),
+                ClientInfo(client),
+                const SizedBox(height: 12),
+                _ossisConsentItem(
+                  Icons.visibility_outlined,
+                  'Ekranınız destek personeli tarafından görüntülenebilir.',
+                ),
+                _ossisConsentItem(
+                  Icons.keyboard_alt_outlined,
+                  'Onayınızla klavye ve fare kontrolü kullanılabilir.',
+                ),
+                _ossisConsentItem(
+                  Icons.folder_copy_outlined,
+                  'Dosya aktarımı, sohbet ve sesli görüşme araçları kullanılabilir.',
+                ),
+                _ossisConsentItem(
+                  Icons.timer_outlined,
+                  'Kalan süre: ${entitlement.remainingTimeText} · '
+                  'Kredi: ${entitlement.creditText}',
+                ),
+                const SizedBox(height: 10),
+                ExpansionTile(
+                  tilePadding: EdgeInsets.zero,
+                  childrenPadding: const EdgeInsets.only(bottom: 8),
+                  title: const Text(
+                    'Aydınlatma ve Uzaktan Destek Sözleşmesi',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  children: const [
+                    Text(
+                      'Bu oturumu kabul ederek OSSIS destek personelinin, '
+                      'bildirilen teknik sorunun incelenmesi ve giderilmesi '
+                      'amacıyla ekranınıza uzaktan erişmesine izin verirsiniz. '
+                      'Oturumu istediğiniz zaman sonlandırabilirsiniz. '
+                      'Bağlantı sırasında yalnızca destek için gerekli işlemler '
+                      'yapılır. Oturum başlangıç ve bitiş bilgileri, güvenlik ve '
+                      'hizmet kaydı amacıyla saklanabilir. Personel oturumu '
+                      'tamamladığında ilgili destek kredisi kullanılmış sayılır.',
+                    ),
+                  ],
+                ),
+                CheckboxListTile(
+                  value: accepted,
+                  onChanged: (value) => setDialogState(
+                    () => accepted = value ?? false,
+                  ),
+                  contentPadding: EdgeInsets.zero,
+                  controlAffinity: ListTileControlAffinity.leading,
+                  activeColor: const Color(0xFFD92D3A),
+                  title: const Text(
+                    'Sözleşmeyi ve bilgilendirmeyi okudum, kabul ediyorum.',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  subtitle: const Text('Sözleşme sürümü: $_kOssisConsentVersion'),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          dialogButton('Reddet', onPressed: reject, isOutline: true),
+          dialogButton(
+            'Onayla ve Bağlantıyı Başlat',
+            onPressed: accepted ? approve : null,
+          ),
+        ],
+        onSubmit: accepted ? approve : null,
+        onCancel: reject,
+      );
+    }, tag: getLoginDialogTag(client.id));
+  }
+
+  Widget _ossisConsentItem(IconData icon, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 19, color: const Color(0xFFD92D3A)),
+          const SizedBox(width: 9),
+          Expanded(child: Text(text)),
+        ],
+      ),
     );
   }
 
