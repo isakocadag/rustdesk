@@ -25,13 +25,13 @@ import '../widgets/tabbar_widget.dart';
 import 'macos_full_screen_focus_recovery.dart';
 import 'ossis_personnel_session.dart';
 
+import 'package:flutter_hbb/native/custom_cursor.dart'
+    if (dart.library.html) 'package:flutter_hbb/web/custom_cursor.dart';
+
 const bool kOssisPersonnelRemoteBuild = bool.fromEnvironment(
   'OSSIS_PERSONNEL',
   defaultValue: false,
 );
-
-import 'package:flutter_hbb/native/custom_cursor.dart'
-    if (dart.library.html) 'package:flutter_hbb/web/custom_cursor.dart';
 
 final SimpleWrapper<bool> _firstEnterImage = SimpleWrapper(false);
 
