@@ -42,6 +42,11 @@ abstract class OssisEntitlementState extends ChangeNotifier {
       'available_minutes',
       'minute_balance',
     ]);
+    final expiresAtValue = firstText(payload, const [
+      'expires_at',
+      'support_expires_at',
+      'entitlement_expires_at',
+    ]);
 
     if (creditValue != null) {
       credit = creditValue.floor().clamp(0, 1 << 31).toInt();
@@ -52,6 +57,15 @@ abstract class OssisEntitlementState extends ChangeNotifier {
     } else if (minutesValue != null) {
       remainingSeconds =
           (minutesValue * 60).floor().clamp(0, 1 << 31).toInt();
+    } else if (expiresAtValue != null) {
+      final expiresAt = DateTime.tryParse(expiresAtValue);
+      if (expiresAt != null) {
+        remainingSeconds = expiresAt
+            .difference(DateTime.now())
+            .inSeconds
+            .clamp(0, 1 << 31)
+            .toInt();
+      }
     }
     _syncCountdown();
   }

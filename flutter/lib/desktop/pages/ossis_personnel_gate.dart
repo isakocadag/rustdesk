@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hbb/common.dart';
 import 'package:http/http.dart' as http;
 
 import 'ossis_personnel_session.dart';
@@ -35,7 +36,39 @@ class _OssisPersonnelGateState extends State<OssisPersonnelGate> {
   bool _approved = false;
   bool _busy = false;
   bool _passwordVisible = false;
+  bool _rememberUsername = false;
   String? _error;
+
+  static const _rememberUsernameKey = 'ossis-personnel-remember-username';
+  static const _rememberedUsernameKey = 'ossis-personnel-username';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRememberedUsername();
+  }
+
+  Future<void> _loadRememberedUsername() async {
+    final remember = bind.mainGetLocalOption(key: _rememberUsernameKey);
+    if (!mounted || remember != 'Y') return;
+    final username = bind.mainGetLocalOption(key: _rememberedUsernameKey);
+    if (!mounted) return;
+    setState(() {
+      _rememberUsername = true;
+      _usernameController.text = username;
+    });
+  }
+
+  Future<void> _saveRememberedUsername(String username) async {
+    await bind.mainSetLocalOption(
+      key: _rememberUsernameKey,
+      value: _rememberUsername ? 'Y' : '',
+    );
+    await bind.mainSetLocalOption(
+      key: _rememberedUsernameKey,
+      value: _rememberUsername ? username : '',
+    );
+  }
 
   @override
   void dispose() {
@@ -157,6 +190,7 @@ class _OssisPersonnelGateState extends State<OssisPersonnelGate> {
         ...payload!,
         ...sessionPayload!,
       });
+      await _saveRememberedUsername(username);
 
       // Şifre artık gerekli değil; bellekte tutma.
       _passwordController.clear();
@@ -288,6 +322,25 @@ class _OssisPersonnelGateState extends State<OssisPersonnelGate> {
                           color: const Color(0xFF939DA7),
                         ),
                       ),
+                    ),
+                  ),
+                  CheckboxListTile(
+                    value: _rememberUsername,
+                    onChanged: _busy
+                        ? null
+                        : (value) => setState(
+                              () => _rememberUsername = value ?? false,
+                            ),
+                    contentPadding: EdgeInsets.zero,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    activeColor: const Color(0xFFE62B2F),
+                    title: const Text(
+                      'Beni hatırla',
+                      style: TextStyle(color: Color(0xFFD5DAE0)),
+                    ),
+                    subtitle: const Text(
+                      'Yalnızca kullanıcı adı bu cihazda saklanır.',
+                      style: TextStyle(color: Color(0xFF7F8993), fontSize: 11),
                     ),
                   ),
                   if (_error != null) ...[

@@ -2781,6 +2781,14 @@ class _CloseMenu extends StatelessWidget {
         return;
       }
       closeConnection(id: id);
+      if (_kOssisPersonnelToolbarBuild) {
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+        await rustDeskWinManager.call(
+          WindowType.Main,
+          kWindowMainWindowOnTop,
+          const <String, dynamic>{},
+        );
+      }
     }
 
     if (_kOssisPersonnelToolbarBuild) {

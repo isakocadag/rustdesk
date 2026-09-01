@@ -16,6 +16,7 @@ import 'package:flutter_hbb/desktop/pages/desktop_setting_page.dart';
 import 'package:flutter_hbb/desktop/pages/desktop_tab_page.dart';
 import 'package:flutter_hbb/desktop/widgets/update_progress.dart';
 import 'package:flutter_hbb/models/platform_model.dart';
+import 'package:flutter_hbb/models/chat_model.dart';
 import 'package:flutter_hbb/models/server_model.dart';
 import 'package:flutter_hbb/models/state_model.dart';
 import 'package:flutter_hbb/plugin/ui_manager.dart';
@@ -680,6 +681,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                             ? 'Destek personeliyle güvenli mesajlaşma alanı hazır.'
                             : 'Sohbet bağlantı kurulduğunda otomatik olarak etkinleşir.',
                         connected: connected,
+                        actionLabel: 'SOHBETİ AÇ',
+                        onPressed: connected ? _openCustomerChat : null,
                       ),
                       const SizedBox(height: 14),
                       _buildCommunicationPanel(
@@ -689,6 +692,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                             ? 'Sesli görüşme isteği geldiğinde onayınıza sunulur.'
                             : 'Sesli görüşme bağlantı sırasında kullanılabilir.',
                         connected: connected,
+                        actionLabel: _customerVoiceActionLabel,
+                        onPressed: connected ? _handleCustomerVoice : null,
                       ),
                       const Spacer(),
                       AnimatedBuilder(
@@ -781,6 +786,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     required String title,
     required String description,
     required bool connected,
+    required String actionLabel,
+    required VoidCallback? onPressed,
   }) {
     return Container(
       padding: const EdgeInsets.all(18),
@@ -831,30 +838,65 @@ class _DesktopHomePageState extends State<DesktopHomePage>
             ),
           ),
           const SizedBox(height: 14),
-          Container(
+          SizedBox(
             height: 38,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: connected
-                  ? const Color(0xFF212F3A)
-                  : const Color(0xFF121922),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              connected ? 'BAĞLANTI İLE ETKİN' : 'BAĞLANTI BEKLENİYOR',
-              style: TextStyle(
-                color: connected
-                    ? const Color(0xFFB9C7D3)
-                    : const Color(0xFF596674),
-                fontSize: 10,
-                fontWeight: FontWeight.w800,
-                letterSpacing: .6,
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: onPressed,
+              style: FilledButton.styleFrom(
+                backgroundColor: const Color(0xFFD92D3A),
+                disabledBackgroundColor: const Color(0xFF121922),
+                disabledForegroundColor: const Color(0xFF596674),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text(
+                connected ? actionLabel : 'BAĞLANTI BEKLENİYOR',
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: .6,
+                ),
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Client? get _activeCustomerClient {
+    for (final client in gFFI.serverModel.clients) {
+      if (client.authorized && !client.disconnected) return client;
+    }
+    return null;
+  }
+
+  void _openCustomerChat() {
+    final client = _activeCustomerClient;
+    if (client == null) return;
+    gFFI.chatModel.changeCurrentKey(MessageKey(client.peerId, client.id));
+    gFFI.chatModel.toggleChatOverlay();
+  }
+
+  String get _customerVoiceActionLabel {
+    final client = _activeCustomerClient;
+    if (client?.incomingVoiceCall == true) return 'SESLİ GÖRÜŞMEYİ KABUL ET';
+    if (client?.inVoiceCall == true) return 'SESLİ GÖRÜŞMEYİ BİTİR';
+    return 'PERSONELDEN ÇAĞRI BEKLENİYOR';
+  }
+
+  void _handleCustomerVoice() {
+    final client = _activeCustomerClient;
+    if (client == null) return;
+    if (client.incomingVoiceCall) {
+      gFFI.serverModel.handleVoiceCall(client, true);
+    } else if (client.inVoiceCall) {
+      bind.cmCloseVoiceCall(id: client.id);
+    } else {
+      showToast('Sesli görüşmeyi destek personeli başlatmalıdır.');
+    }
   }
 
   Widget _buildAccountLine(String label, String value) {
