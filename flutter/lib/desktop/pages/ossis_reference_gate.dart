@@ -4,8 +4,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_hbb/common.dart';
 import 'package:flutter_hbb/consts.dart';
+import 'package:flutter_hbb/models/platform_model.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
