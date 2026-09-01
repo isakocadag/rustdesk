@@ -28,6 +28,11 @@ import './kb_layout_type_chooser.dart';
 import 'package:flutter_hbb/utils/scale.dart';
 import 'package:flutter_hbb/common/widgets/custom_scale_base.dart';
 
+const bool _kOssisPersonnelToolbarBuild = bool.fromEnvironment(
+  'OSSIS_PERSONNEL',
+  defaultValue: false,
+);
+
 enum _ToolbarEdge { top, right, bottom, left }
 
 _ToolbarEdge _parseToolbarEdge(String? s) {
@@ -2771,15 +2776,32 @@ class _CloseMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> closeSession() async {
+      if (await showConnEndAuditDialogCloseCanceled(ffi: ffi)) {
+        return;
+      }
+      closeConnection(id: id);
+    }
+
+    if (_kOssisPersonnelToolbarBuild) {
+      return TextButton.icon(
+        onPressed: closeSession,
+        icon: const Icon(Icons.link_off_rounded, size: 18),
+        label: const Text('Bağlantıyı Sonlandır'),
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.white,
+          backgroundColor: _ToolbarTheme.redColor,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
     return _IconMenuButton(
       assetName: 'assets/close.svg',
       tooltip: 'Close',
-      onPressed: () async {
-        if (await showConnEndAuditDialogCloseCanceled(ffi: ffi)) {
-          return;
-        }
-        closeConnection(id: id);
-      },
+      onPressed: closeSession,
       color: _ToolbarTheme.redColor,
       hoverColor: _ToolbarTheme.hoverRedColor,
     );

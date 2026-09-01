@@ -15,6 +15,11 @@ import 'package:path_provider/path_provider.dart';
 import '../common.dart';
 import '../generated_bridge.dart';
 
+const bool _kOssisPersonnelNativeBuild = bool.fromEnvironment(
+  'OSSIS_PERSONNEL',
+  defaultValue: false,
+);
+
 final class RgbaFrame extends Struct {
   @Uint32()
   external int len;
@@ -206,7 +211,12 @@ class PlatformFFI {
         debugPrint(
             '_appType:$_appType,info1-id:$id,info2-name:$name,dir:$_dir');
       }
-      if (desktopType == DesktopType.cm) {
+      // The customer application owns its incoming-session manager. Keeping
+      // the CM listener in the main process prevents a second floating
+      // connection-manager window from being launched for every session.
+      if (desktopType == DesktopType.cm ||
+          (desktopType == DesktopType.main &&
+              !_kOssisPersonnelNativeBuild)) {
         await _ffiBind.cmInit();
       }
       await _ffiBind.mainDeviceId(id: id);

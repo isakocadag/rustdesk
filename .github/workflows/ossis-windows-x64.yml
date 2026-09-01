@@ -375,17 +375,8 @@ jobs:
               [System.Text.Encoding]::UTF8
             )
 
-            $cppAnchor = [string]::Join([Environment]::NewLine, @(
-              '  if (get_rustdesk_app_name) {',
-              '    wchar_t app_name_buffer[512] = {0};',
-              '    if (get_rustdesk_app_name(app_name_buffer, 512) == 0) {',
-              '      app_name = std::wstring(app_name_buffer);',
-              '    }',
-              '  }'
-            ))
-
-            $cppReplacement = $cppAnchor + [Environment]::NewLine +
-              '  app_name = L"Ossis Support Console";'
+            $cppAnchor = '  app_name = L"Ossis Remote Control";'
+            $cppReplacement = '  app_name = L"Ossis Support Console";'
 
             $cppCount = ([regex]::Matches(
               $cppText,

@@ -1577,7 +1577,11 @@ pub mod connection_manager {
             debug_assert!(h.get("name").is_none());
             h.insert("name", json!(name));
 
-            if let Some(s) = GLOBAL_EVENT_STREAM.read().unwrap().get(super::APP_TYPE_CM) {
+            let streams = GLOBAL_EVENT_STREAM.read().unwrap();
+            if let Some(s) = streams
+                .get(super::APP_TYPE_CM)
+                .or_else(|| streams.get(super::APP_TYPE_MAIN))
+            {
                 s.add(serde_json::ser::to_string(&h).unwrap_or("".to_owned()));
             } else {
                 println!(

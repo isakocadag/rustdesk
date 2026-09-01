@@ -19,6 +19,16 @@ import 'model.dart';
 
 const kLoginDialogTag = "LOGIN";
 
+const bool _kOssisPersonnelServerBuild = bool.fromEnvironment(
+  'OSSIS_PERSONNEL',
+  defaultValue: false,
+);
+
+bool get _isOssisCustomerMainWindow =>
+    isDesktop &&
+    desktopType == DesktopType.main &&
+    !_kOssisPersonnelServerBuild;
+
 const kUseTemporaryPassword = "use-temporary-password";
 const kUsePermanentPassword = "use-permanent-password";
 const kUseBothPasswords = "use-both-passwords";
@@ -579,7 +589,10 @@ class ServerModel with ChangeNotifier {
       }
       scrollToBottom();
       notifyListeners();
-      if (isAndroid && !client.authorized) showLoginDialog(client);
+      if ((isAndroid || _isOssisCustomerMainWindow) &&
+          !client.authorized) {
+        showLoginDialog(client);
+      }
       if (isAndroid) androidUpdatekeepScreenOn();
     } catch (e) {
       debugPrint("Failed to call loginRequest,error:$e");
@@ -597,7 +610,7 @@ class ServerModel with ChangeNotifier {
       if (!hideCm) windowOnTop(null);
     });
     // Only do the hidden task when on Desktop.
-    if (client.authorized && isDesktop) {
+    if (client.authorized && desktopType == DesktopType.cm) {
       cmHiddenTimer = Timer(const Duration(seconds: 3), () {
         if (!hideCm) windowManager.minimize();
         cmHiddenTimer = null;
@@ -766,7 +779,7 @@ class ServerModel with ChangeNotifier {
         _clients[index].inVoiceCall = client.inVoiceCall;
         _clients[index].incomingVoiceCall = client.incomingVoiceCall;
         if (client.incomingVoiceCall) {
-          if (isAndroid) {
+          if (isAndroid || _isOssisCustomerMainWindow) {
             showVoiceCallDialog(client);
           } else {
             // Has incoming phone call, let's set the window on top.

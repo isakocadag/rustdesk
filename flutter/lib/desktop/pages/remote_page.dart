@@ -23,6 +23,12 @@ import '../widgets/remote_toolbar.dart';
 import '../widgets/kb_layout_type_chooser.dart';
 import '../widgets/tabbar_widget.dart';
 import 'macos_full_screen_focus_recovery.dart';
+import 'ossis_personnel_session.dart';
+
+const bool kOssisPersonnelRemoteBuild = bool.fromEnvironment(
+  'OSSIS_PERSONNEL',
+  defaultValue: false,
+);
 
 import 'package:flutter_hbb/native/custom_cursor.dart'
     if (dart.library.html) 'package:flutter_hbb/web/custom_cursor.dart';
@@ -130,6 +136,9 @@ class _RemotePageState extends State<RemotePage>
   Worker? _waylandKeyboardModeWorker;
   bool _waylandKeyboardModeNormalized = false;
   bool _waylandKeyboardModeNormalizing = false;
+  bool _ossisEntitlementCloseHandled = false;
+  bool _ossisFiveMinuteWarningShown = false;
+  bool _ossisOneMinuteWarningShown = false;
 
   SessionID get sessionId => _ffi.sessionId;
 
@@ -148,6 +157,9 @@ class _RemotePageState extends State<RemotePage>
   void initState() {
     super.initState();
     _ffi = FFI(widget.sessionId);
+    if (kOssisPersonnelRemoteBuild) {
+      OssisPersonnelSession.instance.addListener(_enforceOssisEntitlement);
+    }
     if (isMacOS) {
       // SchedulerBinding.instance.lifecycleState is null in the first connection in a new window.
       _macOSLifecycleState = SchedulerBinding.instance.lifecycleState;
@@ -158,6 +170,14 @@ class _RemotePageState extends State<RemotePage>
     Get.put<FFI>(_ffi, tag: widget.id);
     _ffi.imageModel.addCallbackOnFirstImage((String peerId) {
       _ffi.canvasModel.activateLocalCursor();
+      if (kOssisPersonnelRemoteBuild) {
+        unawaited(bind
+            .sessionSetViewStyle(
+              sessionId: _ffi.sessionId,
+              value: kRemoteViewStyleAdaptive,
+            )
+            .then((_) => _ffi.canvasModel.updateViewStyle()));
+      }
       showKBLayoutTypeChooserIfNeeded(
           _ffi.ffiModel.pi.platform, _ffi.dialogManager);
       _ffi.recordingModel
@@ -222,6 +242,31 @@ class _RemotePageState extends State<RemotePage>
     });
     if (_ffi.ffiModel.pi.isSet.value) {
       unawaited(_normalizeWaylandKeyboardModeIfNeeded());
+    }
+  }
+
+  void _enforceOssisEntitlement() {
+    if (!kOssisPersonnelRemoteBuild || _ossisEntitlementCloseHandled) return;
+    final entitlement = OssisPersonnelSession.instance;
+    final seconds = entitlement.remainingSeconds;
+    if (!_ossisFiveMinuteWarningShown &&
+        seconds != null &&
+        seconds > 60 &&
+        seconds <= 300) {
+      _ossisFiveMinuteWarningShown = true;
+      showToast('Destek süresinin bitmesine 5 dakika kaldı.');
+    }
+    if (!_ossisOneMinuteWarningShown &&
+        seconds != null &&
+        seconds > 0 &&
+        seconds <= 60) {
+      _ossisOneMinuteWarningShown = true;
+      showToast('Destek süresinin bitmesine 1 dakika kaldı.');
+    }
+    if (entitlement.hasServerEntitlement && entitlement.isExhausted) {
+      _ossisEntitlementCloseHandled = true;
+      showToast('Kredi veya destek süresi bitti. Bağlantı sonlandırıldı.');
+      closeConnection(id: widget.id);
     }
   }
 
@@ -624,6 +669,9 @@ class _RemotePageState extends State<RemotePage>
   @override
   Future<void> dispose() async {
     final closeSession = closeSessionOnDispose.remove(widget.id) ?? true;
+    if (kOssisPersonnelRemoteBuild) {
+      OssisPersonnelSession.instance.removeListener(_enforceOssisEntitlement);
+    }
 
     // https://github.com/flutter/flutter/issues/64935
     if (isMacOS) {

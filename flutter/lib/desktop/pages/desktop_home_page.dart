@@ -56,6 +56,9 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   var watchIsCanRecordAudio = false;
   Timer? _updateTimer;
   bool isCardClosed = false;
+  bool _ossisEntitlementCloseHandled = false;
+  bool _ossisFiveMinuteWarningShown = false;
+  bool _ossisOneMinuteWarningShown = false;
 
   final RxBool _editHover = false.obs;
   final RxBool _block = false.obs;
@@ -263,7 +266,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
 
   Widget _buildOssisMetric(IconData icon, String label, String value) {
     return Container(
-      constraints: const BoxConstraints(minWidth: 130, maxWidth: 190),
+      constraints: const BoxConstraints(minWidth: 110, maxWidth: 160),
       margin: const EdgeInsets.only(right: 10),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       decoration: BoxDecoration(
@@ -664,9 +667,9 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                     ],
                   ),
                 ),
-                const SizedBox(width: 18),
-                SizedBox(
-                  width: 330,
+                const SizedBox(width: 14),
+                Expanded(
+                  flex: 1,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -1372,7 +1375,11 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   @override
   void initState() {
     super.initState();
+    if (!kOssisPersonnelHomeBuild) {
+      OssisCustomerSession.instance.addListener(_enforceCustomerEntitlement);
+    }
     _updateTimer = periodic_immediate(const Duration(seconds: 1), () async {
+      _enforceCustomerEntitlement();
       await gFFI.serverModel.fetchID();
       final error = await bind.mainGetError();
       if (systemError != error) {
@@ -1535,6 +1542,33 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     WidgetsBinding.instance.addObserver(this);
   }
 
+  void _enforceCustomerEntitlement() {
+    if (kOssisPersonnelHomeBuild || _ossisEntitlementCloseHandled) return;
+    final entitlement = OssisCustomerSession.instance;
+    final seconds = entitlement.remainingSeconds;
+    if (!_ossisFiveMinuteWarningShown &&
+        seconds != null &&
+        seconds > 60 &&
+        seconds <= 300) {
+      _ossisFiveMinuteWarningShown = true;
+      showToast('Destek süresinin bitmesine 5 dakika kaldı.');
+    }
+    if (!_ossisOneMinuteWarningShown &&
+        seconds != null &&
+        seconds > 0 &&
+        seconds <= 60) {
+      _ossisOneMinuteWarningShown = true;
+      showToast('Destek süresinin bitmesine 1 dakika kaldı.');
+    }
+    if (stateGlobal.videoConnCount.value > 0 &&
+        entitlement.hasServerEntitlement &&
+        entitlement.isExhausted) {
+      _ossisEntitlementCloseHandled = true;
+      showToast('Kredi veya destek süresi bitti. Bağlantı sonlandırıldı.');
+      unawaited(gFFI.serverModel.closeAll());
+    }
+  }
+
   _updateWindowSize() {
     RenderObject? renderObject = _childKey.currentContext?.findRenderObject();
     if (renderObject == null) {
@@ -1551,6 +1585,10 @@ class _DesktopHomePageState extends State<DesktopHomePage>
 
   @override
   void dispose() {
+    if (!kOssisPersonnelHomeBuild) {
+      OssisCustomerSession.instance
+          .removeListener(_enforceCustomerEntitlement);
+    }
     _uniLinksSubscription?.cancel();
     Get.delete<RxBool>(tag: 'stop-service');
     _updateTimer?.cancel();
