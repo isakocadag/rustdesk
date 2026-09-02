@@ -265,7 +265,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) {
             throw "ossis_personnel_gate.dart analizi basarisiz."
           }
-          dart analyze lib/common.dart lib/models/server_model.dart lib/desktop/widgets/remote_toolbar.dart lib/desktop/pages/ossis_personnel_session.dart lib/desktop/pages/ossis_customer_session.dart lib/desktop/pages/ossis_reference_gate.dart lib/desktop/pages/desktop_home_page.dart lib/desktop/pages/desktop_tab_page.dart lib/desktop/pages/connection_page.dart lib/common/widgets/peer_card.dart
+          dart analyze lib/common.dart lib/models/server_model.dart lib/desktop/widgets/remote_toolbar.dart lib/desktop/pages/ossis_personnel_session.dart lib/desktop/pages/ossis_customer_session.dart lib/desktop/pages/ossis_entitlement_state.dart lib/desktop/pages/ossis_usage_reporter.dart lib/desktop/pages/ossis_reference_gate.dart lib/desktop/pages/desktop_home_page.dart lib/desktop/pages/desktop_tab_page.dart lib/desktop/pages/remote_tab_page.dart lib/desktop/pages/connection_page.dart lib/utils/multi_window_manager.dart lib/common/widgets/peer_card.dart
           if ($LASTEXITCODE -ne 0) {
             throw "Ossis personel oturum veya ana ekran analizi basarisiz."
           }

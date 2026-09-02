@@ -12,6 +12,7 @@ import 'package:flutter_hbb/consts.dart';
 import 'package:flutter_hbb/desktop/pages/connection_page.dart';
 import 'package:flutter_hbb/desktop/pages/ossis_customer_session.dart';
 import 'package:flutter_hbb/desktop/pages/ossis_personnel_session.dart';
+import 'package:flutter_hbb/desktop/pages/ossis_usage_reporter.dart';
 import 'package:flutter_hbb/desktop/pages/desktop_setting_page.dart';
 import 'package:flutter_hbb/desktop/pages/desktop_tab_page.dart';
 import 'package:flutter_hbb/desktop/widgets/update_progress.dart';
@@ -354,18 +355,18 @@ class _DesktopHomePageState extends State<DesktopHomePage>
             height: 48,
             width: double.infinity,
             child: OutlinedButton.icon(
-              onPressed: () {
-                SystemNavigator.pop();
-
-                if (isWindows) {
-                  exit(0);
-                }
+              onPressed: () async {
+                final closed =
+                    await rustDeskWinManager.closeRemoteDesktopSessions();
+                showToast(closed
+                    ? 'Aktif destek bağlantısı sonlandırıldı.'
+                    : 'Sonlandırılacak aktif bağlantı yok.');
               },
               icon: const Icon(
                 Icons.cancel_outlined,
               ),
               label: const Text(
-                'Bağlantıyı İptal Et',
+                'Bağlantıyı Sonlandır',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 15,
@@ -1421,6 +1422,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       OssisCustomerSession.instance.addListener(_enforceCustomerEntitlement);
     }
     _updateTimer = periodic_immediate(const Duration(seconds: 1), () async {
+      await _syncOssisUsage();
       _enforceCustomerEntitlement();
       await gFFI.serverModel.fetchID();
       final error = await bind.mainGetError();
@@ -1582,6 +1584,26 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       });
     }
     WidgetsBinding.instance.addObserver(this);
+  }
+
+  Future<void> _syncOssisUsage() async {
+    if (kOssisPersonnelHomeBuild) {
+      final ids = await rustDeskWinManager.remoteDesktopIds();
+      await OssisUsageReporter.instance.reportPersonnel(
+        connected: ids.isNotEmpty,
+        connectionKey: ids.isEmpty ? '' : ids.first,
+      );
+      if (OssisPersonnelSession.instance.isExhausted && ids.isNotEmpty) {
+        await rustDeskWinManager.closeRemoteDesktopSessions();
+      }
+      return;
+    }
+    final connected = gFFI.serverModel.clients
+        .any((client) => client.authorized && !client.disconnected);
+    await OssisUsageReporter.instance.reportCustomer(
+      connected: connected,
+      connectionKey: gFFI.serverModel.serverId.text.replaceAll(' ', ''),
+    );
   }
 
   void _enforceCustomerEntitlement() {

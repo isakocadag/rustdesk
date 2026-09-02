@@ -7,6 +7,7 @@ class OssisCustomerSession extends OssisEntitlementState {
 
   String customerName = 'OSSIS Müşterisi';
   String referenceText = '';
+  String usageToken = '';
 
   void updateFromPayload(
     Map<String, dynamic> payload, {
@@ -24,6 +25,11 @@ class OssisCustomerSession extends OssisEntitlementState {
         : (OssisEntitlementState.firstText(
                 payload, const ['reference_code', 'reference']) ??
             referenceText);
+    usageToken = OssisEntitlementState.firstText(
+          payload,
+          const ['usage_token'],
+        ) ??
+        usageToken;
     updateEntitlement(payload);
   }
 }

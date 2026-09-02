@@ -348,7 +348,7 @@ class _ConnectionPageState extends State<ConnectionPage>
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
-            height: 210,
+            height: 250,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -371,11 +371,11 @@ class _ConnectionPageState extends State<ConnectionPage>
                       borderRadius: BorderRadius.circular(17),
                       border: Border.all(color: const Color(0xFF503039)),
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
+                        const Row(
                           children: [
                             Icon(
                               Icons.admin_panel_settings_outlined,
@@ -393,14 +393,40 @@ class _ConnectionPageState extends State<ConnectionPage>
                             ),
                           ],
                         ),
-                        SizedBox(height: 12),
-                        Text(
+                        const SizedBox(height: 12),
+                        const Text(
                           'Müşterinin ekrandaki OSSIS ID numarasını girin. Bağlantı isteği müşterinin onayına sunulur ve onay sonrasında oturum araçları açılır.',
                           style: TextStyle(
                             color: Color(0xFFA8B3BF),
                             fontSize: 12,
                             height: 1.45,
                           ),
+                        ),
+                        const SizedBox(height: 18),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () => _runPersonnelSessionAction(
+                                  kWindowEventOpenRemoteChat,
+                                  'Sohbet için aktif bağlantı yok.',
+                                ),
+                                icon: const Icon(Icons.chat_bubble_outline),
+                                label: const Text('Metin Sohbeti'),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () => _runPersonnelSessionAction(
+                                  kWindowEventToggleRemoteVoice,
+                                  'Sesli görüşme için aktif bağlantı yok.',
+                                ),
+                                icon: const Icon(Icons.headset_mic_outlined),
+                                label: const Text('Sesli Görüşme'),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -444,6 +470,15 @@ class _ConnectionPageState extends State<ConnectionPage>
         ],
       ),
     );
+  }
+
+  Future<void> _runPersonnelSessionAction(
+    String action,
+    String unavailableMessage,
+  ) async {
+    final handled =
+        await rustDeskWinManager.invokeRemoteDesktopAction(action);
+    if (!handled) showToast(unavailableMessage);
   }
 
   /// Callback for the connect button.

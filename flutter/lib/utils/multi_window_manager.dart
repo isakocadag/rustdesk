@@ -453,6 +453,56 @@ class RustDeskMultiWindowManager {
     await Future.wait(WindowType.values.map((e) => _closeWindows(e)));
   }
 
+  /// Ends every outgoing remote-desktop session without closing the main app.
+  Future<bool> closeRemoteDesktopSessions() async {
+    var closedAny = false;
+    for (final windowId in List<int>.from(_remoteDesktopWindows)) {
+      try {
+        final result = await DesktopMultiWindow.invokeMethod(
+          windowId,
+          kWindowEventCloseRemoteSessions,
+          null,
+        );
+        closedAny = closedAny || result == true;
+      } catch (e) {
+        debugPrint('Failed to close remote sessions in window $windowId: $e');
+      }
+    }
+    return closedAny;
+  }
+
+  Future<bool> invokeRemoteDesktopAction(String method) async {
+    for (final windowId in List<int>.from(_remoteDesktopWindows).reversed) {
+      try {
+        final result =
+            await DesktopMultiWindow.invokeMethod(windowId, method, null);
+        if (result == true) return true;
+      } catch (e) {
+        debugPrint('Failed to invoke $method in window $windowId: $e');
+      }
+    }
+    return false;
+  }
+
+  Future<List<String>> remoteDesktopIds() async {
+    final ids = <String>{};
+    for (final windowId in List<int>.from(_remoteDesktopWindows)) {
+      try {
+        final result = await DesktopMultiWindow.invokeMethod(
+          windowId,
+          kWindowEventGetRemoteList,
+          null,
+        );
+        if (result is String && result.isNotEmpty) {
+          ids.addAll(result.split(',').where((id) => id.trim().isNotEmpty));
+        }
+      } catch (e) {
+        debugPrint('Failed to read remote sessions in window $windowId: $e');
+      }
+    }
+    return ids.toList();
+  }
+
   Future<void> _closeWindows(WindowType type) async {
     if (type == WindowType.Main) {
       // skip main window, use window manager instead

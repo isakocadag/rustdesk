@@ -75,6 +75,9 @@ const String kWindowEventActiveSession = "active_session";
 const String kWindowEventActiveDisplaySession = "active_display_session";
 const String kWindowEventGetRemoteList = "get_remote_list";
 const String kWindowEventGetSessionIdList = "get_session_id_list";
+const String kWindowEventCloseRemoteSessions = "close_remote_sessions";
+const String kWindowEventOpenRemoteChat = "open_remote_chat";
+const String kWindowEventToggleRemoteVoice = "toggle_remote_voice";
 const String kWindowEventRemoteWindowCoords = "remote_window_coords";
 const String kWindowEventSetFullscreen = "set_fullscreen";
 

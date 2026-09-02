@@ -8,8 +8,10 @@ class OssisPersonnelSession extends OssisEntitlementState {
   String displayName = 'Personel';
   String username = '';
   String planText = 'Standart';
+  String token = '';
 
   void updateFromPayload(Map<String, dynamic> payload) {
+    token = OssisEntitlementState.firstText(payload, const ['token']) ?? token;
     displayName = OssisEntitlementState.firstText(payload, const [
           'display_name',
           'full_name',

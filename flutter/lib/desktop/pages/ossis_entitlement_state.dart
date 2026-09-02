@@ -24,6 +24,7 @@ abstract class OssisEntitlementState extends ChangeNotifier {
 
   void updateEntitlement(Map<String, dynamic> payload) {
     final creditValue = firstNumber(payload, const [
+      'remaining_credits',
       'credit',
       'credits',
       'balance',
@@ -31,6 +32,7 @@ abstract class OssisEntitlementState extends ChangeNotifier {
       'remaining_credit',
     ]);
     final secondsValue = firstNumber(payload, const [
+      'session_remaining_seconds',
       'remaining_seconds',
       'seconds_remaining',
       'remaining_time_seconds',

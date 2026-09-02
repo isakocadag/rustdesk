@@ -22,6 +22,7 @@ import 'package:bot_toast/bot_toast.dart';
 
 import '../../common/widgets/dialog.dart';
 import '../../models/platform_model.dart';
+import '../../models/chat_model.dart';
 
 class _MenuTheme {
   static const Color blueColor = MyTheme.button;
@@ -508,6 +509,33 @@ class _ConnectionTabPageState extends State<ConnectionTabPage> {
           .map((e) => '${e.key},${(e.page as RemotePage).ffi.sessionId}')
           .toList()
           .join(';');
+    } else if (call.method == kWindowEventCloseRemoteSessions) {
+      final keys = tabController.state.value.tabs.map((e) => e.key).toList();
+      for (final key in keys) {
+        tabController.closeBy(key);
+      }
+      return keys.isNotEmpty;
+    } else if (call.method == kWindowEventOpenRemoteChat ||
+        call.method == kWindowEventToggleRemoteVoice) {
+      if (tabController.state.value.tabs.isEmpty) return false;
+      final remotePage =
+          tabController.state.value.selectedTabInfo.page as RemotePage;
+      final ffi = remotePage.ffi;
+      if (call.method == kWindowEventOpenRemoteChat) {
+        ffi.chatModel.changeCurrentKey(MessageKey(ffi.id, ChatModel.clientModeID));
+        ffi.chatModel.toggleChatOverlay();
+      } else {
+        switch (ffi.chatModel.voiceCallStatus.value) {
+          case VoiceCallStatus.waitingForResponse:
+          case VoiceCallStatus.connected:
+            bind.sessionCloseVoiceCall(sessionId: ffi.sessionId);
+            break;
+          default:
+            bind.sessionRequestVoiceCall(sessionId: ffi.sessionId);
+        }
+      }
+      await windowOnTop(windowId());
+      return true;
     } else if (call.method == kWindowEventGetCachedSessionData) {
       // Ready to show new window and close old tab.
       final args = jsonDecode(call.arguments);
