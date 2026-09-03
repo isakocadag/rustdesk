@@ -1622,7 +1622,16 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   }
 
   void _enforceCustomerEntitlement() {
-    if (kOssisPersonnelHomeBuild || _ossisEntitlementCloseHandled) return;
+    if (kOssisPersonnelHomeBuild) return;
+
+    if (_activeCustomerClient == null) {
+      _ossisEntitlementCloseHandled = false;
+      _ossisFiveMinuteWarningShown = false;
+      _ossisOneMinuteWarningShown = false;
+      return;
+    }
+
+    if (_ossisEntitlementCloseHandled) return;
     final entitlement = OssisCustomerSession.instance;
     final seconds = entitlement.remainingSeconds;
     if (!_ossisFiveMinuteWarningShown &&

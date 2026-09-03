@@ -546,9 +546,9 @@ class ServerModel with ChangeNotifier {
         showCmWindow();
       }
     }
-    if (_clients.length != oldClientLenght) {
-      notifyListeners();
-      if (isAndroid) androidUpdatekeepScreenOn();
+    notifyListeners();
+    if (_clients.length != oldClientLenght && isAndroid) {
+      androidUpdatekeepScreenOn();
     }
   }
 
