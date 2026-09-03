@@ -87,8 +87,9 @@ class OssisUsageReporter {
       if (decoded is! Map || response.statusCode != 200) return false;
       final payload = Map<String, dynamic>.from(decoded);
       if (payload['valid'] != true) return false;
-      final usage = payload['usage'];
-      if (usage is Map) onUsage(Map<String, dynamic>.from(usage));
+      // Entitlement alanlari usage/data/entitlement veya top-level olabilir.
+      // Parser recursive oldugu icin basarili cevabin tamamini isle.
+      onUsage(payload);
       _lastConnected = connected;
       _lastReportAt = now;
       return true;

@@ -1,4 +1,4 @@
-﻿// main window right pane
+// main window right pane
 
 import 'dart:async';
 import 'dart:convert';
@@ -385,7 +385,7 @@ class _ConnectionPageState extends State<ConnectionPage>
                             ),
                             SizedBox(width: 10),
                             Text(
-                              'GÃ¼venli Personel BaÄŸlantÄ±sÄ±',
+                              'Güvenli Personel Bağlantısı',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
@@ -396,7 +396,7 @@ class _ConnectionPageState extends State<ConnectionPage>
                         ),
                         const SizedBox(height: 12),
                         const Text(
-                          'MÃ¼ÅŸterinin ekrandaki OSSIS ID numarasÄ±nÄ± girin. BaÄŸlantÄ± isteÄŸi mÃ¼ÅŸterinin onayÄ±na sunulur ve onay sonrasÄ±nda oturum araÃ§larÄ± aÃ§Ä±lÄ±r.',
+                          'Müşterinin ekrandaki OSSIS ID numarasını girin. Bağlantı isteği müşterinin onayına sunulur ve onay sonrasında oturum araçları açılır.',
                           style: TextStyle(
                             color: Color(0xFFA8B3BF),
                             fontSize: 12,
@@ -410,7 +410,7 @@ class _ConnectionPageState extends State<ConnectionPage>
                               child: OutlinedButton.icon(
                                 onPressed: () => _runPersonnelSessionAction(
                                   kWindowEventOpenRemoteChat,
-                                  'Sohbet iÃ§in aktif baÄŸlantÄ± yok.',
+                                  'Sohbet için aktif bağlantı yok.',
                                 ),
                                 icon: const Icon(Icons.chat_bubble_outline),
                                 label: const Text('Metin Sohbeti'),
@@ -421,10 +421,10 @@ class _ConnectionPageState extends State<ConnectionPage>
                               child: OutlinedButton.icon(
                                 onPressed: () => _runPersonnelSessionAction(
                                   kWindowEventToggleRemoteVoice,
-                                  'Sesli gÃ¶rÃ¼ÅŸme iÃ§in aktif baÄŸlantÄ± yok.',
+                                  'Sesli görüşme için aktif bağlantı yok.',
                                 ),
                                 icon: const Icon(Icons.headset_mic_outlined),
-                                label: const Text('Sesli GÃ¶rÃ¼ÅŸme'),
+                                label: const Text('Sesli Görüşme'),
                               ),
                             ),
                           ],
@@ -442,7 +442,7 @@ class _ConnectionPageState extends State<ConnectionPage>
               Icon(Icons.devices_other_outlined, color: accent, size: 19),
               SizedBox(width: 9),
               Text(
-                'MÃœÅžTERÄ°LER VE SON OTURUMLAR',
+                'MÜŞTERİLER VE SON OTURUMLAR',
                 style: TextStyle(
                   color: Color(0xFF9CA8B5),
                   fontSize: 11,
@@ -510,7 +510,7 @@ class _ConnectionPageState extends State<ConnectionPage>
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Yeni Destek BaÄŸlantÄ±sÄ±',
+                'Yeni Destek Bağlantısı',
                 style: TextStyle(
                   fontSize: 19,
                   fontWeight: FontWeight.w800,
@@ -596,7 +596,7 @@ class _ConnectionPageState extends State<ConnectionPage>
                               counterText: '',
                               hintText: _idInputFocused.value
                                   ? null
-                                  : 'Cihaz IDâ€™sini girin',
+                                  : 'Cihaz ID’sini girin',
                               contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 13)),
                           controller: fieldTextEditingController,
@@ -688,7 +688,7 @@ class _ConnectionPageState extends State<ConnectionPage>
                     onPressed: () {
                       onConnect();
                     },
-                    child: const Text('BaÄŸlantÄ±yÄ± BaÅŸlat'),
+                    child: const Text('Bağlantıyı Başlat'),
                   ),
                 ),
                 const SizedBox(width: 8),

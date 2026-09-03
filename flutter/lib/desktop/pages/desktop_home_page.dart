@@ -61,6 +61,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   bool _ossisEntitlementCloseHandled = false;
   bool _ossisFiveMinuteWarningShown = false;
   bool _ossisOneMinuteWarningShown = false;
+  bool _ossisPeriodicTickBusy = false;
 
   final RxBool _editHover = false.obs;
   final RxBool _block = false.obs;
@@ -482,9 +483,14 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     const border = Color(0xFF293644);
     const accent = Color(0xFFD92D3A);
 
-    return Obx(() {
-      final connected = stateGlobal.videoConnCount.value > 0;
-      return Stack(
+    return AnimatedBuilder(
+      animation: gFFI.serverModel,
+      builder: (context, _) {
+        return AnimatedBuilder(
+          animation: OssisCustomerSession.instance,
+          builder: (context, __) {
+            final connected = _activeCustomerClient != null;
+            return Stack(
         children: [
           const Offstage(
             offstage: true,
@@ -740,8 +746,11 @@ class _DesktopHomePageState extends State<DesktopHomePage>
             ),
           ),
         ],
-      );
-    });
+            );
+          },
+        );
+      },
+    );
   }
 
   Widget _buildCustomerTool(IconData icon, String label, bool connected) {
@@ -1422,6 +1431,9 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       OssisCustomerSession.instance.addListener(_enforceCustomerEntitlement);
     }
     _updateTimer = periodic_immediate(const Duration(seconds: 1), () async {
+      if (_ossisPeriodicTickBusy) return;
+      _ossisPeriodicTickBusy = true;
+      try {
       await _syncOssisUsage();
       _enforceCustomerEntitlement();
       await gFFI.serverModel.fetchID();
@@ -1470,6 +1482,9 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           watchIsCanRecordAudio = false;
           setState(() {});
         }
+      }
+      } finally {
+        _ossisPeriodicTickBusy = false;
       }
     });
     Get.put<RxBool>(svcStopped, tag: 'stop-service');
@@ -1624,7 +1639,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       _ossisOneMinuteWarningShown = true;
       showToast('Destek süresinin bitmesine 1 dakika kaldı.');
     }
-    if (stateGlobal.videoConnCount.value > 0 &&
+    if (_activeCustomerClient != null &&
         entitlement.hasServerEntitlement &&
         entitlement.isExhausted) {
       _ossisEntitlementCloseHandled = true;

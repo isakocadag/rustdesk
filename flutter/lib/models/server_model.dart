@@ -891,6 +891,7 @@ class ServerModel with ChangeNotifier {
     _clients.clear();
     tabController.state.value.tabs.clear();
     if (isAndroid) androidUpdatekeepScreenOn();
+    notifyListeners();
   }
 
   void jumpTo(int id) {
