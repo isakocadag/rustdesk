@@ -427,241 +427,93 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(
-                        child: Row(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Expanded(
-                              child: Column(
+                            SizedBox(
+                              height: 200,
+                              child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(22),
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: connected
-                                            ? const [
-                                                Color(0xFF17352B),
-                                                Color(0xFF15251F)
-                                              ]
-                                            : const [
-                                                Color(0xFF25191E),
-                                                Color(0xFF181C23)
-                                              ],
-                                      ),
-                                      borderRadius: BorderRadius.circular(18),
-                                      border: Border.all(
-                                        color: connected
-                                            ? const Color(0xFF34765A)
-                                            : const Color(0xFF553039),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 54,
-                                          height: 54,
-                                          decoration: BoxDecoration(
-                                            color: connected
-                                                ? const Color(0xFF214D3B)
-                                                : const Color(0xFF3A2027),
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Icon(
-                                            connected
-                                                ? Icons.verified_user_rounded
-                                                : Icons.support_agent_rounded,
-                                            color: connected
-                                                ? const Color(0xFF65D5A0)
-                                                : const Color(0xFFF17A84),
-                                            size: 29,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 16),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                connected
-                                                    ? 'Destek bağlantısı aktif'
-                                                    : 'Destek ekibi bekleniyor',
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.w800,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 5),
-                                              Text(
-                                                connected
-                                                    ? 'Bağlantı araçları kullanıma hazır. Oturumu istediğiniz zaman sonlandırabilirsiniz.'
-                                                    : 'Ekrandaki ID’yi destek personeline iletin. Bağlantı isteğini yalnızca siz onayladığınızda oturum başlar.',
-                                                style: const TextStyle(
-                                                  color: Color(0xFFABB5C0),
-                                                  height: 1.35,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 7,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: connected
-                                                ? const Color(0xFF214D3B)
-                                                : const Color(0xFF242B34),
-                                            borderRadius:
-                                                BorderRadius.circular(18),
-                                          ),
-                                          child: Text(
-                                            connected ? 'BAĞLI' : 'HAZIR',
-                                            style: TextStyle(
-                                              color: connected
-                                                  ? const Color(0xFF83E3B3)
-                                                  : const Color(0xFFAAB4C0),
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.w800,
-                                              letterSpacing: .7,
-                                            ),
-                                          ),
-                                        ),
-                                        if (connected) ...[
-                                          const SizedBox(width: 12),
-                                          FilledButton.icon(
-                                            onPressed: () async {
-                                              await gFFI.serverModel.closeAll();
-                                              showToast(
-                                                  'Destek bağlantısı sonlandırıldı.');
-                                            },
-                                            style: FilledButton.styleFrom(
-                                              backgroundColor:
-                                                  const Color(0xFFD92D3A),
-                                              foregroundColor: Colors.white,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 16,
-                                                vertical: 14,
-                                              ),
-                                            ),
-                                            icon: const Icon(
-                                                Icons.link_off_rounded,
-                                                size: 19),
-                                            label: const Text(
-                                              'BAĞLANTIYI SONLANDIR',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w800),
-                                            ),
-                                          ),
-                                        ],
-                                      ],
+                                  Expanded(
+                                    child: _buildCustomerConnectionPanel(
+                                      connected,
                                     ),
                                   ),
-                                  const SizedBox(height: 18),
-                                  const Text(
-                                    'OTURUM ARAÇLARI',
-                                    style: TextStyle(
-                                      color: Color(0xFF778696),
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w800,
-                                      letterSpacing: 1.1,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      _buildCustomerTool(
-                                        Icons.monitor_rounded,
-                                        'Ekran Paylaşımı',
-                                        connected,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      _buildCustomerTool(
-                                        Icons.keyboard_alt_outlined,
-                                        'Klavye ve Fare',
-                                        connected,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      _buildCustomerTool(
-                                        Icons.folder_copy_outlined,
-                                        'Dosya Aktarımı',
-                                        connected,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      _buildCustomerTool(
-                                        Icons.volume_up_outlined,
-                                        'Sistem Sesi',
-                                        connected,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      _buildCustomerTool(
-                                        Icons.fiber_manual_record_rounded,
-                                        'Oturum Kaydı',
-                                        connected,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      _buildCustomerTool(
-                                        Icons.shield_outlined,
-                                        'Güvenli Bağlantı',
-                                        connected,
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  Container(
-                                    padding: const EdgeInsets.all(18),
-                                    decoration: BoxDecoration(
-                                      color: surfaceSoft,
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(color: border),
-                                    ),
-                                    child: const Row(
-                                      children: [
-                                        Icon(
-                                          Icons.privacy_tip_outlined,
-                                          color: accent,
-                                          size: 27,
-                                        ),
-                                        SizedBox(width: 13),
-                                        Expanded(
-                                          child: Text(
-                                            'Kontrol sizde: Her bağlantı isteği onayınıza sunulur. Onay vermediğiniz sürece ekranınıza erişilemez.',
-                                            style: TextStyle(
-                                              color: Color(0xFFB4BEC9),
-                                              height: 1.35,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                  const SizedBox(width: 16),
+                                  SizedBox(
+                                    width: 300,
+                                    child: _buildCommunicationPanel(
+                                      icon: Icons.headset_mic_outlined,
+                                      title: 'Sesli Görüşme',
+                                      description: connected
+                                          ? 'Sesli görüşme isteği geldiğinde onayınıza sunulur.'
+                                          : 'Sesli görüşme bağlantı sırasında kullanılabilir.',
+                                      connected: connected,
+                                      actionLabel: _customerVoiceActionLabel,
+                                      onPressed: connected
+                                          ? _handleCustomerVoice
+                                          : null,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            const SizedBox(width: 14),
-                            SizedBox(
-                              width: 300,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  _buildCommunicationPanel(
-                                    icon: Icons.headset_mic_outlined,
-                                    title: 'Sesli Görüşme',
-                                    description: connected
-                                        ? 'Sesli görüşme isteği geldiğinde onayınıza sunulur.'
-                                        : 'Sesli görüşme bağlantı sırasında kullanılabilir.',
-                                    connected: connected,
-                                    actionLabel: _customerVoiceActionLabel,
-                                    onPressed:
-                                        connected ? _handleCustomerVoice : null,
+                            const SizedBox(height: 20),
+                            const Row(
+                              children: [
+                                Icon(Icons.dashboard_outlined,
+                                    color: accent, size: 19),
+                                SizedBox(width: 9),
+                                Text(
+                                  'OTURUM ARAÇLARI',
+                                  style: TextStyle(
+                                    color: Color(0xFF9CA8B5),
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 1,
                                   ),
-                                  const Spacer(),
-                                ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.all(18),
+                                decoration: BoxDecoration(
+                                  color: surfaceSoft,
+                                  borderRadius: BorderRadius.circular(17),
+                                  border: Border.all(color: border),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    _buildCustomerTool(Icons.monitor_rounded,
+                                        'Ekran Paylaşımı', connected),
+                                    const SizedBox(width: 12),
+                                    _buildCustomerTool(
+                                        Icons.keyboard_alt_outlined,
+                                        'Klavye ve Fare',
+                                        connected),
+                                    const SizedBox(width: 12),
+                                    _buildCustomerTool(
+                                        Icons.folder_copy_outlined,
+                                        'Dosya Aktarımı',
+                                        connected),
+                                    const SizedBox(width: 12),
+                                    _buildCustomerTool(Icons.volume_up_outlined,
+                                        'Sistem Sesi', connected),
+                                    const SizedBox(width: 12),
+                                    _buildCustomerTool(
+                                        Icons.fiber_manual_record_rounded,
+                                        'Oturum Kaydı',
+                                        connected),
+                                    const SizedBox(width: 12),
+                                    _buildCustomerTool(Icons.shield_outlined,
+                                        'Güvenli Bağlantı', connected),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
@@ -733,13 +585,119 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           crossAxisCount: 3,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
-          childAspectRatio: 2.4,
+          childAspectRatio: 2.65,
         ),
         itemCount: entries.length,
         itemBuilder: (context, index) {
           final entry = entries[index];
           return _buildOssisInfoCard(entry.icon, entry.label, entry.value);
         },
+      ),
+    );
+  }
+
+  Widget _buildCustomerConnectionPanel(bool connected) {
+    return Container(
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: connected
+              ? const [Color(0xFF17352B), Color(0xFF15251F)]
+              : const [Color(0xFF25191E), Color(0xFF181C23)],
+        ),
+        borderRadius: BorderRadius.circular(17),
+        border: Border.all(
+          color: connected ? const Color(0xFF34765A) : const Color(0xFF553039),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 54,
+            height: 54,
+            decoration: BoxDecoration(
+              color:
+                  connected ? const Color(0xFF214D3B) : const Color(0xFF3A2027),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              connected
+                  ? Icons.verified_user_rounded
+                  : Icons.support_agent_rounded,
+              color:
+                  connected ? const Color(0xFF65D5A0) : const Color(0xFFF17A84),
+              size: 29,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  connected
+                      ? 'Destek bağlantısı aktif'
+                      : 'Destek ekibi bekleniyor',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  connected
+                      ? 'Bağlantı araçları kullanıma hazır. Oturumu istediğiniz zaman sonlandırabilirsiniz.'
+                      : 'Ekrandaki ID’yi destek personeline iletin. Bağlantı isteğini yalnızca siz onayladığınızda oturum başlar.',
+                  style: const TextStyle(
+                    color: Color(0xFFABB5C0),
+                    height: 1.35,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+            decoration: BoxDecoration(
+              color:
+                  connected ? const Color(0xFF214D3B) : const Color(0xFF242B34),
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Text(
+              connected ? 'BAĞLI' : 'HAZIR',
+              style: TextStyle(
+                color: connected
+                    ? const Color(0xFF83E3B3)
+                    : const Color(0xFFAAB4C0),
+                fontSize: 11,
+                fontWeight: FontWeight.w800,
+                letterSpacing: .7,
+              ),
+            ),
+          ),
+          if (connected) ...[
+            const SizedBox(width: 12),
+            FilledButton.icon(
+              onPressed: () async {
+                await gFFI.serverModel.closeAll();
+                showToast('Destek bağlantısı sonlandırıldı.');
+              },
+              style: FilledButton.styleFrom(
+                backgroundColor: const Color(0xFFD92D3A),
+                foregroundColor: Colors.white,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              ),
+              icon: const Icon(Icons.link_off_rounded, size: 19),
+              label: const Text(
+                'BAĞLANTIYI SONLANDIR',
+                style: TextStyle(fontWeight: FontWeight.w800),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }

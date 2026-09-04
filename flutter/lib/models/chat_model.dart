@@ -200,6 +200,15 @@ class ChatModel with ChangeNotifier {
   }
 
   showChatWindowOverlay({Offset? chatInitPos}) {
+    if (_usesOssisEmbeddedChat) {
+      _blockableOverlayState.setMiddleBlocked(false);
+      if (chatWindowOverlayEntry != null) {
+        chatWindowOverlayEntry!.remove();
+        chatWindowOverlayEntry = null;
+      }
+      hideChatIconOverlay();
+      return;
+    }
     if (chatWindowOverlayEntry != null) return;
     isWindowFocus.value = true;
     _blockableOverlayState.setMiddleBlocked(true);
@@ -262,6 +271,9 @@ class ChatModel with ChangeNotifier {
   }
 
   hideChatOverlay() {
+    if (_usesOssisEmbeddedChat) {
+      _blockableOverlayState.setMiddleBlocked(false);
+    }
     if (!_isChatOverlayHide()) {
       hideChatIconOverlay();
       hideChatWindowOverlay();
