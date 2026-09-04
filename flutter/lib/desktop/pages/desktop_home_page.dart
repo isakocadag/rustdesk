@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hbb/common.dart';
 import 'package:flutter_hbb/common/widgets/animated_rotation_widget.dart';
 import 'package:flutter_hbb/common/widgets/custom_password.dart';
+import 'package:flutter_hbb/common/widgets/chat_page.dart';
 import 'package:flutter_hbb/consts.dart';
 import 'package:flutter_hbb/desktop/pages/connection_page.dart';
 import 'package:flutter_hbb/desktop/pages/ossis_customer_session.dart';
@@ -97,8 +98,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       child: Column(
         children: [
           Container(
-            height: 92,
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            height: 108,
+            padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
             decoration: const BoxDecoration(
               color: panel,
               border: Border(bottom: BorderSide(color: border)),
@@ -220,7 +221,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  width: 250,
+                  width: 300,
                   margin: const EdgeInsets.all(18),
                   clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(
@@ -418,7 +419,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     return ChangeNotifierProvider.value(
       value: gFFI.serverModel,
       child: Container(
-        width: isIncomingOnly ? 280.0 : 250.0,
+        width: isIncomingOnly ? 280.0 : 300.0,
         color: Theme.of(context).colorScheme.background,
         child: Stack(
           children: [
@@ -594,6 +595,28 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                                 ),
                               ),
                             ),
+                            if (connected) ...[
+                              const SizedBox(width: 12),
+                              FilledButton.icon(
+                                onPressed: () async {
+                                  await gFFI.serverModel.closeAll();
+                                  showToast('Destek bağlantısı sonlandırıldı.');
+                                },
+                                style: FilledButton.styleFrom(
+                                  backgroundColor: const Color(0xFFD92D3A),
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 14,
+                                  ),
+                                ),
+                                icon: const Icon(Icons.link_off_rounded, size: 19),
+                                label: const Text(
+                                  'BAĞLANTIYI SONLANDIR',
+                                  style: TextStyle(fontWeight: FontWeight.w800),
+                                ),
+                              ),
+                            ],
                           ],
                         ),
                       ),
@@ -608,35 +631,39 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                         ),
                       ),
                       const SizedBox(height: 10),
-                      Wrap(
-                        spacing: 12,
-                        runSpacing: 12,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           _buildCustomerTool(
                             Icons.monitor_rounded,
                             'Ekran Paylaşımı',
                             connected,
                           ),
+                          const SizedBox(width: 10),
                           _buildCustomerTool(
                             Icons.keyboard_alt_outlined,
                             'Klavye ve Fare',
                             connected,
                           ),
+                          const SizedBox(width: 10),
                           _buildCustomerTool(
                             Icons.folder_copy_outlined,
                             'Dosya Aktarımı',
                             connected,
                           ),
+                          const SizedBox(width: 10),
                           _buildCustomerTool(
                             Icons.volume_up_outlined,
                             'Sistem Sesi',
                             connected,
                           ),
+                          const SizedBox(width: 10),
                           _buildCustomerTool(
                             Icons.fiber_manual_record_rounded,
                             'Oturum Kaydı',
                             connected,
                           ),
+                          const SizedBox(width: 10),
                           _buildCustomerTool(
                             Icons.shield_outlined,
                             'Güvenli Bağlantı',
@@ -681,16 +708,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      _buildCommunicationPanel(
-                        icon: Icons.chat_bubble_outline_rounded,
-                        title: 'Metin Sohbeti',
-                        description: connected
-                            ? 'Destek personeliyle güvenli mesajlaşma alanı hazır.'
-                            : 'Sohbet bağlantı kurulduğunda otomatik olarak etkinleşir.',
-                        connected: connected,
-                        actionLabel: 'SOHBETİ AÇ',
-                        onPressed: connected ? _openCustomerChat : null,
-                      ),
+                      Expanded(child: _buildCustomerChatFlow(connected)),
                       const SizedBox(height: 14),
                       _buildCommunicationPanel(
                         icon: Icons.headset_mic_outlined,
@@ -754,39 +772,43 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   }
 
   Widget _buildCustomerTool(IconData icon, String label, bool connected) {
-    return Container(
-      width: 160,
-      height: 96,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: connected ? const Color(0xFF192630) : const Color(0xFF151C24),
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(
-          color: connected ? const Color(0xFF3B5366) : const Color(0xFF26313D),
+    return Expanded(
+      child: Container(
+        height: 96,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: connected ? const Color(0xFF192630) : const Color(0xFF151C24),
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+            color:
+                connected ? const Color(0xFF3B5366) : const Color(0xFF26313D),
+          ),
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Icon(
-            icon,
-            color: connected
-                ? const Color(0xFFF06470)
-                : const Color(0xFF596674),
-            size: 25,
-          ),
-          Text(
-            label,
-            style: TextStyle(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(
+              icon,
               color: connected
-                  ? const Color(0xFFE4EAF0)
-                  : const Color(0xFF6E7A87),
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+                  ? const Color(0xFFF06470)
+                  : const Color(0xFF596674),
+              size: 25,
             ),
-          ),
-        ],
+            Text(
+              label,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: connected
+                    ? const Color(0xFFE4EAF0)
+                    : const Color(0xFF6E7A87),
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -876,18 +898,75 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     );
   }
 
+  Widget _buildCustomerChatFlow(bool connected) {
+    final client = _activeCustomerClient;
+    if (client != null &&
+        gFFI.chatModel.currentKey != MessageKey(client.peerId, client.id)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          gFFI.chatModel.changeCurrentKey(MessageKey(client.peerId, client.id));
+        }
+      });
+    }
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: const Color(0xFF17212C),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: connected ? const Color(0xFF3B5366) : const Color(0xFF293644),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(16, 13, 16, 11),
+            child: Row(
+              children: [
+                Icon(Icons.chat_bubble_outline_rounded,
+                    color: Color(0xFFD92D3A), size: 19),
+                SizedBox(width: 9),
+                Text(
+                  'SOHBET AKIŞI',
+                  style: TextStyle(
+                    color: Color(0xFFAAB5C1),
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1, color: Color(0xFF293644)),
+          Expanded(
+            child: connected
+                ? ChatPage(
+                    chatModel: gFFI.chatModel,
+                    type: ChatPageType.desktopCM,
+                  )
+                : const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        'Sohbet, destek bağlantısı kurulduğunda burada açılır.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Color(0xFF7F8B98), height: 1.4),
+                      ),
+                    ),
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Client? get _activeCustomerClient {
     for (final client in gFFI.serverModel.clients) {
       if (client.authorized && !client.disconnected) return client;
     }
     return null;
-  }
-
-  void _openCustomerChat() {
-    final client = _activeCustomerClient;
-    if (client == null) return;
-    gFFI.chatModel.changeCurrentKey(MessageKey(client.peerId, client.id));
-    gFFI.chatModel.toggleChatOverlay();
   }
 
   String get _customerVoiceActionLabel {

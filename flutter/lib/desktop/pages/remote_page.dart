@@ -14,7 +14,9 @@ import '../../common/widgets/remote_input.dart';
 import '../../common.dart';
 import '../../common/widgets/dialog.dart';
 import '../../common/widgets/toolbar.dart';
+import '../../common/widgets/chat_page.dart';
 import '../../models/model.dart';
+import '../../models/chat_model.dart';
 import '../../models/input_model.dart';
 import '../../models/platform_model.dart';
 import '../../common/shared_state.dart';
@@ -158,6 +160,8 @@ class _RemotePageState extends State<RemotePage>
     super.initState();
     _ffi = FFI(widget.sessionId);
     if (kOssisPersonnelRemoteBuild) {
+      _ffi.chatModel
+          .changeCurrentKey(MessageKey(widget.id, ChatModel.clientModeID));
       OssisPersonnelSession.instance.addListener(_enforceOssisEntitlement);
     }
     if (isMacOS) {
@@ -818,34 +822,71 @@ class _RemotePageState extends State<RemotePage>
       );
     }
 
+    final sessionBody = Obx(() {
+      final imageReady = _ffi.ffiModel.pi.isSet.isTrue &&
+          _ffi.ffiModel.waitForFirstImage.isFalse;
+      if (imageReady) {
+        // If the privacy mode(disable physical displays) is switched,
+        // we should not dismiss the dialog immediately.
+        if (DateTime.now().difference(togglePrivacyModeTime) >
+            const Duration(milliseconds: 3000)) {
+          // `dismissAll()` is to ensure that the state is clean.
+          // It's ok to call dismissAll() here.
+          _ffi.dialogManager.dismissAll();
+          // Recreate the block state to refresh the state.
+          _blockableOverlayState = BlockableOverlayState();
+          _blockableOverlayState.applyFfi(_ffi);
+        }
+        // Block the whole `bodyWidget()` when dialog shows.
+        return BlockableOverlay(
+          underlying: bodyWidget(),
+          state: _blockableOverlayState,
+        );
+      } else {
+        // `_blockableOverlayState` is not recreated here.
+        // The toolbar's block state won't work properly when reconnecting, but that's okay.
+        return bodyWidget();
+      }
+    });
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: Obx(() {
-        final imageReady = _ffi.ffiModel.pi.isSet.isTrue &&
-            _ffi.ffiModel.waitForFirstImage.isFalse;
-        if (imageReady) {
-          // If the privacy mode(disable physical displays) is switched,
-          // we should not dismiss the dialog immediately.
-          if (DateTime.now().difference(togglePrivacyModeTime) >
-              const Duration(milliseconds: 3000)) {
-            // `dismissAll()` is to ensure that the state is clean.
-            // It's ok to call dismissAll() here.
-            _ffi.dialogManager.dismissAll();
-            // Recreate the block state to refresh the state.
-            _blockableOverlayState = BlockableOverlayState();
-            _blockableOverlayState.applyFfi(_ffi);
-          }
-          // Block the whole `bodyWidget()` when dialog shows.
-          return BlockableOverlay(
-            underlying: bodyWidget(),
-            state: _blockableOverlayState,
-          );
-        } else {
-          // `_blockableOverlayState` is not recreated here.
-          // The toolbar's block state won't work properly when reconnecting, but that's okay.
-          return bodyWidget();
-        }
-      }),
+      body: kOssisPersonnelRemoteBuild
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: sessionBody),
+                Container(
+                  width: 320,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF131B24),
+                    border: Border(
+                      left: BorderSide(color: Color(0xFF293644)),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(18, 16, 18, 12),
+                        child: Text(
+                          'MÜŞTERİ SOHBETİ',
+                          style: TextStyle(
+                            color: Color(0xFFAAB5C1),
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ),
+                      const Divider(height: 1, color: Color(0xFF293644)),
+                      Expanded(child: ChatPage(chatModel: _ffi.chatModel)),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          : sessionBody,
     );
   }
 

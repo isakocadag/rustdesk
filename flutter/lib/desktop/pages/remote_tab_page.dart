@@ -523,7 +523,11 @@ class _ConnectionTabPageState extends State<ConnectionTabPage> {
       final ffi = remotePage.ffi;
       if (call.method == kWindowEventOpenRemoteChat) {
         ffi.chatModel.changeCurrentKey(MessageKey(ffi.id, ChatModel.clientModeID));
-        ffi.chatModel.toggleChatOverlay();
+        if (kOssisPersonnelRemoteBuild) {
+          ffi.chatModel.requestChatInputFocus();
+        } else {
+          ffi.chatModel.toggleChatOverlay();
+        }
       } else {
         switch (ffi.chatModel.voiceCallStatus.value) {
           case VoiceCallStatus.waitingForResponse:
