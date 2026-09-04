@@ -79,6 +79,7 @@ const String kWindowEventCloseRemoteSessions = "close_remote_sessions";
 const String kWindowEventOpenRemoteChat = "open_remote_chat";
 const String kWindowEventGetRemoteChat = "get_remote_chat";
 const String kWindowEventSendRemoteChat = "send_remote_chat";
+const String kWindowEventRemoteChatUpdated = "remote_chat_updated";
 const String kWindowEventToggleRemoteVoice = "toggle_remote_voice";
 const String kWindowEventRemoteWindowCoords = "remote_window_coords";
 const String kWindowEventSetFullscreen = "set_fullscreen";

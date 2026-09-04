@@ -158,6 +158,7 @@ class _RemotePageState extends State<RemotePage>
     super.initState();
     _ffi = FFI(widget.sessionId);
     if (kOssisPersonnelRemoteBuild) {
+      _ffi.chatModel.addListener(_notifyOssisChatChanged);
       OssisPersonnelSession.instance.addListener(_enforceOssisEntitlement);
     }
     if (isMacOS) {
@@ -670,6 +671,7 @@ class _RemotePageState extends State<RemotePage>
   Future<void> dispose() async {
     final closeSession = closeSessionOnDispose.remove(widget.id) ?? true;
     if (kOssisPersonnelRemoteBuild) {
+      _ffi.chatModel.removeListener(_notifyOssisChatChanged);
       OssisPersonnelSession.instance.removeListener(_enforceOssisEntitlement);
     }
 
@@ -719,6 +721,15 @@ class _RemotePageState extends State<RemotePage>
     WakelockManager.disable(_uniqueKey);
     await Get.delete<FFI>(tag: widget.id);
     removeSharedStates(widget.id);
+  }
+
+  void _notifyOssisChatChanged() {
+    if (!kOssisPersonnelRemoteBuild) return;
+    unawaited(DesktopMultiWindow.invokeMethod(
+      kMainWindowId,
+      kWindowEventRemoteChatUpdated,
+      null,
+    ));
   }
 
   Widget emptyOverlay() => BlockableOverlay(

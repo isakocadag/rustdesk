@@ -53,6 +53,12 @@ class MultiWindowCallResult {
 /// mainly use it in `Main Window`
 /// use it in sub window is not recommended
 class RustDeskMultiWindowManager {
+  final ValueNotifier<int> ossisRemoteChatRevision = ValueNotifier<int>(0);
+
+  void notifyOssisRemoteChatUpdated() {
+    ossisRemoteChatRevision.value++;
+  }
+
   RustDeskMultiWindowManager._();
 
   static final instance = RustDeskMultiWindowManager._();

@@ -204,7 +204,6 @@ class _OssisPersonnelChatPanel extends StatefulWidget {
 
 class _OssisPersonnelChatPanelState extends State<_OssisPersonnelChatPanel> {
   final _messageController = TextEditingController();
-  Timer? _refreshTimer;
   List<Map<String, dynamic>> _messages = const [];
   String? _peerId;
   bool _refreshing = false;
@@ -215,16 +214,15 @@ class _OssisPersonnelChatPanelState extends State<_OssisPersonnelChatPanel> {
   @override
   void initState() {
     super.initState();
+    rustDeskWinManager.ossisRemoteChatRevision.addListener(_refreshChat);
+    rustDeskWinManager.registerActiveWindowListener(_refreshChat);
     _refreshChat();
-    _refreshTimer = Timer.periodic(
-      const Duration(milliseconds: 700),
-      (_) => _refreshChat(),
-    );
   }
 
   @override
   void dispose() {
-    _refreshTimer?.cancel();
+    rustDeskWinManager.ossisRemoteChatRevision.removeListener(_refreshChat);
+    rustDeskWinManager.unregisterActiveWindowListener(_refreshChat);
     _messageController.dispose();
     super.dispose();
   }
@@ -616,11 +614,13 @@ class _ConnectionPageState extends State<ConnectionPage>
     const panel = Color(0xFF17212C);
     const border = Color(0xFF293644);
     const accent = Color(0xFFD92D3A);
+    final bottomDockHeight =
+        (MediaQuery.sizeOf(context).height * .24).clamp(180.0, 260.0);
 
     return Container(
       color: surface,
       padding: const EdgeInsets.all(22),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
@@ -628,7 +628,7 @@ class _ConnectionPageState extends State<ConnectionPage>
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(
-                  height: 250,
+                  height: 200,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -747,42 +747,6 @@ class _ConnectionPageState extends State<ConnectionPage>
                     child: PeerTabPage(),
                   ),
                 ),
-                const SizedBox(height: 12),
-                AnimatedBuilder(
-                  animation: OssisPersonnelSession.instance,
-                  builder: (context, _) => Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      color: panel,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: border),
-                    ),
-                    child: Row(
-                      children: [
-                        _buildPersonnelAccountValue(
-                          Icons.account_circle_outlined,
-                          'PERSONEL',
-                          OssisPersonnelSession.instance.displayName,
-                        ),
-                        const SizedBox(width: 34),
-                        _buildPersonnelAccountValue(
-                          Icons.toll_outlined,
-                          'KREDİ',
-                          OssisPersonnelSession.instance.creditText,
-                        ),
-                        const SizedBox(width: 34),
-                        _buildPersonnelAccountValue(
-                          Icons.hourglass_bottom_rounded,
-                          'KALAN SÜRE',
-                          OssisPersonnelSession.instance.remainingTimeText,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
                 if (!isOutgoingOnly) ...[
                   const SizedBox(height: 10),
                   const OnlineStatusWidget(),
@@ -790,12 +754,57 @@ class _ConnectionPageState extends State<ConnectionPage>
               ],
             ),
           ),
-          const SizedBox(width: 16),
-          const SizedBox(
-            width: 330,
-            child: _OssisPersonnelChatPanel(),
+          const SizedBox(height: 14),
+          SizedBox(
+            height: bottomDockHeight,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Expanded(child: _OssisPersonnelChatPanel()),
+                const SizedBox(width: 14),
+                SizedBox(
+                  width: 610,
+                  child: _buildPersonnelAccountPanel(),
+                ),
+              ],
+            ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPersonnelAccountPanel() {
+    return AnimatedBuilder(
+      animation: OssisPersonnelSession.instance,
+      builder: (context, _) => Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF17212C),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFF293644)),
+        ),
+        child: Row(
+          children: [
+            _buildPersonnelAccountValue(
+              Icons.account_circle_outlined,
+              'PERSONEL',
+              OssisPersonnelSession.instance.displayName,
+            ),
+            const SizedBox(width: 10),
+            _buildPersonnelAccountValue(
+              Icons.toll_outlined,
+              'KREDİ',
+              OssisPersonnelSession.instance.creditText,
+            ),
+            const SizedBox(width: 10),
+            _buildPersonnelAccountValue(
+              Icons.hourglass_bottom_rounded,
+              'KALAN SÜRE',
+              OssisPersonnelSession.instance.remainingTimeText,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -806,38 +815,47 @@ class _ConnectionPageState extends State<ConnectionPage>
     String value,
   ) {
     return Expanded(
-      child: Row(
-        children: [
-          Icon(icon, color: const Color(0xFFD92D3A), size: 25),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: const TextStyle(
-                    color: Color(0xFF8D9AAA),
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: .8,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        decoration: BoxDecoration(
+          color: const Color(0xFF0F161E),
+          borderRadius: BorderRadius.circular(11),
+          border: Border.all(color: const Color(0xFF354352)),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: const Color(0xFFD92D3A), size: 25),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      color: Color(0xFF8D9AAA),
+                      fontSize: 10,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: .8,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  value,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
+                  const SizedBox(height: 3),
+                  Text(
+                    value,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

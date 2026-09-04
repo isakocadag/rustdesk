@@ -73,6 +73,11 @@ class ChatModel with ChangeNotifier {
 
   Offset chatWindowPosition = Offset(20, 80);
 
+  bool get _usesOssisEmbeddedChat =>
+      isWindows &&
+      (desktopType == DesktopType.main ||
+          (kOssisPersonnelBuild && desktopType == DesktopType.remote));
+
   void setChatWindowPosition(Offset position) {
     chatWindowPosition = position;
     notifyListeners();
@@ -240,6 +245,10 @@ class ChatModel with ChangeNotifier {
           chatWindowOverlayEntry == null);
 
   toggleChatOverlay({Offset? chatInitPos}) {
+    if (_usesOssisEmbeddedChat) {
+      hideChatOverlay();
+      return;
+    }
     if (_isChatOverlayHide()) {
       gFFI.invokeMethod("enable_soft_keyboard", true);
       if (!(isDesktop || isWebDesktop)) {

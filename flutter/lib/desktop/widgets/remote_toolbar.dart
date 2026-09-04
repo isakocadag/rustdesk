@@ -2647,6 +2647,14 @@ class _ChatMenuState extends State<_ChatMenu> {
     }
     widget.ffi.chatModel
         .changeCurrentKey(MessageKey(widget.ffi.id, ChatModel.clientModeID));
+    if (_kOssisPersonnelToolbarBuild) {
+      unawaited(DesktopMultiWindow.invokeMethod(
+        kMainWindowId,
+        kWindowMainWindowOnTop,
+        null,
+      ));
+      return;
+    }
     widget.ffi.chatModel.toggleChatOverlay(chatInitPos: initPos);
   }
 
