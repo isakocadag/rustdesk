@@ -471,17 +471,27 @@ class RustDeskMultiWindowManager {
     return closedAny;
   }
 
-  Future<bool> invokeRemoteDesktopAction(String method) async {
+  Future<dynamic> invokeRemoteDesktopMethod(
+    String method, [
+    dynamic arguments,
+  ]) async {
     for (final windowId in List<int>.from(_remoteDesktopWindows).reversed) {
       try {
-        final result =
-            await DesktopMultiWindow.invokeMethod(windowId, method, null);
-        if (result == true) return true;
+        final result = await DesktopMultiWindow.invokeMethod(
+          windowId,
+          method,
+          arguments,
+        );
+        if (result != null && result != false) return result;
       } catch (e) {
         debugPrint('Failed to invoke $method in window $windowId: $e');
       }
     }
-    return false;
+    return null;
+  }
+
+  Future<bool> invokeRemoteDesktopAction(String method) async {
+    return await invokeRemoteDesktopMethod(method) == true;
   }
 
   Future<List<String>> remoteDesktopIds() async {
@@ -522,7 +532,8 @@ class RustDeskMultiWindowManager {
     }
     for (int i = 0; i < windows.length; i++) {
       final wId = windows[i];
-      final shouldSavePos = type != WindowType.Terminal || i == windows.length - 1;
+      final shouldSavePos =
+          type != WindowType.Terminal || i == windows.length - 1;
       if (shouldSavePos) {
         debugPrint("closing multi window, type: ${type.toString()} id: $wId");
         try {

@@ -240,6 +240,7 @@ void runMainApp(bool startService) async {
       await windowManager.focus();
 
       if (gateRequired) {
+        await windowManager.setMinimumSize(const Size(1360, 720));
         await windowManager.maximize();
       }
 

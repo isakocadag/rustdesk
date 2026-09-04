@@ -77,6 +77,8 @@ const String kWindowEventGetRemoteList = "get_remote_list";
 const String kWindowEventGetSessionIdList = "get_session_id_list";
 const String kWindowEventCloseRemoteSessions = "close_remote_sessions";
 const String kWindowEventOpenRemoteChat = "open_remote_chat";
+const String kWindowEventGetRemoteChat = "get_remote_chat";
+const String kWindowEventSendRemoteChat = "send_remote_chat";
 const String kWindowEventToggleRemoteVoice = "toggle_remote_voice";
 const String kWindowEventRemoteWindowCoords = "remote_window_coords";
 const String kWindowEventSetFullscreen = "set_fullscreen";
@@ -153,8 +155,7 @@ const String kOptionRemoteMenubarDragLeft = "remote-menubar-drag-left";
 const String kOptionRemoteMenubarDragRight = "remote-menubar-drag-right";
 const String kOptionRemoteMenubarEdge = "remote-menubar-edge";
 const String kOptionRemoteMenubarFraction = "remote-menubar-frac";
-const String kOptionAllowMultiEdgeToolbarDock =
-    "allow-multi-edge-toolbar-dock";
+const String kOptionAllowMultiEdgeToolbarDock = "allow-multi-edge-toolbar-dock";
 const String kOptionHideAbTagsPanel = "hideAbTagsPanel";
 const String kOptionRemoteMenubarState = "remoteMenubarState";
 const String kOptionPeerSorting = "peer-sorting";
@@ -179,9 +180,12 @@ const String kOptionShowVirtualMouse = "show-virtual-mouse";
 const String kOptionVirtualMouseScale = "virtual-mouse-scale";
 const String kOptionShowVirtualJoystick = "show-virtual-joystick";
 const String kOptionAllowAskForNoteAtEndOfConnection = "allow-ask-for-note";
-const String kOptionAllowMonitorSwitchMainToolbar = "allow-monitor-switch-main-toolbar";
-const String kOptionAllowMonitorSwitchMinToolbar = "allow-monitor-switch-min-toolbar";
-const String kOptionEnableShowTerminalExtraKeys = "enable-show-terminal-extra-keys";
+const String kOptionAllowMonitorSwitchMainToolbar =
+    "allow-monitor-switch-main-toolbar";
+const String kOptionAllowMonitorSwitchMinToolbar =
+    "allow-monitor-switch-min-toolbar";
+const String kOptionEnableShowTerminalExtraKeys =
+    "enable-show-terminal-extra-keys";
 const String kOptionShowTerminalCtrlKeys = "show-terminal-extra-ctrl-keys";
 
 // network options
@@ -217,8 +221,10 @@ const String kOptionDisableFloatingWindow = "disable-floating-window";
 
 const String kOptionKeepScreenOn = "keep-screen-on";
 
-const String kOptionKeepAwakeDuringIncomingSessions = "keep-awake-during-incoming-sessions";
-const String kOptionKeepAwakeDuringOutgoingSessions = "keep-awake-during-outgoing-sessions";
+const String kOptionKeepAwakeDuringIncomingSessions =
+    "keep-awake-during-incoming-sessions";
+const String kOptionKeepAwakeDuringOutgoingSessions =
+    "keep-awake-during-outgoing-sessions";
 
 const String kOptionShowMobileAction = "showMobileActions";
 

@@ -35,6 +35,7 @@ const bool kOssisPersonnelHomeBuild = bool.fromEnvironment(
   'OSSIS_PERSONNEL',
   defaultValue: false,
 );
+
 class DesktopHomePage extends StatefulWidget {
   const DesktopHomePage({Key? key}) : super(key: key);
 
@@ -146,47 +147,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                   ],
                 ),
                 const Spacer(),
-                if (kOssisPersonnelHomeBuild)
-                  AnimatedBuilder(
-                    animation: OssisPersonnelSession.instance,
-                    builder: (context, _) => Row(
-                      children: [
-                        _buildOssisMetric(
-                          Icons.account_circle_outlined,
-                          'PERSONEL',
-                          OssisPersonnelSession.instance.displayName,
-                        ),
-                        _buildOssisMetric(
-                          Icons.toll_outlined,
-                          'KREDİ',
-                          OssisPersonnelSession.instance.creditText,
-                        ),
-                        _buildOssisMetric(
-                          Icons.hourglass_bottom_rounded,
-                          'KALAN SÜRE',
-                          OssisPersonnelSession.instance.remainingTimeText,
-                        ),
-                      ],
-                    ),
-                  ),
-                if (!kOssisPersonnelHomeBuild)
-                  AnimatedBuilder(
-                    animation: OssisCustomerSession.instance,
-                    builder: (context, _) => Row(
-                      children: [
-                        _buildOssisMetric(
-                          Icons.toll_outlined,
-                          'KREDİ',
-                          OssisCustomerSession.instance.creditText,
-                        ),
-                        _buildOssisMetric(
-                          Icons.hourglass_bottom_rounded,
-                          'KALAN SÜRE',
-                          OssisCustomerSession.instance.remainingTimeText,
-                        ),
-                      ],
-                    ),
-                  ),
                 const SizedBox(width: 10),
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -268,52 +228,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     );
   }
 
-  Widget _buildOssisMetric(IconData icon, String label, String value) {
-    return Container(
-      constraints: const BoxConstraints(minWidth: 110, maxWidth: 160),
-      margin: const EdgeInsets.only(right: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-      decoration: BoxDecoration(
-        color: const Color(0xFF0F161E),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF293644)),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: const Color(0xFFD92D3A), size: 20),
-          const SizedBox(width: 9),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: const TextStyle(
-                    color: Color(0xFF718091),
-                    fontSize: 9,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: .7,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  value,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildBlock({required Widget child}) {
     return buildRemoteBlock(
         block: _block, mask: true, use: canBeBlocked, child: child);
@@ -349,7 +263,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
             : loadLogo(),
       ),
       buildTip(context),
-
       if (kOssisPersonnelHomeBuild)
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
@@ -357,6 +270,14 @@ class _DesktopHomePageState extends State<DesktopHomePage>
             height: 48,
             width: double.infinity,
             child: OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: const Color(0xFFFFD7DB),
+                backgroundColor: const Color(0xFF5A2028),
+                side: const BorderSide(color: Color(0xFFD92D3A), width: 1.4),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
               onPressed: () async {
                 final closed =
                     await rustDeskWinManager.closeRemoteDesktopSessions();
@@ -492,278 +413,314 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           builder: (context, __) {
             final connected = _activeCustomerClient != null;
             return Stack(
-        children: [
-          const Offstage(
-            offstage: true,
-            child: OnlineStatusWidget(),
-          ),
-          Container(
-            color: surface,
-            padding: const EdgeInsets.all(22),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  flex: 3,
-                  child: Column(
+                const Offstage(
+                  offstage: true,
+                  child: OnlineStatusWidget(),
+                ),
+                Container(
+                  color: surface,
+                  padding: const EdgeInsets.all(22),
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(22),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: connected
-                                ? const [Color(0xFF17352B), Color(0xFF15251F)]
-                                : const [Color(0xFF25191E), Color(0xFF181C23)],
-                          ),
-                          borderRadius: BorderRadius.circular(18),
-                          border: Border.all(
-                            color: connected
-                                ? const Color(0xFF34765A)
-                                : const Color(0xFF553039),
-                          ),
-                        ),
-                        child: Row(
+                      Expanded(
+                        flex: 3,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Container(
-                              width: 54,
-                              height: 54,
+                              padding: const EdgeInsets.all(22),
                               decoration: BoxDecoration(
-                                color: connected
-                                    ? const Color(0xFF214D3B)
-                                    : const Color(0xFF3A2027),
-                                shape: BoxShape.circle,
+                                gradient: LinearGradient(
+                                  colors: connected
+                                      ? const [
+                                          Color(0xFF17352B),
+                                          Color(0xFF15251F)
+                                        ]
+                                      : const [
+                                          Color(0xFF25191E),
+                                          Color(0xFF181C23)
+                                        ],
+                                ),
+                                borderRadius: BorderRadius.circular(18),
+                                border: Border.all(
+                                  color: connected
+                                      ? const Color(0xFF34765A)
+                                      : const Color(0xFF553039),
+                                ),
                               ),
-                              child: Icon(
-                                connected
-                                    ? Icons.verified_user_rounded
-                                    : Icons.support_agent_rounded,
-                                color: connected
-                                    ? const Color(0xFF65D5A0)
-                                    : const Color(0xFFF17A84),
-                                size: 29,
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              child: Row(
                                 children: [
-                                  Text(
-                                    connected
-                                        ? 'Destek bağlantısı aktif'
-                                        : 'Destek ekibi bekleniyor',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w800,
+                                  Container(
+                                    width: 54,
+                                    height: 54,
+                                    decoration: BoxDecoration(
+                                      color: connected
+                                          ? const Color(0xFF214D3B)
+                                          : const Color(0xFF3A2027),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      connected
+                                          ? Icons.verified_user_rounded
+                                          : Icons.support_agent_rounded,
+                                      color: connected
+                                          ? const Color(0xFF65D5A0)
+                                          : const Color(0xFFF17A84),
+                                      size: 29,
                                     ),
                                   ),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    connected
-                                        ? 'Bağlantı araçları kullanıma hazır. Oturumu istediğiniz zaman sonlandırabilirsiniz.'
-                                        : 'Ekrandaki ID’yi destek personeline iletin. Bağlantı isteğini yalnızca siz onayladığınızda oturum başlar.',
-                                    style: const TextStyle(
-                                      color: Color(0xFFABB5C0),
-                                      height: 1.35,
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          connected
+                                              ? 'Destek bağlantısı aktif'
+                                              : 'Destek ekibi bekleniyor',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 5),
+                                        Text(
+                                          connected
+                                              ? 'Bağlantı araçları kullanıma hazır. Oturumu istediğiniz zaman sonlandırabilirsiniz.'
+                                              : 'Ekrandaki ID’yi destek personeline iletin. Bağlantı isteğini yalnızca siz onayladığınızda oturum başlar.',
+                                          style: const TextStyle(
+                                            color: Color(0xFFABB5C0),
+                                            height: 1.35,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 7,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: connected
+                                          ? const Color(0xFF214D3B)
+                                          : const Color(0xFF242B34),
+                                      borderRadius: BorderRadius.circular(18),
+                                    ),
+                                    child: Text(
+                                      connected ? 'BAĞLI' : 'HAZIR',
+                                      style: TextStyle(
+                                        color: connected
+                                            ? const Color(0xFF83E3B3)
+                                            : const Color(0xFFAAB4C0),
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w800,
+                                        letterSpacing: .7,
+                                      ),
+                                    ),
+                                  ),
+                                  if (connected) ...[
+                                    const SizedBox(width: 12),
+                                    FilledButton.icon(
+                                      onPressed: () async {
+                                        await gFFI.serverModel.closeAll();
+                                        showToast(
+                                            'Destek bağlantısı sonlandırıldı.');
+                                      },
+                                      style: FilledButton.styleFrom(
+                                        backgroundColor:
+                                            const Color(0xFFD92D3A),
+                                        foregroundColor: Colors.white,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 14,
+                                        ),
+                                      ),
+                                      icon: const Icon(Icons.link_off_rounded,
+                                          size: 19),
+                                      label: const Text(
+                                        'BAĞLANTIYI SONLANDIR',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 18),
+                            const Text(
+                              'OTURUM ARAÇLARI',
+                              style: TextStyle(
+                                color: Color(0xFF778696),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 1.1,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                _buildCustomerTool(
+                                  Icons.monitor_rounded,
+                                  'Ekran Paylaşımı',
+                                  connected,
+                                ),
+                                const SizedBox(width: 10),
+                                _buildCustomerTool(
+                                  Icons.keyboard_alt_outlined,
+                                  'Klavye ve Fare',
+                                  connected,
+                                ),
+                                const SizedBox(width: 10),
+                                _buildCustomerTool(
+                                  Icons.folder_copy_outlined,
+                                  'Dosya Aktarımı',
+                                  connected,
+                                ),
+                                const SizedBox(width: 10),
+                                _buildCustomerTool(
+                                  Icons.volume_up_outlined,
+                                  'Sistem Sesi',
+                                  connected,
+                                ),
+                                const SizedBox(width: 10),
+                                _buildCustomerTool(
+                                  Icons.fiber_manual_record_rounded,
+                                  'Oturum Kaydı',
+                                  connected,
+                                ),
+                                const SizedBox(width: 10),
+                                _buildCustomerTool(
+                                  Icons.shield_outlined,
+                                  'Güvenli Bağlantı',
+                                  connected,
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            Container(
+                              padding: const EdgeInsets.all(18),
+                              decoration: BoxDecoration(
+                                color: surfaceSoft,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: border),
+                              ),
+                              child: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.privacy_tip_outlined,
+                                    color: accent,
+                                    size: 27,
+                                  ),
+                                  SizedBox(width: 13),
+                                  Expanded(
+                                    child: Text(
+                                      'Kontrol sizde: Her bağlantı isteği onayınıza sunulur. Onay vermediğiniz sürece ekranınıza erişilemez.',
+                                      style: TextStyle(
+                                        color: Color(0xFFB4BEC9),
+                                        height: 1.35,
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 7,
-                              ),
-                              decoration: BoxDecoration(
-                                color: connected
-                                    ? const Color(0xFF214D3B)
-                                    : const Color(0xFF242B34),
-                                borderRadius: BorderRadius.circular(18),
-                              ),
-                              child: Text(
-                                connected ? 'BAĞLI' : 'HAZIR',
-                                style: TextStyle(
-                                  color: connected
-                                      ? const Color(0xFF83E3B3)
-                                      : const Color(0xFFAAB4C0),
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: .7,
-                                ),
-                              ),
-                            ),
-                            if (connected) ...[
-                              const SizedBox(width: 12),
-                              FilledButton.icon(
-                                onPressed: () async {
-                                  await gFFI.serverModel.closeAll();
-                                  showToast('Destek bağlantısı sonlandırıldı.');
-                                },
-                                style: FilledButton.styleFrom(
-                                  backgroundColor: const Color(0xFFD92D3A),
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 14,
-                                  ),
-                                ),
-                                icon: const Icon(Icons.link_off_rounded, size: 19),
-                                label: const Text(
-                                  'BAĞLANTIYI SONLANDIR',
-                                  style: TextStyle(fontWeight: FontWeight.w800),
-                                ),
-                              ),
-                            ],
                           ],
                         ),
                       ),
-                      const SizedBox(height: 18),
-                      const Text(
-                        'OTURUM ARAÇLARI',
-                        style: TextStyle(
-                          color: Color(0xFF778696),
-                          fontSize: 11,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 1.1,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _buildCustomerTool(
-                            Icons.monitor_rounded,
-                            'Ekran Paylaşımı',
-                            connected,
-                          ),
-                          const SizedBox(width: 10),
-                          _buildCustomerTool(
-                            Icons.keyboard_alt_outlined,
-                            'Klavye ve Fare',
-                            connected,
-                          ),
-                          const SizedBox(width: 10),
-                          _buildCustomerTool(
-                            Icons.folder_copy_outlined,
-                            'Dosya Aktarımı',
-                            connected,
-                          ),
-                          const SizedBox(width: 10),
-                          _buildCustomerTool(
-                            Icons.volume_up_outlined,
-                            'Sistem Sesi',
-                            connected,
-                          ),
-                          const SizedBox(width: 10),
-                          _buildCustomerTool(
-                            Icons.fiber_manual_record_rounded,
-                            'Oturum Kaydı',
-                            connected,
-                          ),
-                          const SizedBox(width: 10),
-                          _buildCustomerTool(
-                            Icons.shield_outlined,
-                            'Güvenli Bağlantı',
-                            connected,
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      Container(
-                        padding: const EdgeInsets.all(18),
-                        decoration: BoxDecoration(
-                          color: surfaceSoft,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: border),
-                        ),
-                        child: const Row(
+                      const SizedBox(width: 14),
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Icon(
-                              Icons.privacy_tip_outlined,
-                              color: accent,
-                              size: 27,
+                            Expanded(child: _buildCustomerChatFlow(connected)),
+                            const SizedBox(height: 14),
+                            _buildCommunicationPanel(
+                              icon: Icons.headset_mic_outlined,
+                              title: 'Sesli Görüşme',
+                              description: connected
+                                  ? 'Sesli görüşme isteği geldiğinde onayınıza sunulur.'
+                                  : 'Sesli görüşme bağlantı sırasında kullanılabilir.',
+                              connected: connected,
+                              actionLabel: _customerVoiceActionLabel,
+                              onPressed:
+                                  connected ? _handleCustomerVoice : null,
                             ),
-                            SizedBox(width: 13),
-                            Expanded(
-                              child: Text(
-                                'Kontrol sizde: Her bağlantı isteği onayınıza sunulur. Onay vermediğiniz sürece ekranınıza erişilemez.',
-                                style: TextStyle(
-                                  color: Color(0xFFB4BEC9),
-                                  height: 1.35,
+                            const Spacer(),
+                            AnimatedBuilder(
+                              animation: OssisCustomerSession.instance,
+                              builder: (context, _) => Container(
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  color: surfaceSoft,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(color: border),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'HESAP DURUMU',
+                                      style: TextStyle(
+                                        color: Color(0xFF8D9AAA),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w800,
+                                        letterSpacing: 1,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    _buildAccountLine(
+                                      'Müşteri',
+                                      OssisCustomerSession
+                                          .instance.customerName,
+                                    ),
+                                    if (OssisCustomerSession
+                                        .instance.referenceText.isNotEmpty) ...[
+                                      const SizedBox(height: 14),
+                                      _buildAccountLine(
+                                        'Referans kodu',
+                                        OssisCustomerSession
+                                            .instance.referenceText,
+                                      ),
+                                    ],
+                                    if (OssisCustomerSession.instance
+                                        .membershipDateText.isNotEmpty) ...[
+                                      const SizedBox(height: 14),
+                                      _buildAccountLine(
+                                        'Üyelik tarihi',
+                                        OssisCustomerSession
+                                            .instance.membershipDateText,
+                                      ),
+                                    ],
+                                    const SizedBox(height: 14),
+                                    _buildAccountLine(
+                                      'Kredi',
+                                      OssisCustomerSession.instance.creditText,
+                                    ),
+                                    const SizedBox(height: 14),
+                                    _buildAccountLine(
+                                      'Kalan süre',
+                                      OssisCustomerSession
+                                          .instance.remainingTimeText,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(child: _buildCustomerChatFlow(connected)),
-                      const SizedBox(height: 14),
-                      _buildCommunicationPanel(
-                        icon: Icons.headset_mic_outlined,
-                        title: 'Sesli Görüşme',
-                        description: connected
-                            ? 'Sesli görüşme isteği geldiğinde onayınıza sunulur.'
-                            : 'Sesli görüşme bağlantı sırasında kullanılabilir.',
-                        connected: connected,
-                        actionLabel: _customerVoiceActionLabel,
-                        onPressed: connected ? _handleCustomerVoice : null,
-                      ),
-                      const Spacer(),
-                      AnimatedBuilder(
-                        animation: OssisCustomerSession.instance,
-                        builder: (context, _) => Container(
-                          padding: const EdgeInsets.all(18),
-                          decoration: BoxDecoration(
-                            color: surfaceSoft,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: border),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'HESAP ÖZETİ',
-                                style: TextStyle(
-                                  color: Color(0xFF778696),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 1,
-                                ),
-                              ),
-                              const SizedBox(height: 14),
-                              _buildAccountLine(
-                                'Kredi',
-                                OssisCustomerSession.instance.creditText,
-                              ),
-                              const SizedBox(height: 11),
-                              _buildAccountLine(
-                                'Kalan süre',
-                                OssisCustomerSession
-                                    .instance.remainingTimeText,
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
               ],
-            ),
-          ),
-        ],
             );
           },
         );
@@ -790,9 +747,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           children: [
             Icon(
               icon,
-              color: connected
-                  ? const Color(0xFFF06470)
-                  : const Color(0xFF596674),
+              color:
+                  connected ? const Color(0xFFF06470) : const Color(0xFF596674),
               size: 25,
             ),
             Text(
@@ -992,7 +948,14 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: const TextStyle(color: Color(0xFF8E9AA7))),
+        Text(
+          label,
+          style: const TextStyle(
+            color: Color(0xFFB2BDC9),
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         Flexible(
           child: Text(
             value,
@@ -1000,6 +963,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w800,
+              fontSize: 16,
             ),
           ),
         ),
@@ -1042,8 +1006,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                                   ?.color
                                   ?.withOpacity(0.5)),
                         ).marginOnly(top: 5),
-                        if (kOssisPersonnelHomeBuild)
-                          buildPopupMenu(context)
+                        if (kOssisPersonnelHomeBuild) buildPopupMenu(context)
                       ],
                     ),
                   ),
@@ -1513,55 +1476,55 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       if (_ossisPeriodicTickBusy) return;
       _ossisPeriodicTickBusy = true;
       try {
-      await _syncOssisUsage();
-      _enforceCustomerEntitlement();
-      await gFFI.serverModel.fetchID();
-      final error = await bind.mainGetError();
-      if (systemError != error) {
-        systemError = error;
-        setState(() {});
-      }
-      final v = await mainGetBoolOption(kOptionStopService);
-      if (v != svcStopped.value) {
-        svcStopped.value = v;
-        setState(() {});
-      }
-      if (watchIsCanScreenRecording) {
-        if (bind.mainIsCanScreenRecording(prompt: false)) {
-          watchIsCanScreenRecording = false;
+        await _syncOssisUsage();
+        _enforceCustomerEntitlement();
+        await gFFI.serverModel.fetchID();
+        final error = await bind.mainGetError();
+        if (systemError != error) {
+          systemError = error;
           setState(() {});
         }
-      }
-      if (watchIsProcessTrust) {
-        if (bind.mainIsProcessTrusted(prompt: false)) {
-          watchIsProcessTrust = false;
+        final v = await mainGetBoolOption(kOptionStopService);
+        if (v != svcStopped.value) {
+          svcStopped.value = v;
           setState(() {});
         }
-      }
-      if (watchIsInputMonitoring) {
-        if (bind.mainIsCanInputMonitoring(prompt: false)) {
-          watchIsInputMonitoring = false;
-          // Do not notify for now.
-          // Monitoring may not take effect until the process is restarted.
-          // rustDeskWinManager.call(
-          //     WindowType.RemoteDesktop, kWindowDisableGrabKeyboard, '');
-          setState(() {});
+        if (watchIsCanScreenRecording) {
+          if (bind.mainIsCanScreenRecording(prompt: false)) {
+            watchIsCanScreenRecording = false;
+            setState(() {});
+          }
         }
-      }
-      if (watchIsCanRecordAudio) {
-        if (isMacOS) {
-          Future.microtask(() async {
-            if ((await osxCanRecordAudio() ==
-                PermissionAuthorizeType.authorized)) {
-              watchIsCanRecordAudio = false;
-              setState(() {});
-            }
-          });
-        } else {
-          watchIsCanRecordAudio = false;
-          setState(() {});
+        if (watchIsProcessTrust) {
+          if (bind.mainIsProcessTrusted(prompt: false)) {
+            watchIsProcessTrust = false;
+            setState(() {});
+          }
         }
-      }
+        if (watchIsInputMonitoring) {
+          if (bind.mainIsCanInputMonitoring(prompt: false)) {
+            watchIsInputMonitoring = false;
+            // Do not notify for now.
+            // Monitoring may not take effect until the process is restarted.
+            // rustDeskWinManager.call(
+            //     WindowType.RemoteDesktop, kWindowDisableGrabKeyboard, '');
+            setState(() {});
+          }
+        }
+        if (watchIsCanRecordAudio) {
+          if (isMacOS) {
+            Future.microtask(() async {
+              if ((await osxCanRecordAudio() ==
+                  PermissionAuthorizeType.authorized)) {
+                watchIsCanRecordAudio = false;
+                setState(() {});
+              }
+            });
+          } else {
+            watchIsCanRecordAudio = false;
+            setState(() {});
+          }
+        }
       } finally {
         _ossisPeriodicTickBusy = false;
       }
@@ -1587,7 +1550,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
 
     bool isChattyMethod(String methodName) {
       switch (methodName) {
-        case kWindowBumpMouse: return true;
+        case kWindowBumpMouse:
+          return true;
       }
 
       return false;
@@ -1596,7 +1560,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     rustDeskWinManager.setMethodHandler((call, fromWindowId) async {
       if (!isChattyMethod(call.method)) {
         debugPrint(
-          "[Main] call ${call.method} with args ${call.arguments} from window $fromWindowId");
+            "[Main] call ${call.method} with args ${call.arguments} from window $fromWindowId");
       }
       if (call.method == kWindowMainWindowOnTop) {
         windowOnTop(null);
@@ -1631,9 +1595,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           connToken: call.arguments['connToken'],
         );
       } else if (call.method == kWindowBumpMouse) {
-        return RdPlatformChannel.instance.bumpMouse(
-          dx: call.arguments['dx'],
-          dy: call.arguments['dy']);
+        return RdPlatformChannel.instance
+            .bumpMouse(dx: call.arguments['dx'], dy: call.arguments['dy']);
       } else if (call.method == kWindowEventMoveTabToNewWindow) {
         final args = call.arguments.split(',');
         int? windowId;
@@ -1753,8 +1716,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   @override
   void dispose() {
     if (!kOssisPersonnelHomeBuild) {
-      OssisCustomerSession.instance
-          .removeListener(_enforceCustomerEntitlement);
+      OssisCustomerSession.instance.removeListener(_enforceCustomerEntitlement);
     }
     _uniLinksSubscription?.cancel();
     Get.delete<RxBool>(tag: 'stop-service');

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:desktop_multi_window/desktop_multi_window.dart';
+import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hbb/common.dart';
 import 'package:flutter_hbb/common/shared_state.dart';
@@ -516,18 +517,47 @@ class _ConnectionTabPageState extends State<ConnectionTabPage> {
       }
       return keys.isNotEmpty;
     } else if (call.method == kWindowEventOpenRemoteChat ||
+        call.method == kWindowEventGetRemoteChat ||
+        call.method == kWindowEventSendRemoteChat ||
         call.method == kWindowEventToggleRemoteVoice) {
       if (tabController.state.value.tabs.isEmpty) return false;
       final remotePage =
           tabController.state.value.selectedTabInfo.page as RemotePage;
       final ffi = remotePage.ffi;
       if (call.method == kWindowEventOpenRemoteChat) {
-        ffi.chatModel.changeCurrentKey(MessageKey(ffi.id, ChatModel.clientModeID));
-        if (kOssisPersonnelRemoteBuild) {
-          ffi.chatModel.requestChatInputFocus();
-        } else {
+        ffi.chatModel
+            .changeCurrentKey(MessageKey(ffi.id, ChatModel.clientModeID));
+        if (!kOssisPersonnelRemoteBuild) {
           ffi.chatModel.toggleChatOverlay();
         }
+      } else if (call.method == kWindowEventGetRemoteChat) {
+        final key = MessageKey(ffi.id, ChatModel.clientModeID);
+        if (ffi.chatModel.currentKey != key) {
+          ffi.chatModel.changeCurrentKey(key);
+        }
+        final messages = ffi.chatModel.messages[key]?.chatMessages ?? [];
+        return jsonEncode({
+          'peerId': ffi.id,
+          'messages': messages
+              .map((message) => {
+                    'text': message.text,
+                    'own': message.user.id == ffi.chatModel.me.id,
+                    'time': message.createdAt.toIso8601String(),
+                  })
+              .toList(),
+        });
+      } else if (call.method == kWindowEventSendRemoteChat) {
+        final text = call.arguments?.toString().trim() ?? '';
+        if (text.isEmpty) return false;
+        final key = MessageKey(ffi.id, ChatModel.clientModeID);
+        if (ffi.chatModel.currentKey != key) {
+          ffi.chatModel.changeCurrentKey(key);
+        }
+        ffi.chatModel.send(ChatMessage(
+          text: text,
+          user: ffi.chatModel.me,
+          createdAt: DateTime.now(),
+        ));
       } else {
         switch (ffi.chatModel.voiceCallStatus.value) {
           case VoiceCallStatus.waitingForResponse:

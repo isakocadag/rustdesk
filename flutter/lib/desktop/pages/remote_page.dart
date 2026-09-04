@@ -14,9 +14,7 @@ import '../../common/widgets/remote_input.dart';
 import '../../common.dart';
 import '../../common/widgets/dialog.dart';
 import '../../common/widgets/toolbar.dart';
-import '../../common/widgets/chat_page.dart';
 import '../../models/model.dart';
-import '../../models/chat_model.dart';
 import '../../models/input_model.dart';
 import '../../models/platform_model.dart';
 import '../../common/shared_state.dart';
@@ -160,8 +158,6 @@ class _RemotePageState extends State<RemotePage>
     super.initState();
     _ffi = FFI(widget.sessionId);
     if (kOssisPersonnelRemoteBuild) {
-      _ffi.chatModel
-          .changeCurrentKey(MessageKey(widget.id, ChatModel.clientModeID));
       OssisPersonnelSession.instance.addListener(_enforceOssisEntitlement);
     }
     if (isMacOS) {
@@ -851,42 +847,7 @@ class _RemotePageState extends State<RemotePage>
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: kOssisPersonnelRemoteBuild
-          ? Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(child: sessionBody),
-                Container(
-                  width: 320,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF131B24),
-                    border: Border(
-                      left: BorderSide(color: Color(0xFF293644)),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(18, 16, 18, 12),
-                        child: Text(
-                          'MÜŞTERİ SOHBETİ',
-                          style: TextStyle(
-                            color: Color(0xFFAAB5C1),
-                            fontSize: 11,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 1,
-                          ),
-                        ),
-                      ),
-                      const Divider(height: 1, color: Color(0xFF293644)),
-                      Expanded(child: ChatPage(chatModel: _ffi.chatModel)),
-                    ],
-                  ),
-                ),
-              ],
-            )
-          : sessionBody,
+      body: sessionBody,
     );
   }
 

@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import '../../common.dart';
 import '../../common/formatter/id_formatter.dart';
 import '../../common/widgets/peer_tab_page.dart';
 import '../../common/widgets/autocomplete.dart';
+import 'ossis_personnel_session.dart';
 import '../../models/platform_model.dart';
 import '../../utils/multi_window_manager.dart';
 import '../../desktop/widgets/material_mod_popup_menu.dart' as mod_menu;
@@ -192,6 +194,265 @@ class _OnlineStatusWidgetState extends State<OnlineStatusWidget> {
   }
 }
 
+class _OssisPersonnelChatPanel extends StatefulWidget {
+  const _OssisPersonnelChatPanel();
+
+  @override
+  State<_OssisPersonnelChatPanel> createState() =>
+      _OssisPersonnelChatPanelState();
+}
+
+class _OssisPersonnelChatPanelState extends State<_OssisPersonnelChatPanel> {
+  final _messageController = TextEditingController();
+  Timer? _refreshTimer;
+  List<Map<String, dynamic>> _messages = const [];
+  String? _peerId;
+  bool _refreshing = false;
+  bool _sending = false;
+
+  bool get _connected => _peerId != null;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshChat();
+    _refreshTimer = Timer.periodic(
+      const Duration(milliseconds: 700),
+      (_) => _refreshChat(),
+    );
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _refreshChat() async {
+    if (_refreshing) return;
+    _refreshing = true;
+    try {
+      final result = await rustDeskWinManager.invokeRemoteDesktopMethod(
+        kWindowEventGetRemoteChat,
+      );
+      if (!mounted) return;
+      if (result is! String || result.isEmpty) {
+        if (_connected || _messages.isNotEmpty) {
+          setState(() {
+            _peerId = null;
+            _messages = const [];
+          });
+        }
+        return;
+      }
+      final payload = jsonDecode(result);
+      if (payload is! Map<String, dynamic>) return;
+      final rawMessages = payload['messages'];
+      final messages = rawMessages is List
+          ? rawMessages
+              .whereType<Map>()
+              .map((item) => Map<String, dynamic>.from(item))
+              .toList(growable: false)
+          : <Map<String, dynamic>>[];
+      setState(() {
+        _peerId = payload['peerId']?.toString();
+        _messages = messages;
+      });
+    } catch (_) {
+      if (mounted && _connected) {
+        setState(() {
+          _peerId = null;
+          _messages = const [];
+        });
+      }
+    } finally {
+      _refreshing = false;
+    }
+  }
+
+  Future<void> _sendMessage() async {
+    final text = _messageController.text.trim();
+    if (text.isEmpty || !_connected || _sending) return;
+    setState(() => _sending = true);
+    try {
+      final sent = await rustDeskWinManager.invokeRemoteDesktopMethod(
+        kWindowEventSendRemoteChat,
+        text,
+      );
+      if (sent == true) {
+        _messageController.clear();
+        await _refreshChat();
+      } else {
+        showToast('Mesaj gönderilemedi: aktif bağlantı yok.');
+      }
+    } finally {
+      if (mounted) setState(() => _sending = false);
+    }
+  }
+
+  String _timeText(dynamic value) {
+    final time = DateTime.tryParse(value?.toString() ?? '')?.toLocal();
+    if (time == null) return '';
+    return '${time.hour.toString().padLeft(2, '0')}:'
+        '${time.minute.toString().padLeft(2, '0')}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: const Color(0xFF17212C),
+        borderRadius: BorderRadius.circular(17),
+        border: Border.all(color: const Color(0xFF293644)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
+            child: Row(
+              children: [
+                const Icon(Icons.chat_bubble_outline_rounded,
+                    color: Color(0xFFD92D3A), size: 19),
+                const SizedBox(width: 9),
+                const Expanded(
+                  child: Text(
+                    'MÜŞTERİ SOHBETİ',
+                    style: TextStyle(
+                      color: Color(0xFFAAB5C1),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _connected
+                        ? const Color(0xFF41C985)
+                        : const Color(0xFF596674),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1, color: Color(0xFF293644)),
+          Expanded(
+            child: !_connected
+                ? const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(24),
+                      child: Text(
+                        'Sohbet, müşteri bağlantısı kurulduğunda burada açılır.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(0xFF7F8B98),
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                  )
+                : _messages.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'Henüz mesaj yok.',
+                          style: TextStyle(color: Color(0xFF7F8B98)),
+                        ),
+                      )
+                    : ListView.builder(
+                        reverse: true,
+                        padding: const EdgeInsets.all(12),
+                        itemCount: _messages.length,
+                        itemBuilder: (context, index) {
+                          final message = _messages[index];
+                          final own = message['own'] == true;
+                          return Align(
+                            alignment: own
+                                ? Alignment.centerRight
+                                : Alignment.centerLeft,
+                            child: Container(
+                              constraints: const BoxConstraints(maxWidth: 235),
+                              margin: const EdgeInsets.only(bottom: 9),
+                              padding: const EdgeInsets.fromLTRB(12, 9, 12, 7),
+                              decoration: BoxDecoration(
+                                color: own
+                                    ? const Color(0xFF7A2630)
+                                    : const Color(0xFF263544),
+                                borderRadius: BorderRadius.circular(11),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      message['text']?.toString() ?? '',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    _timeText(message['time']),
+                                    style: const TextStyle(
+                                      color: Color(0xFFAAB5C1),
+                                      fontSize: 9,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _messageController,
+                    enabled: _connected && !_sending,
+                    onSubmitted: (_) => _sendMessage(),
+                    decoration: InputDecoration(
+                      isDense: true,
+                      hintText: _connected
+                          ? 'Bir mesaj yazın'
+                          : 'Bağlantı bekleniyor',
+                      filled: true,
+                      fillColor: const Color(0xFF0F161E),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Color(0xFF354352)),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                IconButton.filled(
+                  onPressed: _connected && !_sending ? _sendMessage : null,
+                  style: IconButton.styleFrom(
+                    backgroundColor: const Color(0xFFD92D3A),
+                  ),
+                  icon: const Icon(Icons.send_rounded, size: 19),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// Connection page for connecting to a remote peer.
 class ConnectionPage extends StatefulWidget {
   const ConnectionPage({Key? key}) : super(key: key);
@@ -213,6 +474,7 @@ class _ConnectionPageState extends State<ConnectionPage>
   String selectedConnectionType = 'Connect';
 
   bool isWindowMinimized = false;
+  bool _ossisExitStarted = false;
 
   final AllPeersLoader _allPeersLoader = AllPeersLoader();
 
@@ -289,6 +551,19 @@ class _ConnectionPageState extends State<ConnectionPage>
   @override
   void onWindowClose() {
     super.onWindowClose();
+    if (isWindows) {
+      if (_ossisExitStarted) return;
+      _ossisExitStarted = true;
+      Future<void>(() async {
+        await rustDeskWinManager.closeAllSubWindows();
+        await gFFI.serverModel.closeAll();
+        await gFFI.close();
+        await windowManager.setPreventClose(false);
+        await windowManager.close();
+        exit(0);
+      });
+      return;
+    }
     bind.mainOnMainWindowClose();
   }
 
@@ -345,129 +620,223 @@ class _ConnectionPageState extends State<ConnectionPage>
     return Container(
       color: surface,
       padding: const EdgeInsets.all(22),
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(
-            height: 250,
-            child: Row(
+          Expanded(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: panel,
-                    borderRadius: BorderRadius.circular(17),
-                    border: Border.all(color: border),
-                  ),
-                  child: _buildRemoteIDTextField(context),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF25191E), Color(0xFF17212C)],
-                      ),
-                      borderRadius: BorderRadius.circular(17),
-                      border: Border.all(color: const Color(0xFF503039)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Row(
-                          children: [
-                            Icon(
-                              Icons.admin_panel_settings_outlined,
-                              color: accent,
-                              size: 27,
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              'Güvenli Personel Bağlantısı',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                          ],
+                SizedBox(
+                  height: 250,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: panel,
+                          borderRadius: BorderRadius.circular(17),
+                          border: Border.all(color: border),
                         ),
-                        const SizedBox(height: 12),
-                        const Text(
-                          'Müşterinin ekrandaki OSSIS ID numarasını girin. Bağlantı isteği müşterinin onayına sunulur ve onay sonrasında oturum araçları açılır.',
-                          style: TextStyle(
-                            color: Color(0xFFA8B3BF),
-                            fontSize: 12,
-                            height: 1.45,
+                        child: _buildRemoteIDTextField(context),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF25191E), Color(0xFF17212C)],
+                            ),
+                            borderRadius: BorderRadius.circular(17),
+                            border: Border.all(color: const Color(0xFF503039)),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Row(
+                                children: [
+                                  Icon(
+                                    Icons.admin_panel_settings_outlined,
+                                    color: accent,
+                                    size: 27,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Güvenli Personel Bağlantısı',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              const Text(
+                                'Müşterinin ekrandaki OSSIS ID numarasını girin. Bağlantı isteği müşterinin onayına sunulur ve onay sonrasında oturum araçları açılır.',
+                                style: TextStyle(
+                                  color: Color(0xFFA8B3BF),
+                                  fontSize: 12,
+                                  height: 1.45,
+                                ),
+                              ),
+                              const SizedBox(height: 18),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: OutlinedButton.icon(
+                                      onPressed: () =>
+                                          _runPersonnelSessionAction(
+                                        kWindowEventOpenRemoteChat,
+                                        'Sohbet için aktif bağlantı yok.',
+                                      ),
+                                      icon:
+                                          const Icon(Icons.chat_bubble_outline),
+                                      label: const Text('Metin Sohbeti'),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: OutlinedButton.icon(
+                                      onPressed: () =>
+                                          _runPersonnelSessionAction(
+                                        kWindowEventToggleRemoteVoice,
+                                        'Sesli görüşme için aktif bağlantı yok.',
+                                      ),
+                                      icon: const Icon(
+                                          Icons.headset_mic_outlined),
+                                      label: const Text('Sesli Görüşme'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 18),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: OutlinedButton.icon(
-                                onPressed: () => _runPersonnelSessionAction(
-                                  kWindowEventOpenRemoteChat,
-                                  'Sohbet için aktif bağlantı yok.',
-                                ),
-                                icon: const Icon(Icons.chat_bubble_outline),
-                                label: const Text('Metin Sohbeti'),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: OutlinedButton.icon(
-                                onPressed: () => _runPersonnelSessionAction(
-                                  kWindowEventToggleRemoteVoice,
-                                  'Sesli görüşme için aktif bağlantı yok.',
-                                ),
-                                icon: const Icon(Icons.headset_mic_outlined),
-                                label: const Text('Sesli Görüşme'),
-                              ),
-                            ),
-                          ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Row(
+                  children: [
+                    Icon(Icons.devices_other_outlined, color: accent, size: 19),
+                    SizedBox(width: 9),
+                    Text(
+                      'MÜŞTERİLER VE SON OTURUMLAR',
+                      style: TextStyle(
+                        color: Color(0xFF9CA8B5),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      color: panel,
+                      borderRadius: BorderRadius.circular(17),
+                      border: Border.all(color: border),
+                    ),
+                    child: PeerTabPage(),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                AnimatedBuilder(
+                  animation: OssisPersonnelSession.instance,
+                  builder: (context, _) => Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
+                    decoration: BoxDecoration(
+                      color: panel,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: border),
+                    ),
+                    child: Row(
+                      children: [
+                        _buildPersonnelAccountValue(
+                          Icons.account_circle_outlined,
+                          'PERSONEL',
+                          OssisPersonnelSession.instance.displayName,
+                        ),
+                        const SizedBox(width: 34),
+                        _buildPersonnelAccountValue(
+                          Icons.toll_outlined,
+                          'KREDİ',
+                          OssisPersonnelSession.instance.creditText,
+                        ),
+                        const SizedBox(width: 34),
+                        _buildPersonnelAccountValue(
+                          Icons.hourglass_bottom_rounded,
+                          'KALAN SÜRE',
+                          OssisPersonnelSession.instance.remainingTimeText,
                         ),
                       ],
                     ),
                   ),
                 ),
+                if (!isOutgoingOnly) ...[
+                  const SizedBox(height: 10),
+                  const OnlineStatusWidget(),
+                ],
               ],
             ),
           ),
-          const SizedBox(height: 20),
-          const Row(
-            children: [
-              Icon(Icons.devices_other_outlined, color: accent, size: 19),
-              SizedBox(width: 9),
-              Text(
-                'MÜŞTERİLER VE SON OTURUMLAR',
-                style: TextStyle(
-                  color: Color(0xFF9CA8B5),
-                  fontSize: 11,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 1,
-                ),
-              ),
-            ],
+          const SizedBox(width: 16),
+          const SizedBox(
+            width: 330,
+            child: _OssisPersonnelChatPanel(),
           ),
-          const SizedBox(height: 10),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPersonnelAccountValue(
+    IconData icon,
+    String label,
+    String value,
+  ) {
+    return Expanded(
+      child: Row(
+        children: [
+          Icon(icon, color: const Color(0xFFD92D3A), size: 25),
+          const SizedBox(width: 12),
           Expanded(
-            child: Container(
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                color: panel,
-                borderRadius: BorderRadius.circular(17),
-                border: Border.all(color: border),
-              ),
-              child: PeerTabPage(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: const TextStyle(
+                    color: Color(0xFF8D9AAA),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: .8,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
             ),
           ),
-          if (!isOutgoingOnly) ...[
-            const SizedBox(height: 10),
-            const OnlineStatusWidget(),
-          ],
         ],
       ),
     );
@@ -477,8 +846,7 @@ class _ConnectionPageState extends State<ConnectionPage>
     String action,
     String unavailableMessage,
   ) async {
-    final handled =
-        await rustDeskWinManager.invokeRemoteDesktopAction(action);
+    final handled = await rustDeskWinManager.invokeRemoteDesktopAction(action);
     if (!handled) showToast(unavailableMessage);
   }
 

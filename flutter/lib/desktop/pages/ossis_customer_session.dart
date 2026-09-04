@@ -7,6 +7,7 @@ class OssisCustomerSession extends OssisEntitlementState {
 
   String customerName = 'OSSIS Müşterisi';
   String referenceText = '';
+  String membershipDateText = '';
   String usageToken = '';
 
   void updateFromPayload(
@@ -30,6 +31,13 @@ class OssisCustomerSession extends OssisEntitlementState {
           const ['usage_token'],
         ) ??
         usageToken;
+    membershipDateText = OssisEntitlementState.firstText(payload, const [
+          'membership_date',
+          'member_since',
+          'registered_at',
+          'created_at',
+        ]) ??
+        membershipDateText;
     updateEntitlement(payload);
   }
 }
